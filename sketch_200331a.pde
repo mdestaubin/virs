@@ -553,8 +553,7 @@ void statsBar() {
      }
     }
   }
-  
-  println(yInfected);
+ 
     
   //if (isSetup){  
   //int calc = int(yCFR-(numSick));
