@@ -444,12 +444,18 @@ void statsBar() {
        text("75%", xStat+318,yPercent2);
        
     stroke(150);
+    
+    //if(!looping){
+      
+    //  pause = true;
+    //}
        
+    
+    if (!pause) {
+      noFill();
+    }
     if (pause){
      fill(150); 
-    }
-    else {
-      noFill();
     }
     
     rect(xStat+335,25,5,20);
@@ -517,7 +523,7 @@ void statsBar() {
 
     //epiCurve();
    
-    sickHistory.add(yCFR-(numSick/2));
+    sickHistory.add(yCFR-(numSick/4));
     strokeWeight(2);
      xCord1 = xStat;
     
@@ -525,9 +531,9 @@ void statsBar() {
     for (int i = 0; i < frameCount; i++) 
     {
     
-    
+    if (i < sickHistory.size() && sickHistory.get(i) != null){
     float yInfected = sickHistory.get(i);
-   // Float yTotal = prevHistory.get(i);
+    
     strokeWeight(1);
 
     stroke(100,10);
@@ -542,11 +548,13 @@ void statsBar() {
     //stroke(180,180);
     //line(xCord1, yTotal, xCord1, yDead);
 
-   xCord1 = xCord1 + .08;
+   xCord1 = xCord1 + .06;
 
      }
-
     }
+  }
+  
+  println(yInfected);
     
   //if (isSetup){  
   //int calc = int(yCFR-(numSick));
@@ -685,7 +693,7 @@ void initailizePop() {
 
     {
 
-        PVector L = new PVector(random(25, width - 407), random(25, height-26));        
+        PVector L = new PVector(random(25, width - 407), random(27, height-26));        
 
         population.add(new Agent(L));
 
@@ -792,7 +800,14 @@ void mousePressed()
 
     if(mouseX >= xStat+335 && mouseX <= (xStat+355) && mouseY >= 25 && mouseY <= (45)){
       pause = !pause;
-      looping = !looping;
+      
+      if(!pause){
+      noLoop();
+      }
+      else{
+        loop();
+      }
+      //looping = !looping;
     }
 
    if(mouseX >= xStat && mouseX <= (xStat+80) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
@@ -871,7 +886,7 @@ void keyPressed()
 
         { 
           
-            PVector L = new PVector(random(25, width - 406), random(25, height-26));
+            PVector L = new PVector(random(27, width - 406), random(25, height-26));
             population.add(new Agent(L));
             dayCounter = 0;
             numDead = 0;
@@ -885,7 +900,7 @@ void keyPressed()
     
     //if (isSetup){
       
-    //  sickHistory.clear();
+     sickHistory.clear();
       
     //}
     
@@ -913,7 +928,7 @@ class Agent {
 
   int haloGrowth = 0;
   
-  float deathRate = 0.1;
+  float deathRate = 0.05;
 
   PVector target;
 
