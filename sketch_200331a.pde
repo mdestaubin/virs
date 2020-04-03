@@ -43,7 +43,7 @@ int yHealthy = 615;
 
 int ySick = 585;
 
-int yInfected = 560;
+int yInfect = 560;
 
 int ySurvivors = 320;
 
@@ -294,7 +294,7 @@ void statsBar() {
     textAlign(RIGHT);
     
    // text("FATALITY RATE: " + nf(percentCFR, 0, 2) + "%", xStat+360, yDead);
-    text("RECOVERED: " + int(numHealed), xStat+360, yInfected);
+    text("RECOVERED: " + int(numHealed), xStat+360, yInfect);
 
     text("DEATHS: " + int(numDead), xStat+360, ySick);
 
@@ -314,7 +314,7 @@ void statsBar() {
     
     text("EPI CURVE ", xStat, yCFR-130);
 
-    text("EXPOSED: " + int(numInfected), xStat, yInfected);
+    text("EXPOSED: " + int(numInfected), xStat, yInfect);
   
     text("INFECTED ISOLATION", xStat, yButton1-15);
     
@@ -553,7 +553,8 @@ void statsBar() {
      }
     }
   }
- 
+  
+  //println(yInfected);
     
   //if (isSetup){  
   //int calc = int(yCFR-(numSick));
