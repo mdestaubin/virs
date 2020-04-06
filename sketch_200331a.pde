@@ -311,8 +311,8 @@ void statsBar() {
      text("research effort at the Harvard Humanitarian Initiative.", (width-420)/2,((height-40)/2)+45);
      
      text("This particular simulation of ViRS is a spatially abstract COVID-19", (width-420)/2,((height-40)/2)+85);
-     text("transmission study model. It intends to demonstrate the level of", (width-420)/2,((height-40)/2)+105);
-     text("impact public health measures have on containing and stopping a", (width-420)/2,((height-40)/2)+125);
+     text("transmission study model. It intends to demonstrate the level of impact", (width-420)/2,((height-40)/2)+105);
+     text("non-clinical public health measures have on containing and stopping a", (width-420)/2,((height-40)/2)+125);
      text("COVID-19 outbreak within a population. ", (width-420)/2,((height-40)/2)+145);
      
      text("Its primary purpose is to act as an educational tool that gives the user the", (width-420)/2,((height-40)/2)+185);
