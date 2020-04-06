@@ -315,8 +315,8 @@ void statsBar() {
      text("non-clinical public health measures have on containing and stopping a", (width-420)/2,((height-40)/2)+125);
      text("COVID-19 outbreak within a population. ", (width-420)/2,((height-40)/2)+145);
      
-     text("Its primary purpose is to act as an educational tool that gives the user the", (width-420)/2,((height-40)/2)+185);
-     text("ability to control certain parameters and visualize their effects on the outbreak.", (width-420)/2,((height-40)/2)+205);
+     text("Note this is not a prediction model, its primary purpose is to act as an educational tool that", (width-420)/2,((height-40)/2)+185);
+     text("gives the user the ability to control certain parameters and visualize their effects on the outbreak.", (width-420)/2,((height-40)/2)+205);
      text("This model is part of an ongoing project and will be updated with improvements periodically.", (width-420)/2,((height-40)/2)+225);
      
      text("For any questions or comments, please email", (width-420)/2,((height-40)/2)+265);
