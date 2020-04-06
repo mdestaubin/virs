@@ -728,7 +728,7 @@ void infect()
             }
                         }
             
-            infectionLine(person1,person2);
+                   infectionLine(person1,person2);
                   //if (prob(infectionProbability) == true && person1.infected){
                   // stroke(255, 40);
                   // strokeWeight(3);
@@ -788,26 +788,31 @@ void initailizePop() {
     //infectedAgent();
 
 }
-
-
+    
 void infectionLine(Agent person1, Agent person2) {
   
   float spreadDist = dist(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
- 
-  stroke(255,60);
-  strokeWeight(3);
 
-   if ((person2.sick || person1.sick)) {
+   if ((person2.sick) || (person1.sick)) {
      
-     if((person1.vel.x == 0 || person2.vel.x == 0)){
-       noStroke();
+     if(contactDays <= 1){
+      
+      if (spreadDist < 30){
+
+        stroke(255, 60);
+
+        strokeWeight(3);
+        
+        if((person1.vel.x == 0 || person2.vel.x == 0)){
+        noStroke();
      }
 
-      if (spreadDist < 30){
         line(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
-       }
+      }
      }
     }
+
+}
 
 
 
@@ -916,9 +921,8 @@ void mousePressed()
     infectedPerson.loc.y = mouseY;
 
     population.add(infectedPerson);
-    
-   
-    
+
+    loop();
     }
  
 
