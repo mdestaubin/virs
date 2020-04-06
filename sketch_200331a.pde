@@ -304,7 +304,7 @@ void statsBar() {
     //  text("ViRS",(width-420)/2,((height-40)/2)-80);
      textFont(altFont);
      textSize(15);
-     text("THe Visual Response Simulator | ViRS | is an agent-based modeling project designed", (width-420)/2,((height-40)/2)-35);
+     text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed", (width-420)/2,((height-40)/2)-35);
      text("to explore and visualize how disease dynamics, social behaviors, and spatial",(width-420)/2,((height-40)/2)-15);
      text("relationships interact. Originating as an individual thesis project at the", (width-420)/2,((height-40)/2)+5);
      text("Harvard Graduate School of Design, ViRS is now a collaborative, cross-disciplinary", (width-420)/2,((height-40)/2)+25);
