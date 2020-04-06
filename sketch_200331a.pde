@@ -304,23 +304,22 @@ void statsBar() {
     //  text("ViRS",(width-420)/2,((height-40)/2)-80);
      textFont(altFont);
      textSize(15);
-     text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed", (width-420)/2,((height-40)/2)-35);
-     text("to explore and visualize how disease dynamics, social behaviors, and spatial",(width-420)/2,((height-40)/2)-15);
-     text("relationships interact. Originating as an individual thesis project at the", (width-420)/2,((height-40)/2)+5);
-     text("Harvard Graduate School of Design, ViRS is now a collaborative, cross-disciplinary", (width-420)/2,((height-40)/2)+25);
-     text("research effort at the Harvard Humanitarian Initiative.", (width-420)/2,((height-40)/2)+45);
      
-     text("This particular simulation of ViRS is a spatially abstract COVID-19 transmission study", (width-420)/2,((height-40)/2)+85);
-     text("model. It intends to demonstrate the level of impact non-clinical public health", (width-420)/2,((height-40)/2)+105);
-     text("measures have on containing and stopping a COVID-19 outbreak within a population.", (width-420)/2,((height-40)/2)+125);
+     text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore", (width-420)/2,((height-40)/2)-35);
+     text("and visualize how disease dynamics and social behaviors interact over space and time.",(width-420)/2,((height-40)/2)-15);
+     text("Originating as an individual thesis project at the Harvard Graduate School of Design,", (width-420)/2,((height-40)/2)+5);
+     text("ViRS is now a collaborative, cross-disciplinary research effort at the Harvard Humanitarian Initiative.", (width-420)/2,((height-40)/2)+25);
      
-     text("Note this is not a prediction model, its primary purpose is to act as an educational tool that", (width-420)/2,((height-40)/2)+165);
-     text("gives the user the ability to control certain parameters and visualize their effects on the outbreak.", (width-420)/2,((height-40)/2)+185);
-     text("This model is part of an ongoing project and will be updated with improvements periodically.", (width-420)/2,((height-40)/2)+205);
+     text("This particular simulation of ViRS is a spatially abstract COVID-19 transmission study model.", (width-420)/2,((height-40)/2)+65);
+     text("It intends to demonstrate the level of impact non-clinical public health measures have on", (width-420)/2,((height-40)/2)+85);
+     text("containing and stopping a COVID-19 outbreak within a population.", (width-420)/2,((height-40)/2)+105);
      
-     text("For any questions or comments, please email", (width-420)/2,((height-40)/2)+245);
-     text("Michael de St. Aubin, mdestaubin@hsph.harvard.edu", (width-420)/2,((height-40)/2)+265);
-    
+     text("Note this is not a prediction model, its primary purpose is to act as an educational tool that", (width-420)/2,((height-40)/2)+145);
+     text("gives the user the ability to control certain parameters and visualize their effects on the outbreak.", (width-420)/2,((height-40)/2)+165);
+     text("This model is part of an ongoing project and will be updated with improvements periodically.", (width-420)/2,((height-40)/2)+185);
+     
+     text("For any questions or comments, please email", (width-420)/2,((height-40)/2)+225);
+     text("Michael de St. Aubin, mdestaubin@hsph.harvard.edu", (width-420)/2,((height-40)/2)+245);
     
      textSize(18);
      text("BACK", (width-420)/2,((height-40)/2)+335);
