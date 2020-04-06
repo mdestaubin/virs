@@ -310,17 +310,17 @@ void statsBar() {
      text("Harvard Graduate School of Design, ViRS is now a collaborative, cross-disciplinary", (width-420)/2,((height-40)/2)+25);
      text("research effort at the Harvard Humanitarian Initiative.", (width-420)/2,((height-40)/2)+45);
      
-     text("This particular simulation of ViRS is a spatially abstract COVID-19", (width-420)/2,((height-40)/2)+85);
-     text("transmission study model. It intends to demonstrate the level of impact", (width-420)/2,((height-40)/2)+105);
-     text("non-clinical public health measures have on containing and stopping a", (width-420)/2,((height-40)/2)+125);
-     text("COVID-19 outbreak within a population. ", (width-420)/2,((height-40)/2)+145);
+     text("This particular simulation of ViRS is a spatially abstract COVID-19 transmission study", (width-420)/2,((height-40)/2)+85);
+     text("model. It intends to demonstrate the level of impact non-clinical public health", (width-420)/2,((height-40)/2)+105);
+     text("measures have on containing and stopping a COVID-19 outbreak within a population.", (width-420)/2,((height-40)/2)+125);
      
-     text("Note this is not a prediction model, its primary purpose is to act as an educational tool that", (width-420)/2,((height-40)/2)+185);
-     text("gives the user the ability to control certain parameters and visualize their effects on the outbreak.", (width-420)/2,((height-40)/2)+205);
-     text("This model is part of an ongoing project and will be updated with improvements periodically.", (width-420)/2,((height-40)/2)+225);
+     text("Note this is not a prediction model, its primary purpose is to act as an educational tool that", (width-420)/2,((height-40)/2)+165);
+     text("gives the user the ability to control certain parameters and visualize their effects on the outbreak.", (width-420)/2,((height-40)/2)+185);
+     text("This model is part of an ongoing project and will be updated with improvements periodically.", (width-420)/2,((height-40)/2)+205);
      
-     text("For any questions or comments, please email", (width-420)/2,((height-40)/2)+265);
-     text("Michael de St. Aubin, mdestaubin@hsph.harvard.edu", (width-420)/2,((height-40)/2)+285);
+     text("For any questions or comments, please email", (width-420)/2,((height-40)/2)+245);
+     text("Michael de St. Aubin, mdestaubin@hsph.harvard.edu", (width-420)/2,((height-40)/2)+265);
+    
     
      textSize(18);
      text("BACK", (width-420)/2,((height-40)/2)+335);
