@@ -288,10 +288,10 @@ void statsBar() {
      //ellipse(((width-420)/2)-20,((height-40)/2)-123,12,12);
     // ellipse(((width-420)/2)-85,((height-40)/2)-105,26,26);
      fill(255);
-     virs.resize(0,120);
+     virs.resize(0,150);
      hhi.resize(0,60);
-      image(hhi,50,50);
-      image(virs,((width-420)/2)-70,((height-40)/2)-200);
+     image(hhi,50,50);
+     image(virs,((width-420)/2)-82,((height-40)/2)-220);
      
      //text("V",(width-420)/2,((height-40)/2)-75);
      textFont(altFont);
