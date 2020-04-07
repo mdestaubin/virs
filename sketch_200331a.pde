@@ -65,11 +65,13 @@ boolean s1 = true;
 boolean s2 = false;
 boolean s3 = false;
 boolean s4 = false;
+boolean s5 = false;
 
 boolean su1 = true;
 boolean su2 = false;
 boolean su3 = false;
 boolean su4 = false;
+boolean su5 = false;
 
 int yPercent  = 312; //23+button
 int yPercent2 = 385;
@@ -93,6 +95,9 @@ boolean play = true;
 
 PImage virs;
 PImage hhi;
+
+boolean adjust = false;
+boolean adjust2 = false;
 
 
 void setup()
@@ -283,28 +288,30 @@ void statsBar() {
      //ellipse(((width-420)/2)-20,((height-40)/2)-123,12,12);
     // ellipse(((width-420)/2)-85,((height-40)/2)-105,26,26);
      fill(255);
-     
+     virs.resize(0,120);
+     hhi.resize(0,60);
+      image(hhi,50,50);
+      image(virs,((width-420)/2)-70,((height-40)/2)-200);
      
      //text("V",(width-420)/2,((height-40)/2)-75);
      textFont(altFont);
      textSize(18);
      if(!about){
-     virs.resize(0,150);
+     //virs.resize(0,120);
      //image(virs,((width-420)/2)-85,((height-40)/2)-220);
      text("START SIMULATION",(width-420)/2,((height-40)/2)-35);
      text("INSTRUCTIONS", (width-420)/2,((height-40)/2));
      text("ABOUT", (width-420)/2,((height-40)/2)+35);
      }
      if(about){
-      hhi.resize(0,60);
-      image(hhi,60,60);
-      image(virs,((width-420)/2)-85,((height-40)/2)-220);
+     // hhi.resize(0,60);
+     // image(hhi,50,50);
+      //image(virs,((width-420)/2)-70,((height-40)/2)-210);
     //   textFont(myFont);
     // textSize(50);
     //  text("ViRS",(width-420)/2,((height-40)/2)-80);
      textFont(altFont);
      textSize(15);
-     
      text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore", (width-420)/2,((height-40)/2)-35);
      text("and visualize how disease dynamics and social behaviors interact over space and time.",(width-420)/2,((height-40)/2)-15);
      text("Originating as an individual thesis project at the Harvard Graduate School of Design,", (width-420)/2,((height-40)/2)+5);
@@ -312,10 +319,10 @@ void statsBar() {
      
      text("This particular simulation of ViRS is a spatially abstract COVID-19 transmission study model.", (width-420)/2,((height-40)/2)+65);
      text("It intends to demonstrate the level of impact non-clinical public health measures have on", (width-420)/2,((height-40)/2)+85);
-     text("containing and stopping a COVID-19 outbreak within a population.", (width-420)/2,((height-40)/2)+105);
+     text("containing and stopping a COVID-19 outbreak within a population of agents.", (width-420)/2,((height-40)/2)+105);
      
      text("Note this is not a prediction model, its primary purpose is to act as an educational tool that", (width-420)/2,((height-40)/2)+145);
-     text("gives the user the ability to control certain parameters and visualize their effects on the outbreak.", (width-420)/2,((height-40)/2)+165);
+     text("gives the user the ability to control certain parameters and visualize their effects on an outbreak.", (width-420)/2,((height-40)/2)+165);
      text("This model is part of an ongoing project and will be updated with improvements periodically.", (width-420)/2,((height-40)/2)+185);
      
      text("For any questions or comments, please email", (width-420)/2,((height-40)/2)+225);
@@ -324,9 +331,6 @@ void statsBar() {
      textSize(18);
      text("BACK", (width-420)/2,((height-40)/2)+335);
      }
-     
-   //  text("be used as an educational tool that gives the user the ability to control", 60, 460);
-     //text("certain parameters and not as a reliable prediction model.", 60, 480);
 
      dayCounter = 0;
     }
@@ -342,7 +346,7 @@ void statsBar() {
     
     textAlign(RIGHT);
     //textSize(17);
-    text(int(popSize) +" POPULATION", xStat+360, yAssumption);
+    text(int(popSize) +"  AGENTS", xStat+360, yAssumption);
     text(dayCounter+ " DAYS" , xStat+360, yStats); 
     
     //textSize(14);
@@ -366,15 +370,15 @@ void statsBar() {
 
     text("EXPOSED: " + int(numInfected), xStat, yDay);
     
-    text("REPRODUCTIVE NUMBER: 2 CASES", xStat, yRvalue-45);
+    text("R 0: 2", xStat, yRvalue-45);
 
-    text("SYMPTOMATIC ISOLATION", xStat, yButton1-15);
+    text("INFECTED IN ISOLATION", xStat, yButton1-15);
     
     text("SOCIAL DISTANCING", xStat, yButton2-15);
     
     fill(120);
     
-    text("CONTACT TRACING | NA", xStat, yButton3-15);
+    text("CONTACTS TRACED | NA", xStat, yButton3-15);
     
     text("ASYMPTOMATIC: NA", xStat, ySick);
    
@@ -409,158 +413,154 @@ void statsBar() {
        if(s1){
          fill(180);
        }
-       rect(xStat,yButton1,80,30, 7);
+       rect(xStat,yButton1,65,30, 7);
        fill(0);
        if(!s1){
        fill(200);
        }
        
-       text("25%", xStat+42,yPercent);
+       text("0%", xStat+34,yPercent);
        
        noFill();
        if(s2){
          fill(180);
        }
-       rect(xStat+92,yButton1,80,30, 7);
+       rect(xStat+74,yButton1,65,30, 7);
        fill(0);
        if(!s2){
        fill(200);
        }
        
-       text("50%", xStat+134,yPercent);
+       text("25%", xStat+109,yPercent);
        
        noFill();
        if(s3){
          fill(180);
        }
-       rect(xStat+184,yButton1,80,30, 7);
+       rect(xStat+149,yButton1,65,30, 7);
        fill(0);
        if(!s3){
        fill(200);
        }
        
-       text("75%", xStat+226,yPercent);
+       text("50%", xStat+184,yPercent);
        
        noFill();
        if(s4){
          fill(180);
        }
-       rect(xStat+276,yButton1,80,30, 7);
+       rect(xStat+223,yButton1,65,30, 7);
        fill(0);
        if(!s4){
        fill(200);
        }
        
-       text("100%", xStat+318,yPercent);
+       text("75%", xStat+259,yPercent);
+       noFill();
+       
+       noFill();
+       if(s5){
+         fill(180);
+       }
+       rect(xStat+297,yButton1,65,30, 7);
+       fill(0);
+       if(!s5){
+       fill(200);
+       }
+       
+       text("100%", xStat+329,yPercent);
        noFill();
       
        if(su1){
          fill(180);
        }
-       rect(xStat,yButton2,80,30, 7);
+       rect(xStat,yButton2,65,30, 7);
        fill(0);
        if(!su1){
        fill(200);
        }
        
-       text("0%", xStat+42,yPercent2);
+       text("0%", xStat+34,yPercent2);
        
        noFill();
        if(su2){
          fill(180);
        }
-       rect(xStat+92,yButton2,80,30, 7);
+       rect(xStat+74,yButton2,65,30, 7);
        fill(0);
        if(!su2){
        fill(200);
        }
        
-       text("25%", xStat+134,yPercent2);
+       text("25%", xStat+109,yPercent2);
        
        noFill();
        if(su3){
          fill(180);
        }
-       rect(xStat+184,yButton2,80,30, 7);
+       rect(xStat+149,yButton2,65,30, 7);
        fill(0);
        if(!su3){
        fill(200);
        }
        
-       text("50%", xStat+226,yPercent2);
+       text("50%", xStat+184,yPercent2);
        
        noFill();
        if(su4){
          fill(180);
        }
-       rect(xStat+276,yButton2,80,30, 7);
+       rect(xStat+223,yButton2,65,30, 7);
        fill(0);
        if(!su4){
        fill(200);
        }
        
-       text("75%", xStat+318,yPercent2);
+       text("75%", xStat+259,yPercent2);
+       noFill();
+       
+       noFill();
+       if(su5){
+         fill(180);
+       }
+       rect(xStat+297,yButton2,65,30, 7);
+       fill(0);
+       if(!su5){
+       fill(200);
+       }
+       
+       text("100%", xStat+329,yPercent2);
        
 
        noFill();
        stroke(100);
-       rect(xStat,yButton3,80,30, 7);
+       rect(xStat,yButton3,65,30, 7);
        fill(100);
-       text("0%", xStat+42,yPercent3);
+       text("0%", xStat+30,yPercent3);
        
-       //noFill();
-       //if(su2){
-       //  fill(180);
-       //}
        noFill();
-       rect(xStat+92,yButton3,80,30, 7);
-       //fill(0);
-       //if(!su2){
-       //fill(200);
-       //}
+       rect(xStat+74,yButton3,65,30, 7);
        fill(100);
-       text("25%", xStat+134,yPercent3);
+       text("25%", xStat+109,yPercent3);
        
-       //noFill();
-       //if(su3){
-       //  fill(180);
-       //}
        noFill();
-       rect(xStat+184,yButton3,80,30, 7);
-       //fill(0);
-       //if(!su3){
-       //fill(200);
-       //}
+       rect(xStat+149,yButton3,65,30, 7);
        fill(100);
-       text("75%", xStat+226,yPercent3);
-       
-       //noFill();
-       //if(su4){
-       //  fill(180);
-       //}
+       text("50%", xStat+184,yPercent3);
+
        noFill();
-       rect(xStat+276,yButton3,80,30, 7);
-       //fill(0);
-       //if(!su4){
-       //fill(200);
-       //}
+       rect(xStat+223,yButton3,65,30, 7);
        fill(100);
-       text("100%", xStat+318,yPercent3);
-       
-    
-    
-    //if(!looping){
-      
-    //  pause = true;
-    //}
-       
-    //if(isSetup){
-    
-      
-    //}
-    
+       text("75%", xStat+259,yPercent3);
+
+       noFill();
+       rect(xStat+297,yButton3,65,30, 7);
+       fill(100);
+       text("100%", xStat+329,yPercent3);
+
+
      if(isSetup){
-     stroke(150);
+     stroke(225);
      noFill();
      rect(xStat+335,25,5,20);
      rect(xStat+345,25,5,20);
@@ -623,7 +623,7 @@ void statsBar() {
 
     //epiCurve();
    
-    sickHistory.add(yCFR-(numSick/4));
+    sickHistory.add(yCFR-(numSick));
     strokeWeight(2);
      xCord1 = xStat;
     
@@ -633,6 +633,19 @@ void statsBar() {
     
     if (i < sickHistory.size() && sickHistory.get(i) != null){
     float yInfected = sickHistory.get(i);
+    
+    if (numSick >= 120) { 
+        adjust = true; 
+    } 
+    if(adjust){
+    yInfected   = (yInfected+yCFR)/2;
+    }
+    //else if (numSick > 40) {
+    //  // adjust = false; 
+    //  adjust2 = true;
+    //  ySick   = (ySick*2 +yCFR)/2;
+
+    //}
     
     strokeWeight(1);
 
@@ -662,7 +675,7 @@ void statsBar() {
     line(xStat+xInfected+xSurvivors+xDead+xSick, yHealthy+8,xStat+xInfected+xSurvivors+xDead+xSick,yHealthy+45);
 
     
-   if (numSick == 0 && numInfected == 0 && dayCounter > 10) {
+   if ((numSick == 0 && numInfected == 0 && dayCounter > 9) || dayCounter > 99) {
      fill(0,100);
      noStroke();
      rect(20,20,width-420,800,6); 
@@ -793,12 +806,10 @@ void infectionLine(Agent person1, Agent person2) {
   float spreadDist = dist(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
 
    if ((person2.sick) || (person1.sick)) {
-     
-     if(contactDays <= 1){
-      
-      if (spreadDist < 30){
 
-        stroke(255, 60);
+      if (spreadDist < 25){
+
+        stroke(255,70);
 
         strokeWeight(3);
         
@@ -809,7 +820,6 @@ void infectionLine(Agent person1, Agent person2) {
         line(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
       }
      }
-    }
 
 }
 
@@ -926,6 +936,11 @@ void mousePressed()
  
 
     //text("INSTRUCTIONS", (width-420)/2,((height-40)/2)-05);
+    if(!isSetup){
+    if (mouseX > 50 && mouseX < 200 && mouseY > 50 && mouseY < 120) { 
+    link("https://hhi.harvard.edu/");
+  }
+ }
         
     if(mouseX >= ((width-420)/2)-30 && mouseX <= ((width-420)/2)+30 && mouseY >= ((height-40)/2)+20 && mouseY <= ((height-40)/2)+35){
       if(!about){
@@ -952,60 +967,83 @@ void mousePressed()
       //looping = !looping;
     }
 
-   if(mouseX >= xStat && mouseX <= (xStat+80) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+   if(mouseX >= xStat && mouseX <= (xStat+34) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
       s1 = true;
       s2 = false;
       s3 = false;
       s4 = false;
+      s5 = false;
     }
     
-    if(mouseX >= xStat+92 && mouseX <= (xStat+182) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
       s1 = false;
       s2 = true;
       s3 = false;
       s4 = false;
+      s5 = false;
     }
     
-    if(mouseX >= xStat+184 && mouseX <= (xStat+264) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
       s1 = false;
       s2 = false;
       s3 = true;
       s4 = false;
+      s5 = false;
     }
     
-    if(mouseX >= xStat+276 && mouseX <= (xStat+356) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
       s1 = false;
       s2 = false;
       s3 = false;
       s4 = true;
+      s5 = false;
+    }
+    
+    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+      s1 = false;
+      s2 = false;
+      s3 = false;
+      s4 = false;
+      s5 = true;
     }
 
     
-    if(mouseX >= xStat && mouseX <= (xStat+80) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+    if(mouseX >= xStat && mouseX <= (xStat+34) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
       su1 = true;
       su2 = false;
       su3 = false;
       su4 = false;
+      su5 = false;
     }
     
-    if(mouseX >= xStat+92 && mouseX <= (xStat+182) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
       su1 = false;
       su2 = true;
       su3 = false;
       su4 = false;
+      su5 = false;
     }
     
-    if(mouseX >= xStat+184 && mouseX <= (xStat+264) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
       su1 = false;
       su2 = false;
       su3 = true;
       su4 = false;
+      su5 = false;
     }
-    if(mouseX >= xStat+276 && mouseX <= (xStat+356) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
       su1 = false;
       su2 = false;
       su3 = false;
       su4 = true;
+      su5 = false;
+    }
+    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+      su1 = false;
+      su2 = false;
+      su3 = false;
+      su4 = false;
+      su5 = true;
     }
 
 }
@@ -1063,7 +1101,7 @@ class Agent {
 
   int haloGrowth = 0;
   
-  float deathRate = 0.05;
+  float deathRate = 0.035;
 
   PVector target;
 
@@ -1094,7 +1132,7 @@ class Agent {
 
     loc = L;
 
-    vel = new PVector(random(-2, 2), random(-2, 2));
+    vel = new PVector(random(-1,1), random(-1, 1));
 
     noVel = new PVector(0, 0);
     
@@ -1223,6 +1261,9 @@ void drawAgent()
       if(su4){
         travelIsolate = .75;
       }
+      if(su5){
+        travelIsolate = 1.0;
+      }
     if (susceptible || infected || sick){
       if (randomNum < travelIsolate){
          socialDistance = true;
@@ -1238,15 +1279,18 @@ void drawAgent()
       susceptible = false;
       rad = 5;
       if(s1){
-        sickIsolateRate = 0.25;
+        sickIsolateRate = 0.0;
       }
       if(s2){
-        sickIsolateRate = 0.5;
+        sickIsolateRate = 0.25;
       }
       if(s3){
-        sickIsolateRate = 0.75;
+        sickIsolateRate = 0.5;
       }
       if(s4){
+        sickIsolateRate = 0.75;
+      }
+      if(s5){
         sickIsolateRate = 1;
       }
       if (randomNum < sickIsolateRate){
@@ -1267,7 +1311,7 @@ void drawAgent()
     if (recovered) {
       susceptible = false;
       fill(88, 150, 255); 
-      rad = 4;
+      rad = 6;
 
     }
     
@@ -1293,7 +1337,7 @@ void drawAgent()
     if ( sick ) {
       noFill();
       stroke(238, 90, 30);
-      ellipse(loc.x, loc.y, 16, 16);
+      ellipse(loc.x, loc.y, 15, 15);
       //drawHalo();
 
     }
@@ -1387,25 +1431,15 @@ void drawAgent()
     //bounce checks
 
 
-    if (loc.x < 25 || loc.x >= width-405) {
+    if (loc.x < 28 || loc.x >= width-407) {
       vel.x *= -1;
     }
-    if (loc.y < 30 || loc.y >= height-24) {
+    if (loc.y < 30 || loc.y >= height-26) {
       vel.y *= -1;
     }
     
   }
-  
-   void bounce2()
 
-  {
-
-if (frameCount % 2 == 0){
-      vel.x *= -1;
-      vel.y *= -1;
-}
-  
-      }
 }//////////////////////////////////// End of Class
 
 
