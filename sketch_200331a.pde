@@ -967,7 +967,7 @@ void mousePressed()
       //looping = !looping;
     }
 
-   if(mouseX >= xStat && mouseX <= (xStat+34) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+   if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
       s1 = true;
       s2 = false;
       s3 = false;
@@ -1008,7 +1008,7 @@ void mousePressed()
     }
 
     
-    if(mouseX >= xStat && mouseX <= (xStat+34) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+    if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
       su1 = true;
       su2 = false;
       su3 = false;
