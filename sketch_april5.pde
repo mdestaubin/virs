@@ -782,7 +782,7 @@ void statsBar() {
         textSize(17);
     // text("SIMULATION OVER",(width-420)/2,((height-40)/2)-35);
      text("SIMULATION OVER", (width-380)/2,((height-40)/2));
-    // text("MENU", (width-420)/2,((height-40)/2)+35);
+     text("REFRESH BROWSER TO RETURN TO MAIN MENU", (width-380)/2,((height-40)/2)+35);
     over = true;
 
     if (looping) {
