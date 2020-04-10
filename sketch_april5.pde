@@ -787,7 +787,7 @@ void statsBar() {
     line(xCord1, yInfected, xCord1, yCFR);
     
     strokeWeight(1);
-    stroke(155,9);
+    stroke(155,60);
     line(xStat,yLine,xStat+360,yLine);
     
 
@@ -799,7 +799,7 @@ void statsBar() {
 
     if(!isSetup){
     strokeWeight(1);
-    stroke(155,90);
+    stroke(155,60);
     line(xStat,yLine,xStat+360,yLine); 
     }
   
