@@ -372,7 +372,7 @@ void statsBar() {
     rect(xStat-350,yCFR-64,320,56,7);
     fill(220);
     text("The surge capacity line represents the threshold",xStat-340,yCFR-42);
-    text("of the health system capacity.",xStat-340,yCFR-27);
+    text("of the healthcare systems max capacity.",xStat-340,yCFR-27);
     }
     
     fill(255);
