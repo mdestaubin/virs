@@ -433,10 +433,11 @@ void statsBar() {
      text("gives the user the ability to control certain parameters and visualize their effects on an outbreak.", (width-380)/2,((height-40)/2)+200);
      text("This model is part of an ongoing project and will be updated with improvements periodically.", (width-380)/2,((height-40)/2)+220);
      
-     text("For any questions or comments, please email", (width-380)/2,((height-40)/2)+260);
-     text("Michael de St. Aubin, mdestaubin@hsph.harvard.edu", (width-380)/2,((height-40)/2)+280);
+     text("For comments and feedback, please take our...", (width-380)/2,((height-40)/2)+260);
+    // text("Michael de St. Aubin, mdestaubin@hsph.harvard.edu", (width-380)/2,((height-40)/2)+280);
     
      textSize(18);
+     text("USER FEEDBACK SURVEY", (width-380)/2,((height-40)/2)+290);
      text("BACK", (width-380)/2,((height-40)/2)+335);
      }
 
@@ -708,16 +709,7 @@ void statsBar() {
        rect(xStat+297,yButton3,65,30, 7);
        fill(100);
        text("100%", xStat+329,yPercent3);
-
-
-     //if(isSetup){
-     //stroke(225);
-     //strokeWeight(2);
-     //noFill();
-     //line(xStat+340,28,xStat+360,28);
-     //line(xStat+340,35,xStat+360,35);
-     //line(xStat+340,42,xStat+360,42);
-     //}
+ 
 
     noStroke();
 
@@ -787,7 +779,7 @@ void statsBar() {
     line(xCord1, yInfected, xCord1, yCFR);
     
     strokeWeight(1);
-    stroke(155,60);
+    stroke(155,9);
     line(xStat,yLine,xStat+360,yLine);
     
 
@@ -799,7 +791,7 @@ void statsBar() {
 
     if(!isSetup){
     strokeWeight(1);
-    stroke(155,60);
+    stroke(155,90);
     line(xStat,yLine,xStat+360,yLine); 
     }
   
@@ -957,28 +949,6 @@ void infectionLine(Agent person1, Agent person2) {
 
 
 
-////////////////////////////////////////////////////////// cool effect
-//void infectionLine(Agent person1, Agent person2) {
-  
-//  float spreadDist = dist(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
-
-//   if ((person2.sick || person1.sick) && !person1.sickIsolate || !person2.sickIsolate) {
-     
-//     if(contactDays <= 1){
-      
-//      if (spreadDist < 30){
-
-//        stroke(255,60);
-
-//        strokeWeight(3);
-
-//        line(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
-//      }
-//     }
-//    }
-
-//}
-
 void infectedAgent(){
   
   PVector L = new PVector(random(0, width - 400), random(0, height));
@@ -1073,6 +1043,10 @@ void mousePressed()
     if(!isSetup){
     if (mouseX > 50 && mouseX < 200 && mouseY > 50 && mouseY < 120) { 
     link("https://hhi.harvard.edu/");
+  }
+
+  if ((mouseX > ((width-380)/2)-110 && mouseX < ((width-380)/2)+110 && mouseY > ((height-40)/2)+270 && mouseY < ((height-40)/2)+290) && about) { 
+    link("https://ee.kobotoolbox.org/::QuT4e1tO");
   }
  }
         
@@ -1580,6 +1554,3 @@ void drawAgent()
   }
 
 }//////////////////////////////////// End of Class
-
-
-
