@@ -2,6 +2,9 @@
 
 <head>
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+
 <script type="text/javascript" src="processing.js"></script>
 	
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -39,14 +42,22 @@
 
 		height: 	100%;
 
-  		/*width:100%; */
-  		/*height:100%; */
-
   		margin:0; 
-
-  	/*z-index:999999;*/
 		
 	}
+
+#content-desktop {display: block;}
+#content-mobile {display: none;}
+
+@media screen and (max-width: 600px) {
+
+#content-desktop {display: none;}
+#content-mobile {
+
+	display: flex; 
+	color: white;
+	padding: 15px;
+}
 
 </style>
 
@@ -57,7 +68,10 @@
 
 <body>
 
-<canvas data-processing-sources="sketch_april5.pde"><canvas>
+<!-- <div id=”content-desktop”> -->
+<canvas id= "content-desktop" data-processing-sources="sketch_april5.pde"></canvas>
+<h4 id= "content-mobile">THE ViRS | COVID-19 SIMULATOR IS NOT AVAILABLE FOR BETA TESTING ON MOBILE DEVICES. <br> <br> PLEASE VISIT THIS WEBSITE ON A LAPTOP OR DESKTOP COMPUTER TO PROCEED.</h4>
+<!-- </div> -->
 
 </body>
 
