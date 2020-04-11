@@ -25,9 +25,13 @@ int maxDays = 7;
 
 int spreadDistance = 5;
 
+int contactDistance = 15;
+
 float infectionProbability = .10;
 
 float travelProbability;
+
+float isolationProb;
 
 int xStat = 740;
 
@@ -49,8 +53,6 @@ int yDead = 380;
 
 int yCFR = 720;
 
-boolean isolate = false;
-
 boolean isSetup = false;
 
 int numDead = 0;
@@ -70,6 +72,12 @@ boolean su2 = false;
 boolean su3 = false;
 boolean su4 = false;
 boolean su5 = false;
+
+boolean ct1 = true;
+boolean ct2 = false;
+boolean ct3 = false;
+boolean ct4 = false;
+boolean ct5 = false;
 
 int yPercent  = 245; //23+button
 int yPercent2 = 310;
@@ -144,7 +152,7 @@ void draw()
 
     infect();
     statsBar();
-
+    //isolate();
 }
 
 
@@ -409,6 +417,8 @@ void statsBar() {
      //image(virs,((width-420)/2)-85,((height-40)/2)-220);
      text("START SIMULATION",(width-380)/2,((height-40)/2));
      text("ABOUT", (width-380)/2,((height-40)/2)+35);
+     textAlign(RIGHT);
+     //text("[BETA TESTING]",width-420,(65));
     // text("INFO ON COVID-19", (width-380)/2,((height-40)/2)+70);
      }
      if(about){
@@ -419,7 +429,7 @@ void statsBar() {
     // textSize(50);
     //  text("ViRS",(width-420)/2,((height-40)/2)-80);
      textFont(altFont);
-     textSize(15);
+     textSize(14);
      text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore", (width-380)/2,((height-40)/2));
      text("and visualize how disease dynamics and social behaviors interact over space and time.",(width-380)/2,((height-40)/2)+20);
      text("Originating as an individual thesis project at the Harvard Graduate School of Design,", (width-380)/2,((height-40)/2)+40);
@@ -431,10 +441,9 @@ void statsBar() {
      
      text("Note this is not a prediction model, its primary purpose is to act as an educational tool that", (width-380)/2,((height-40)/2)+180);
      text("gives the user the ability to control certain parameters and visualize their effects on an outbreak.", (width-380)/2,((height-40)/2)+200);
-     text("This model is part of an ongoing project and will be updated with improvements periodically.", (width-380)/2,((height-40)/2)+220);
+     text("This model is in beta in its early stages and will be regularly updated with improvements.", (width-380)/2,((height-40)/2)+220);
      
      text("For comments and feedback, please take our...", (width-380)/2,((height-40)/2)+260);
-    // text("Michael de St. Aubin, mdestaubin@hsph.harvard.edu", (width-380)/2,((height-40)/2)+280);
     
      textSize(18);
      text("USER FEEDBACK SURVEY", (width-380)/2,((height-40)/2)+290);
@@ -485,9 +494,9 @@ void statsBar() {
     
     text("SOCIAL DISTANCING", xStat, yButton2-10);
     
-    fill(120);
+    text("CONTACTS TRACED", xStat, yButton3-10);
     
-    text("CONTACTS TRACED | NA", xStat, yButton3-10);
+    fill(120);
     
     text("ASYMPTOMATIC: NA", xStat, ySick);
    
@@ -519,7 +528,7 @@ void statsBar() {
     fill(255);
     text("| BETA", xStat+250, yTitle-4);
     if(!isSetup){
-      fill(30);
+      fill(0);
     }
     text("M", xStat+345, yTitle-1);
     
@@ -539,6 +548,15 @@ void statsBar() {
     noFill();
     stroke(238, 90, 30);
     ellipse(xStat+5, yInfect-5, 13, 13);
+    
+    fill(255); 
+    noStroke();
+    ellipse( xStat+148, yButton3-15, 4, 4);
+    strokeWeight(1);
+    noFill();
+    stroke(255);
+    ellipse(xStat+148, yButton3-15, 9, 9);
+    
     
     fill(88, 150, 255); 
     noStroke();
@@ -683,32 +701,95 @@ void statsBar() {
        
        text("100%", xStat+329,yPercent2);
        
-
-       noFill();
-       stroke(100);
-       rect(xStat,yButton3,65,30, 7);
-       fill(100);
-       text("0%", xStat+30,yPercent3);
        
        noFill();
+      
+       if(ct1){
+         fill(180);
+       }
+       rect(xStat,yButton3,65,30, 7);
+       fill(0);
+       if(!ct1){
+       fill(200);
+       }
+       
+       text("0%", xStat+34,yPercent3);
+       
+       noFill();
+       if(ct2){
+         fill(180);
+       }
        rect(xStat+74,yButton3,65,30, 7);
-       fill(100);
+       fill(0);
+       if(!ct2){
+       fill(200);
+       }
+       
        text("25%", xStat+109,yPercent3);
        
        noFill();
+       if(ct3){
+         fill(180);
+       }
        rect(xStat+149,yButton3,65,30, 7);
-       fill(100);
+       fill(0);
+       if(!ct3){
+       fill(200);
+       }
+       
        text("50%", xStat+184,yPercent3);
-
+       
        noFill();
+       if(ct4){
+         fill(180);
+       }
        rect(xStat+223,yButton3,65,30, 7);
-       fill(100);
+       fill(0);
+       if(!ct4){
+       fill(200);
+       }
+       
        text("75%", xStat+259,yPercent3);
-
        noFill();
+       
+       noFill();
+       if(ct5){
+         fill(180);
+       }
        rect(xStat+297,yButton3,65,30, 7);
-       fill(100);
+       fill(0);
+       if(!ct5){
+       fill(200);
+       }
+       
        text("100%", xStat+329,yPercent3);
+       
+
+       //noFill();
+       //stroke(100);
+       //rect(xStat,yButton3,65,30, 7);
+       //fill(100);
+       //text("0%", xStat+30,yPercent3);
+       
+       //noFill();
+       //rect(xStat+74,yButton3,65,30, 7);
+       //fill(100);
+       //text("25%", xStat+109,yPercent3);
+       
+       //noFill();
+       //rect(xStat+149,yButton3,65,30, 7);
+       //fill(100);
+       //text("50%", xStat+184,yPercent3);
+
+       //noFill();
+       //rect(xStat+223,yButton3,65,30, 7);
+       //fill(100);
+       //text("75%", xStat+259,yPercent3);
+
+       //noFill();
+       //rect(xStat+297,yButton3,65,30, 7);
+       //fill(100);
+       //text("100%", xStat+329,yPercent3);
  
 
     noStroke();
@@ -827,6 +908,23 @@ void statsBar() {
 void infect()
 
 {
+  
+  if(ct1){
+        isolationProb = 0.0;
+      }
+      if(ct2){
+        isolationProb = 0.007;
+      }
+      if(ct3){
+        isolationProb = 0.01;
+      }
+      if(ct4){
+        isolationProb = .015;
+      }
+      if(ct5){
+        isolationProb = 1.0;
+      }
+
 
     for (int i = 0; i < population.size(); i += 1) {
 
@@ -852,40 +950,59 @@ void infect()
                 infectionProbability = .06;
                 
               }
+              
 
-                if (prob(infectionProbability) == true) {
+                if (prob(infectionProbability) && !person2.isolate) {
 
                     person2.getInfected();
-                    
                 }
+
 
             } else if (distance <= spreadDistance && person2.sick && !person1.sick && !person1.recovered && !person2.sickIsolate)
 
             {
-
-                //person2 makes person1 sick
-                
+              
                 if(person1.socialDistance){
                 
                 infectionProbability = .06;
                 
               }
 
-                if (prob(infectionProbability) == true) {
+                if (prob(infectionProbability) && !person1.isolate) {
 
                     person1.getInfected();      
                   
                 }
                 
-            }
-                        }
+            }              
             
-                   infectionLine(person1,person2);
-    
+            infectionLine(person1,person2);
+            
+            if (distance <= contactDistance && person1.sick && !person2.sick && !person2.recovered  && !person1.sickIsolate)
+
+            {
+
+                if (prob(isolationProb)) {
+
+                    person2.getIsolated(); 
+                }
+
+
+            } else if (distance <= contactDistance && person2.sick && !person1.sick && !person1.recovered && !person2.sickIsolate)
+
+            {
+                
+                if (prob(isolationProb)) {
+
+                    person1.getIsolated(); 
+                }           
+             }
+            
+           }
+
         }
     }
 }
-
 
 ///////////////////////////////////////////////////////////////////////Probability Rate
 
@@ -940,7 +1057,6 @@ void infectionLine(Agent person1, Agent person2) {
         if((person1.vel.x == 0 || person2.vel.x == 0)){
         noStroke();
      }
-
         line(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
       }
      }
@@ -1046,7 +1162,7 @@ void mousePressed()
   }
 
   if ((mouseX > ((width-380)/2)-110 && mouseX < ((width-380)/2)+110 && mouseY > ((height-40)/2)+270 && mouseY < ((height-40)/2)+290) && about) { 
-    link("https://ee.kobotoolbox.org/::QuT4e1tO");
+    link("http://virs.io/survey/");
   }
  }
         
@@ -1164,6 +1280,44 @@ void mousePressed()
       su4 = false;
       su5 = true;
     }
+    
+    if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton3 && mouseY <= (yButton3+35)){
+      ct1 = true;
+      ct2 = false;
+      ct3 = false;
+      ct4 = false;
+      ct5 = false;
+    }
+    
+    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton3 && mouseY <= (yButton3+35)){
+      ct1 = false;
+      ct2 = true;
+      ct3 = false;
+      ct4 = false;
+      ct5 = false;
+    }
+    
+    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton3 && mouseY <= (yButton3+35)){
+      ct1 = false;
+      ct2 = false;
+      ct3 = true;
+      ct4 = false;
+      ct5 = false;
+    }
+    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton3 && mouseY <= (yButton3+35)){
+      ct1 = false;
+      ct2 = false;
+      ct3 = false;
+      ct4 = true;
+      ct5 = false;
+    }
+    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton3 && mouseY <= (yButton3+35)){
+      ct1 = false;
+      ct2 = false;
+      ct3 = false;
+      ct4 = false;
+      ct5 = true;
+    }
 
 }
 
@@ -1234,6 +1388,12 @@ class Agent {
   
   boolean susceptible = true;
   
+  boolean isolate = false;
+  
+  boolean isolateDone = false;
+  
+  int d;
+  
 
   Agent(PVector L)
 
@@ -1300,8 +1460,6 @@ class Agent {
 
   }
 
-    //vel.limit(topspeed);
-    
     if(socialDistance){
     
     loc.add(noVel);
@@ -1311,10 +1469,27 @@ class Agent {
     if(!socialDistance) {
     loc.add(vel);
     }
-
+    
+    
     bounce();
 
     drawAgent();
+    
+    if (isolate)
+
+    { 
+      
+      if(frameCount % 60 == 0){
+      d += 1;
+      if (d >= 14) {    
+        isolate = false;
+        isolateDone = true;
+        doneIsolate();
+      }
+    }
+  }
+    
+
 
   }
 
@@ -1328,15 +1503,17 @@ void survive()
       infected = false;
 
       recovered = true;
-
-      fill(0, 255, 0);
-
-      ellipse( loc.x, loc.y, 12, 12);
       
       if (recovered && sickIsolate){
          vel = new PVector(random(-1,1), random(-1, 1));
   }
  }
+}
+
+void doneIsolate(){
+  if (isolateDone){
+    vel = new PVector(random(-1,1), random(-1, 1));
+  }
 }
 
 void dead()
@@ -1352,9 +1529,6 @@ void dead()
 void drawAgent()
 
   {   
-    if (isolate) {
-      vel = new PVector(0, 0);  
-    }
 
     if (susceptible){
       dead = false;
@@ -1408,12 +1582,10 @@ void drawAgent()
       }
       if (randomNum < sickIsolateRate){
         sickIsolate = true;
-     vel = new PVector(0, 0);
+        vel = new PVector(0, 0);
       }
     } 
-    
-    
-    
+
     if (infected) {
       susceptible = false;
       fill(255, 255, 0); 
@@ -1436,22 +1608,25 @@ void drawAgent()
       //drawHalo();
     }
     
-
+    
     noStroke();
 
     ellipse( loc.x, loc.y, rad, rad);
+    
+      if (isolate) {
+      vel = new PVector(0, 0);  
+    }
+
 
     //add Halos
     
     strokeWeight(1);
     noFill();
-      
 
     if ( sick ) {
       noFill();
       stroke(238, 90, 30);
       ellipse(loc.x, loc.y, 13, 13);
-      //drawHalo();
 
     }
 
@@ -1463,47 +1638,15 @@ void drawAgent()
 
     }
     
-    //if (recovered) {
+    if (isolate) {
 
-    //  noFill();
-      
-    //  strokeWeight(1);
+      stroke(255, 100);
 
-    //  stroke(0, 255, 0,100);
+      ellipse(loc.x, loc.y, 8, 8);
 
-    //  ellipse(loc.x, loc.y, 8, 8);
-
-    //}
+    }
     
   }
-  
-
-  void drawHalo()
-      {
-        
-        
-
-          if( haloGrowth <= 500 )
-          {
-              float radius = haloGrowth;
-              float alpha  = map(haloGrowth, 0, 200, 180, 10 );
-              
-              fill(255, 0, 0,alpha);
-              stroke(255, 0, 0,alpha);
-              if(dead){
-              stroke(138, 43, 226,alpha);
-              fill(138, 43, 226,alpha);
-              }
-
-              strokeWeight(1);
-              ellipse( loc.x, loc.y, radius, radius ); 
-              
-              haloGrowth += 4;
-              if (haloGrowth == 400){
-                  haloGrowth = 0; 
-                }
-            }
-        }
 
   void getInfected()
 
@@ -1519,6 +1662,18 @@ void drawAgent()
 
     }
 
+  }
+  
+    void getIsolated()
+
+  {
+
+    if(!recovered && !sick){
+
+    isolate = true;
+    d = 0;
+
+    }
   }
 
 
