@@ -412,7 +412,7 @@ void statsBar() {
      fill(255);
      virs.resize(0,110);
      hhi.resize(0,60);
-     //image(hhi,50,50);
+     image(hhi,50,50);
      image(virs,((width-380)/2)-62,((height-40)/2)-150);
      
      //text("V",(width-420)/2,((height-40)/2)-75);
