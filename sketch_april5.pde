@@ -422,7 +422,7 @@ void statsBar() {
      //virs.resize(0,120);
      //image(virs,((width-420)/2)-85,((height-40)/2)-220);
      text("START SIMULATION",(width-380)/2,((height-40)/2));
-     //text("ABOUT", (width-380)/2,((height-40)/2)+35);
+     text("ABOUT", (width-380)/2,((height-40)/2)+35);
      textAlign(RIGHT);
      //text("[BETA TESTING]",width-420,(65));
     // text("INFO ON COVID-19", (width-380)/2,((height-40)/2)+70);
