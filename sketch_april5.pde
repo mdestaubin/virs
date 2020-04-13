@@ -459,7 +459,7 @@ void statsBar() {
       noStroke();
       rect(((width-420)/2)-104,((height-40)/2)+270,248,27,7);
      }
-
+     fill(255);
      dayCounter = 0;
     }
     
