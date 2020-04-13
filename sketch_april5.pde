@@ -1125,7 +1125,7 @@ void mousePressed()
       }
     }
 
-    if(isSetup && population.size() < 2020){
+    if(isSetup && population.size() < 1020){
     infectedPerson.loc.x = mouseX;
 
     infectedPerson.loc.y = mouseY;
