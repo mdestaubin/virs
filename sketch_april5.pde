@@ -246,8 +246,8 @@ void statsBar() {
     fill(80,200);
     rect(xStat-350,yAssumption+19,320,56,7);
     fill(220);
-    text("The incubation period is the time elapsed",xStat-340,yAssumption+43);
-    text("between exposure to infection and symptoms.",xStat-340,yAssumption+63);
+    text("The incubation period is the time between",xStat-340,yAssumption+43);
+    text("exposure to infection and becoming infected.",xStat-340,yAssumption+63);
     }
     
     if(mouseX > xStat + 200 && mouseX < xStat+360 && mouseY > yAssumption+35-20 && mouseY < yAssumption+35){
@@ -262,8 +262,8 @@ void statsBar() {
     fill(80,200);
     rect(xStat-350,yAssumption+44,320,56,7);
     fill(220);
-    text("The infection period is the time from first",xStat-340,yAssumption+68);
-    text("onset and contagiousness to recovery.",xStat-340,yAssumption+88);
+    text("The infection period is the contagious stage.",xStat-340,yAssumption+68);
+    text("An agent can be symptomatic or asymptomatic.",xStat-340,yAssumption+88);
     }
     
     if(mouseX >  xStat + 320 && mouseX < xStat+360 && mouseY > yAssumption+60-20 && mouseY < yAssumption+60){
@@ -366,8 +366,8 @@ void statsBar() {
     fill(80,200);
     rect(xStat-350,yCFR-64,320,56,7);
     fill(220);
-    text("The surge capacity line represents the threshold",xStat-340,yCFR-42);
-    text("of the healthcare systems max capacity.",xStat-340,yCFR-27);
+    text("The surge capacity line represents the",xStat-340,yCFR-42);
+    text("healthcare systems max capacity threshold.",xStat-340,yCFR-27);
     }
     
     //if(mouseX >= ((width-420)/2)-30 && mouseX <= ((width-420)/2)+30 && mouseY >= ((height-40)/2)+20 && mouseY <= ((height-40)/2)+35){
@@ -436,17 +436,17 @@ void statsBar() {
     //  text("ViRS",(width-420)/2,((height-40)/2)-80);
      textFont(altFont);
      textSize(14);
-     text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore", (width-380)/2,((height-40)/2));
+      text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore", (width-380)/2,((height-40)/2));
      text("and visualize how disease dynamics and social behaviors interact over space and time.",(width-380)/2,((height-40)/2)+20);
      text("Originating as an individual thesis project at the Harvard Graduate School of Design,", (width-380)/2,((height-40)/2)+40);
      text("ViRS is now a collaborative, cross-disciplinary research effort at the Harvard Humanitarian Initiative.", (width-380)/2,((height-40)/2)+60);
      
-     text("This particular simulation of ViRS is a spatially abstract COVID-19 transmission study model.", (width-380)/2,((height-40)/2)+100);
-     text("It intends to demonstrate the level of impact non-clinical public health measures have on", (width-380)/2,((height-40)/2)+120);
-     text("containing and stopping a COVID-19 outbreak within a population of agents.", (width-380)/2,((height-40)/2)+140);
+     text("This particular product from ViRS is a spatially abstract COVID-19 transmission study model.", (width-380)/2,((height-40)/2)+100);
+     text("It intends to demonstrate the level of impact non-pharmaceutical public health interventions", (width-380)/2,((height-40)/2)+120);
+     text("have on containing and stopping a COVID-19 outbreak within a population of agents.", (width-380)/2,((height-40)/2)+140);
      
-     text("Note this is not a prediction model, its primary purpose is to act as an educational tool that", (width-380)/2,((height-40)/2)+180);
-     text("gives the user the ability to control certain parameters and visualize their effects on an outbreak.", (width-380)/2,((height-40)/2)+200);
+     text("This is not a prediction model. Its primary purpose is to act as an educational demonstration tool that", (width-380)/2,((height-40)/2)+180);
+     text("gives the user the ability to control certain parameters and visualize their effects on the outbreak.", (width-380)/2,((height-40)/2)+200);
      text("This model is in beta in its early stages and will be regularly updated with improvements.", (width-380)/2,((height-40)/2)+220);
      
      text("For comments and feedback, please take our...", (width-380)/2,((height-40)/2)+260);
