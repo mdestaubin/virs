@@ -362,12 +362,12 @@ void statsBar() {
     text("infected agents over time.",xStat-340,yCFR-143);
     }
     
-    if(mouseX >  xStat && mouseX < xStat+360 && mouseY > yCFR-53 && mouseY < yCFR-47){
+    if(mouseX >  xStat && mouseX < xStat+360 && mouseY > yCFR-83 && mouseY < yCFR-77){
     fill(80,200);
-    rect(xStat-350,yCFR-64,320,56,7);
+    rect(xStat-350,yCFR-94,320,56,7);
     fill(220);
-    text("This target line represents the theoretical",xStat-340,yCFR-42);
-    text("healthcare systems maximum capacity.",xStat-340,yCFR-27);
+    text("This target line represents the theoretical",xStat-340,yCFR-72);
+    text("healthcare systems maximum capacity.",xStat-340,yCFR-57);
     }
     
     fill(255);
