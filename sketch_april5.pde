@@ -346,48 +346,29 @@ void statsBar() {
     text("affected agents that do not survive.",xStat-340,ySick+23);
     }
     
-    if(mouseX >  xStat && mouseX < xStat+360 && mouseY > yHealthy+5 && mouseY < yHealthy+45){
-    fill(80,200);
-    rect(xStat-350,yHealthy-13,320,56,7);
-    fill(220);
-    text("The prevalence bar shows the total proportion",xStat-340,yHealthy+10);
-    text("of agents that have been affected by the virus.",xStat-340,yHealthy+30);
-    }
+    //if(mouseX >  xStat && mouseX < xStat+360 && mouseY > yHealthy+5 && mouseY < yHealthy+45){
+    //fill(80,200);
+    //rect(xStat-350,yHealthy-13,320,56,7);
+    //fill(220);
+    //text("The prevalence bar shows the total proportion",xStat-340,yHealthy+10);
+    //text("of agents that have been affected by the virus.",xStat-340,yHealthy+30);
+    //}
     
-    if(mouseX >  xStat && mouseX < xStat+360 && mouseY > yCFR-100 && mouseY < yCFR){
+    if(mouseX >  xStat && mouseX < xStat+360 && mouseY > yCFR-160 && mouseY < yCFR){
     fill(80,200);
-    rect(xStat-350,yCFR-125,320,56,7);
+    rect(xStat-350,yCFR-185,320,56,7);
     fill(220);
-    text("The epidemic curve shows the active number of",xStat-340,yCFR-103);
-    text("infected agents over time.",xStat-340,yCFR-83);
+    text("The epidemic curve shows the active number of",xStat-340,yCFR-163);
+    text("infected agents over time.",xStat-340,yCFR-143);
     }
     
     if(mouseX >  xStat && mouseX < xStat+360 && mouseY > yCFR-53 && mouseY < yCFR-47){
     fill(80,200);
     rect(xStat-350,yCFR-64,320,56,7);
     fill(220);
-    text("The surge capacity line represents the",xStat-340,yCFR-42);
-    text("healthcare systems max capacity threshold.",xStat-340,yCFR-27);
+    text("This target line represents the theoretical",xStat-340,yCFR-42);
+    text("healthcare systems maximum capacity.",xStat-340,yCFR-27);
     }
-    
-    //if(mouseX >= ((width-420)/2)-30 && mouseX <= ((width-420)/2)+30 && mouseY >= ((height-40)/2)+20 && mouseY <= ((height-40)/2)+35){
-    //  if(!about){
-    //    noFill();
-    //    strokeWeight(1);
-    //    stroke(255);
-    //   rect(((width-420)/2)-76,((height-40)/2)+15,190,26,7);
-    //  }
-    //}
-    
-    //if(mouseX >= ((width-420)/2)-30 && mouseX <= ((width-420)/2)+30 && mouseY >= ((height-40)/2)+325 && mouseY <= ((height-40)/2)+335){
-    //  if(about){
-    //  noFill();
-    //    strokeWeight(1);
-    //    stroke(255);
-    //   rect(((width-420)/2)-76,((height-40)/2)+315,190,26,7);
-    //}
-    //}
-    
     
     fill(255);
     textAlign(LEFT);
@@ -395,14 +376,8 @@ void statsBar() {
     textSize(14);
 
     if(!isSetup){
-    // fill(0,100);
-     //rect(20,20,width-420,800,6); 
      noStroke();
      fill(255);
-     textAlign(CENTER);
-     //text("CLICK TO START SIMULATION", (width-420)/2, ((height-40)/2)-35);
-     
-     
      textAlign(CENTER);
      stroke(255);
      //strokeWeight(3);
@@ -428,28 +403,23 @@ void statsBar() {
     // text("INFO ON COVID-19", (width-380)/2,((height-40)/2)+70);
      }
      if(about){
-     // hhi.resize(0,60);
-     // image(hhi,50,50);
-      //image(virs,((width-420)/2)-70,((height-40)/2)-210);
-    //   textFont(myFont);
-    // textSize(50);
-    //  text("ViRS",(width-420)/2,((height-40)/2)-80);
+
      textFont(altFont);
      textSize(14);
-      text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore", (width-380)/2,((height-40)/2));
+     text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore", (width-380)/2,((height-40)/2));
      text("and visualize how disease dynamics and social behaviors interact over space and time.",(width-380)/2,((height-40)/2)+20);
      text("Originating as an individual thesis project at the Harvard Graduate School of Design,", (width-380)/2,((height-40)/2)+40);
      text("ViRS is now a collaborative, cross-disciplinary research effort at the Harvard Humanitarian Initiative.", (width-380)/2,((height-40)/2)+60);
      
      text("This particular product from ViRS is a spatially abstract COVID-19 transmission study model.", (width-380)/2,((height-40)/2)+100);
-     text("It intends to demonstrate the level of impact non-pharmaceutical public health interventions", (width-380)/2,((height-40)/2)+120);
+     text("It intends to explore the potential level of impact non-pharmaceutical public health interventions", (width-380)/2,((height-40)/2)+120);
      text("have on containing and stopping a COVID-19 outbreak within a population of agents.", (width-380)/2,((height-40)/2)+140);
      
-     text("This is not a prediction model. Its primary purpose is to act as an educational demonstration tool that", (width-380)/2,((height-40)/2)+180);
-     text("gives the user the ability to control certain parameters and visualize their effects on the outbreak.", (width-380)/2,((height-40)/2)+200);
+     text("This is not a prediction model. Its primary purpose is to act as an educational tool that", (width-380)/2,((height-40)/2)+180);
+     text("gives the user the ability to control certain parameters and explore their effects on the outbreak.", (width-380)/2,((height-40)/2)+200);
      text("This model is in beta in its early stages and will be regularly updated with improvements.", (width-380)/2,((height-40)/2)+220);
      
-     text("For comments and feedback, please take our...", (width-380)/2,((height-40)/2)+260);
+     text("We'd love to hear your thoughts, please take our...", (width-380)/2,((height-40)/2)+260);
     
      textSize(18);
      text("USER FEEDBACK SURVEY", (width-380)/2,((height-40)/2)+290);
@@ -463,14 +433,9 @@ void statsBar() {
      dayCounter = 0;
     }
     
-    //if(!looping){
-    // textAlign(CENTER);
-    // text("Restart", (width-380)/2, (height-40)/2);
-     //dayCounter = 0;
-   // }
     textSize(14);
     textAlign(CENTER);
-    text(nf(percentAffected, 0, 2) + "%", xStat+xInfected+xSurvivors+xDead+xSick+10, yHealthy);
+   // text(nf(percentAffected, 0, 2) + "%", xStat+xInfected+xSurvivors+xDead+xSick+10, yHealthy);
     
     textAlign(RIGHT);
     //textSize(17);
@@ -492,23 +457,23 @@ void statsBar() {
     
     text("INCUBATION: 4-6 DAYS" , xStat, yAssumption+35);
     
-    text("INFECTION: 3-7 DAYS" , xStat, yAssumption+60);
+    text("INFECTIOUS: 3-7 DAYS" , xStat, yAssumption+60);
 
-    text("INFECTED: " + int(numSick), xStat+18, yInfect);
+    text("INFECTIOUS: " + int(numSick), xStat+18, yInfect);
     
-    text("EPIDEMIC CURVE ", xStat, yCFR-110);
+    text("EPIDEMIC CURVE ", xStat, (ySick-yInfect)+ySick+10);
 
     text("EXPOSED: " + int(numInfected), xStat+18, yDay);
 
-    text("INFECTED IN ISOLATION", xStat, yButton1-10);
+    text("INFECTIOUS IN ISOLATION", xStat, yButton1-10);
     
     text("SOCIAL DISTANCING", xStat, yButton2-10);
     
     text("CONTACTS TRACED", xStat+16, yButton3-10);
     
-    fill(120);
+    text("PREVALENCE: "+nf(percentAffected, 0, 2) + "%", xStat, ySick);
     
-    text("ASYMPTOMATIC: NA", xStat, ySick);
+   // text("USER FEEDBACK", xStat, yTitle+21);
    
     textSize(16);
     fill(255);
@@ -778,25 +743,25 @@ void statsBar() {
 
     fill(25);
 
-    rect(xStat, yHealthy + 10, 360, 35,7);
+    //rect(xStat, yHealthy + 10, 360, 35,7);
     
-    rect(xStat, yCFR, 360, -100);
+    rect(xStat, yCFR, 360, -160);
 
     fill(238, 109, 3, 150);
 
-    rect(xStat+xInfected+xSurvivors+xDead, yHealthy + 10, xSick, 35);
+    //rect(xStat+xInfected+xSurvivors+xDead, yHealthy + 10, xSick, 35);
 
-    fill(255, 255, 0, 150);
+    //fill(255, 255, 0, 150);
 
-    rect(xStat+xSurvivors+xDead, yHealthy + 10, xInfected, 35);
+    //rect(xStat+xSurvivors+xDead, yHealthy + 10, xInfected, 35);
 
-    fill(88, 150, 255,150); 
+    //fill(88, 150, 255,150); 
 
-    rect(xStat+xDead, yHealthy + 10, xSurvivors, 35);;
+    //rect(xStat+xDead, yHealthy + 10, xSurvivors, 35);;
 
-    fill(138, 43, 226, 100);
+    //fill(138, 43, 226, 100);
 
-    rect(xStat, yHealthy + 10, xDead, 35);
+    //rect(xStat, yHealthy + 10, xDead, 35);
     
     fill(255,100);
    
@@ -804,7 +769,7 @@ void statsBar() {
     sickHistory.add(yCFR-(numSick));
     strokeWeight(2);
     xCord1 = xStat;
-    int yLine = yCFR-50;
+    int yLine = yCFR-80;
     
     if (isSetup){
     for (int i = 0; i < frameCount; i++) 
@@ -813,12 +778,12 @@ void statsBar() {
     if (i < sickHistory.size() && sickHistory.get(i) != null){
     float yInfected = sickHistory.get(i);
     
-    if (numSick >= 100 && numSick < 199) { 
+    if (numSick >= 159 && numSick < 299) { 
         adjust = true; 
         
     } 
     
-    if (numSick >= 200) { 
+    if (numSick >= 300) { 
         adjust2 = true; 
     } 
     
@@ -836,7 +801,7 @@ void statsBar() {
     strokeWeight(1);
 
     stroke(100,10);
-    line(xCord1,yCFR,xCord1,yCFR-100);
+    line(xCord1,yCFR,xCord1,yCFR-160);
     noFill();
     stroke(238, 109, 3, 30);
     line(xCord1, yInfected, xCord1, yCFR);
@@ -862,7 +827,7 @@ void statsBar() {
 
     strokeWeight(2);
     
-    line(xStat+xInfected+xSurvivors+xDead+xSick, yHealthy+8,xStat+xInfected+xSurvivors+xDead+xSick,yHealthy+45);
+   // line(xStat+xInfected+xSurvivors+xDead+xSick, yHealthy+8,xStat+xInfected+xSurvivors+xDead+xSick,yHealthy+45);
     
    if ((numSick == 0 && numInfected == 0 && dayCounter > 9) || dayCounter > 99) {
      
@@ -1125,7 +1090,7 @@ void mousePressed()
       }
     }
 
-    if(isSetup && population.size() < 1020){
+    if(isSetup && population.size() <1020){
     infectedPerson.loc.x = mouseX;
 
     infectedPerson.loc.y = mouseY;
