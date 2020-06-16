@@ -1068,7 +1068,7 @@ void mousePressed()
     Agent infectedPerson = new Agent(L);
 
     infectedPerson.getInfected();
-    if(mouseX<width-410 && mouseY<height-30 && !over){
+    if(mouseX<width-410 && mouseX> width- 1095 && mouseY<height-30 && mouseY> height - 720 && !over){
     if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+90 && mouseY >= ((height-40)/2)-15 && mouseY <= ((height-40)/2)){
     if(!isSetup){
             //adjust = false;
