@@ -35,6 +35,7 @@ float isolationProb;
 
 int xStat = 740;
 
+
 int yTitle = 38;
 
 int yDay = 455;
@@ -51,14 +52,14 @@ int ySurvivors = 320;
 
 int yDead = 380;
 
-int yCFR = 713;
+ int yCFR = 713;
 
 boolean isSetup = false;
 
 int numDead = 0;
 
-ArrayList<Float> sickHistory;
-
+//FloatList sickHistory;
+HashMap<Integer,Integer> sickHistory;
 float xCord1;
 
 boolean s1 = true;
@@ -107,13 +108,13 @@ void setup()
 {
     size(1120,740);
     frameRate(60);
-    sickHistory =     new ArrayList<Float>();
+   sickHistory =     new HashMap<Integer,Integer>();
     population = new ArrayList<Agent>();
     myFont = createFont("Arial Black", 32);
     altFont = createFont("Arial", 32);
     initailizePop();
     virs = loadImage("DATA/virslogo.png");
-    hhi = loadImage("DATA/hhilogo.png"); 
+    hhi = loadImage("DATA/hhilogo.png");
 }
 
 void draw()
@@ -123,12 +124,11 @@ void draw()
     fill(38,38,38);
     stroke(255);
     strokeWeight(2);
-    rect(20,20,width-420,700,6); 
+   rect(20,20,width-420,700,6); 
     stroke(150);
     line(xStat,yAssumption+10,xStat+360,yAssumption+10);
     line(xStat,yButton1-35,xStat+360,yButton1-35);
     line(xStat,yStats+10,xStat+360,yStats+10);
-
     for (Agent a: population){
       if(isSetup){
         a.update(); 
@@ -142,6 +142,7 @@ void draw()
         currentPopulationSize = population.size();
         dayCounter += 1;
         removeAgent();
+          
     }
 
     infect();
@@ -149,6 +150,7 @@ void draw()
     //if(isSetup && frameCount % 2 == 0){
     //  saveFrame("output/#####.png");
     //}
+    
 }
 
 void removeAgent() {
@@ -160,6 +162,7 @@ void removeAgent() {
           fill(138, 43, 226,100);
           ellipse( d.loc.x, d.loc.y, 16, 16);
           numDead  += 1;
+        
      } 
     }
    } 
@@ -170,11 +173,11 @@ void statsBar() {
 
     float popSize = population.size();   
     float totalPop= popSize + numDead;
-    float numSick = 0;
     float numInfected = 0;
     float numHealed = 0;
     float numHealthy = 0;
-
+    int numSick = 0;
+    
     for (Agent person: population) {
 
         if (person.sick == true) {
@@ -182,34 +185,23 @@ void statsBar() {
             numSick += 1;
 
         }
-
-    }
-
-    for (Agent person: population) {
-
-        if (person.infected == true) {
+         if (person.infected == true) {
 
             numInfected += 1;
 
         }
-
-    }
-
-    for (Agent person: population) {
-
-        if (person.recovered == true) {
+         if (person.recovered == true) {
 
             numHealed += 1;
 
         }
-
-    }
-
-    for (Agent person: population) {
-        if (person.dead == false && person.recovered == false && person.infected == false && person.sick == false) {
+         if (person.dead == false && person.recovered == false && person.infected == false && person.sick == false) {
             numHealthy += 1;
         }
+
     }
+   
+  
     
     float numAffected = numHealed + numDead + numInfected + numSick;
     
@@ -370,6 +362,7 @@ void statsBar() {
     text("healthcare systems maximum capacity.",xStat-340,yCFR-57);
     }
     
+    
     fill(255);
     textAlign(LEFT);
     textFont(altFont);
@@ -432,6 +425,8 @@ void statsBar() {
      fill(255);
      dayCounter = 0;
     }
+     long t3 = System.currentTimeMillis();
+   // println("the time after paragraph " + (t3-t2));
     
     textSize(14);
     textAlign(CENTER);
@@ -546,8 +541,8 @@ void statsBar() {
     textSize(20);
 
     fill(255, 255, 255);
-
     
+ 
     //float xCFR = map(percentCFR, 0, xScale, 0, 360);
 
        textAlign(CENTER);
@@ -738,7 +733,6 @@ void statsBar() {
        }
        
        text("100%", xStat+329,yPercent3);
-
     noStroke();
 
     fill(25);
@@ -762,20 +756,38 @@ void statsBar() {
     //fill(138, 43, 226, 100);
 
     //rect(xStat, yHealthy + 10, xDead, 35);
-    
+    ////////////////////////////////////////////////////////////////////// EPIDEMIC CURVE
     fill(255,100);
-   
-   
-    sickHistory.add(yCFR-(numSick));
+    sickHistory.put(((sickHistory.size())+1),yCFR-(numSick));
+     
     strokeWeight(2);
-    xCord1 = xStat;
-    int yLine = yCFR-80;
+    int yLine = 713 - 80;
     
+     if (numSick >= 159 && numSick < 299) { 
+        adjust = true; 
+        
+    } 
+       if (numSick >= 300) { 
+        adjust2 = true; 
+    }
+     if(adjust){
+    yLine = 713 -25;
+    }
+    
+    if (adjust2) { 
+        yLine = 713 - 13;
+    } 
+    
+    strokeWeight(1);
+    stroke(153);
+    line(xStat,yLine,xStat+360,yLine);
+
     if (isSetup){
+    xCord1 = 740;
+   
     for (int i = 0; i < frameCount; i++) 
     {
-    
-    if (i < sickHistory.size() && sickHistory.get(i) != null){
+    if ( i < sickHistory.size() && sickHistory.get(i) != null){
     float yInfected = sickHistory.get(i);
     
     if (numSick >= 159 && numSick < 299) { 
@@ -790,42 +802,34 @@ void statsBar() {
      
     if(adjust){
     yInfected   = (yInfected+yCFR)/2;
-    yLine = yCFR -25;
+    yLine = 713 -25;
     }
     
     if (adjust2) { 
         yInfected   = (yInfected+yCFR)/2; 
-        yLine = yCFR - 13;
+        yLine = 713 - 13;
     } 
     
-    strokeWeight(1);
+   strokeWeight(1);
 
     stroke(100,10);
-    line(xCord1,yCFR,xCord1,yCFR-160);
     noFill();
     stroke(238, 109, 3, 30);
-    line(xCord1, yInfected, xCord1, yCFR);
-    
-    strokeWeight(1);
-    stroke(155,9);
-    line(xStat,yLine,xStat+360,yLine);
-    
-
+   line(xCord1, yInfected, xCord1, yCFR);
     xCord1 = xCord1 + .06;
-
      }
+    
     }
-  }
+    
+    }
 
-    if(!isSetup){
+    
+  if(!isSetup){
     strokeWeight(1);
     stroke(155,90);
     line(xStat,yLine,xStat+360,yLine); 
     }
-  
-    stroke(200);
-
-    strokeWeight(2);
+    
     
    // line(xStat+xInfected+xSurvivors+xDead+xSick, yHealthy+8,xStat+xInfected+xSurvivors+xDead+xSick,yHealthy+45);
     
@@ -852,10 +856,20 @@ void statsBar() {
     } else {
       loop();
     }
+
   }
-
+   
+    if(!isSetup){
+    strokeWeight(1);
+    stroke(155,90);
+    line(xStat,yLine,xStat+360,yLine); 
+    }
+  
+    stroke(200);
+     strokeWeight(2);
+       long t7 = System.currentTimeMillis();
+  //  println("at the end of statsbar" + (t7-t6));
 }
-
 /////////////////////////////////////////////////////////////////////////// Infect
 
 void infect()
@@ -865,7 +879,7 @@ void infect()
   if(ct1){
         isolationProb = 0.0;
       }
-      if(ct2){
+   if(ct2){
         isolationProb = 0.007;
       }
       if(ct3){
@@ -878,15 +892,14 @@ void infect()
         isolationProb = 1.0;
       }
 
-
-    for (int i = 0; i < population.size(); i += 1) {
-
-        Agent person1 = population.get(i);
-
+     
+      for (int i = 0; i < population.size(); i += 1) {
+  
+          Agent person1 = population.get(i);
+        
         for (int j = i + 1; j < population.size(); j += 1)
 
         {
-
             Agent person2 = population.get(j);
             
             if ((person1.sick || person2.sick)){
@@ -951,9 +964,12 @@ void infect()
                 }           
              }       
           }
-       }
+
     }
-}
+    }
+    }
+    
+
 
 ///////////////////////////////////////////////////////////////////////Probability Rate
 
@@ -988,7 +1004,7 @@ void initailizePop() {
         population.add(new Agent(L));
 
     }
-   
+    
 }
     
 void infectionLine(Agent person1, Agent person2) {
@@ -1001,11 +1017,12 @@ void infectionLine(Agent person1, Agent person2) {
 
         strokeWeight(3);
         
-        if((person1.vel.x == 0 || person2.vel.x == 0)){
-        noStroke();
+        if((person1.vel.x == 0 || person2.vel.x == 0)){//??
+        noStroke();//??
      }
         line(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
       }
+       
 }
 
 
@@ -1023,6 +1040,7 @@ void infectedAgent(){
     infectedPerson.loc.y = (height-180)/2;
 
     population.add(infectedPerson);
+ 
 }
 
 ////////////////////////////////////////////////////////////////////////////////Pop Flux
@@ -1054,7 +1072,7 @@ void popFlux()
         numberToFlux -= 1;
 
     }
-
+ 
 }
 
 //============================================================//
@@ -1068,8 +1086,8 @@ void mousePressed()
     Agent infectedPerson = new Agent(L);
 
     infectedPerson.getInfected();
-    if(mouseX<width-410 && mouseX> width- 1095 && mouseY<height-30 && mouseY> height - 720 && !over){
-    if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+90 && mouseY >= ((height-40)/2)-15 && mouseY <= ((height-40)/2)){
+    if(mouseX<width-400 && mouseX> width- 1095 && mouseY<height-90 && mouseY> height - 720 && !over){
+    if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+120 && mouseY >= ((height-40)/2)-15 && mouseY <= ((height-40)/2)){
     if(!isSetup){
             //adjust = false;
             //adjust2 = false;
@@ -1090,7 +1108,7 @@ void mousePressed()
       }
     }
 
-    if(isSetup && population.size() <1020){
+    if(isSetup && population.size() < 1020){
     infectedPerson.loc.x = mouseX;
 
     infectedPerson.loc.y = mouseY;
@@ -1105,11 +1123,11 @@ void mousePressed()
     //text("INSTRUCTIONS", (width-420)/2,((height-40)/2)-05);
     if(!isSetup){
     if (mouseX > 50 && mouseX < 200 && mouseY > 50 && mouseY < 120) { 
-    link("https://hhi.harvard.edu/","_new");
+    link("https://hhi.harvard.edu/");
   }
 
   if ((mouseX > ((width-380)/2)-110 && mouseX < ((width-380)/2)+110 && mouseY > ((height-40)/2)+270 && mouseY < ((height-40)/2)+290) && about) { 
-    link("http://virs.io/survey/","_new");
+    link("http://virs.io/survey/");
   }
  }
         
@@ -1134,7 +1152,7 @@ void mousePressed()
       for (int i = 0; i < initialPopulationSize; i += 1)
 
         { 
-            //PVector R = new PVector(random(27, width - 406), random(25, height-26));
+           // PVector R = new PVector(random(27, width - 406), random(25, height-26));
             population.add(new Agent(L));
             dayCounter = 0;
             numDead = 0;
@@ -1265,7 +1283,7 @@ void mousePressed()
       ct4 = false;
       ct5 = true;
     }
-
+     
 }
 
 ////////////////////////////////////////////////////////////////////////////////// Reset
@@ -1286,6 +1304,7 @@ void keyPressed()
       }
 
    }
+     
     
 }
 
