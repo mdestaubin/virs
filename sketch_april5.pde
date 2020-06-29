@@ -425,7 +425,7 @@ void statsBar() {
      fill(255);
      dayCounter = 0;
     }
-     long t3 = System.currentTimeMillis();
+     // long t3 = System.currentTimeMillis();
    // println("the time after paragraph " + (t3-t2));
     
     textSize(14);
