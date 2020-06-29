@@ -1123,11 +1123,11 @@ void mousePressed()
     //text("INSTRUCTIONS", (width-420)/2,((height-40)/2)-05);
     if(!isSetup){
     if (mouseX > 50 && mouseX < 200 && mouseY > 50 && mouseY < 120) { 
-    link("https://hhi.harvard.edu/");
+    link("https://hhi.harvard.edu/","new");
   }
 
   if ((mouseX > ((width-380)/2)-110 && mouseX < ((width-380)/2)+110 && mouseY > ((height-40)/2)+270 && mouseY < ((height-40)/2)+290) && about) { 
-    link("http://virs.io/survey/");
+    link("http://virs.io/survey/","new");
   }
  }
         
