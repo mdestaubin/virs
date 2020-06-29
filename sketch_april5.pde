@@ -1086,8 +1086,8 @@ void mousePressed()
     Agent infectedPerson = new Agent(L);
 
     infectedPerson.getInfected();
-    if(mouseX<width-400 && mouseX> width- 1095 && mouseY<height-90 && mouseY> height - 720 && !over){
-    if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+120 && mouseY >= ((height-40)/2)-15 && mouseY <= ((height-40)/2)){
+    if(mouseX<width-400 && mouseX> width- 1095 && mouseY<height-30 && mouseY> height - 720 && !over){
+    if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+90 && mouseY >= ((height-40)/2)-15 && mouseY <= ((height-40)/2)){
     if(!isSetup){
             //adjust = false;
             //adjust2 = false;
@@ -1123,11 +1123,11 @@ void mousePressed()
     //text("INSTRUCTIONS", (width-420)/2,((height-40)/2)-05);
     if(!isSetup){
     if (mouseX > 50 && mouseX < 200 && mouseY > 50 && mouseY < 120) { 
-    link("https://hhi.harvard.edu/","new");
+    link("https://hhi.harvard.edu/","_new");
   }
 
   if ((mouseX > ((width-380)/2)-110 && mouseX < ((width-380)/2)+110 && mouseY > ((height-40)/2)+270 && mouseY < ((height-40)/2)+290) && about) { 
-    link("http://virs.io/survey/","new");
+    link("http://virs.io/survey/","_new");
   }
  }
         
