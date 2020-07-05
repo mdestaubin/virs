@@ -59,7 +59,7 @@ boolean isSetup = false;
 int numDead = 0;
 
 //FloatList sickHistory;
-HashMap<Integer,Integer> sickHistory;
+HashMap<Integer,Float> sickHistory;
 float xCord1;
 
 boolean s1 = true;
@@ -108,7 +108,7 @@ void setup()
 {
     size(1120,740);
     frameRate(60);
-   sickHistory =     new HashMap<Integer,Integer>();
+   sickHistory =     new HashMap<Integer,Float>();
     population = new ArrayList<Agent>();
     myFont = createFont("Arial Black", 32);
     altFont = createFont("Arial", 32);
@@ -176,7 +176,7 @@ void statsBar() {
     float numInfected = 0;
     float numHealed = 0;
     float numHealthy = 0;
-    int numSick = 0;
+    float numSick = 0;
     
     for (Agent person: population) {
 
@@ -859,16 +859,7 @@ void statsBar() {
 
   }
    
-    if(!isSetup){
-    strokeWeight(1);
-    stroke(155,90);
-    line(xStat,yLine,xStat+360,yLine); 
-    }
   
-    stroke(200);
-     strokeWeight(2);
-       long t7 = System.currentTimeMillis();
-  //  println("at the end of statsbar" + (t7-t6));
 }
 /////////////////////////////////////////////////////////////////////////// Infect
 
