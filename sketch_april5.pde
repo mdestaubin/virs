@@ -80,6 +80,13 @@ boolean ct3 = false;
 boolean ct4 = false;
 boolean ct5 = false;
 
+boolean a1 = true;
+boolean a2 = false;
+boolean a3 = false; 
+boolean a4 = false; 
+boolean a5 = false;
+
+
 int yPercent  = 245; //23+button
 int yPercent2 = 310;
 int yPercent3 = 374;
@@ -124,6 +131,7 @@ void draw()
     fill(38,38,38);
     stroke(255);
     strokeWeight(2);
+    println(frameRate);
    rect(20,20,width-420,700,6); 
     stroke(150);
     line(xStat,yAssumption+10,xStat+360,yAssumption+10);
@@ -274,21 +282,30 @@ void statsBar() {
     text("isolation and assumes 0% transmissability.",xStat-340,yButton1+15);
     }
     
-    if(mouseX >  xStat && mouseX < xStat+150 && mouseY > yButton2-25 && mouseY < yButton2-10){
-     fill(80,200);
-    rect(xStat-350,yButton2-29,320,56,7);
+    if(mouseX >  xStat && mouseX < xStat+150 && mouseY > yButton2-30 && mouseY < yButton2-25){
+    fill(80,200);
+    rect(xStat-350,yButton2-40,320,56,7);
     fill(220);
-    text("Controls the proportion of agents who are",xStat-340,yButton2-5);
-    text("immobile and assumes low transmissability.",xStat-340,yButton2+15);
+    text("Controls the proportion of agents who are",xStat-340,yButton2-15);
+    text("immobile and assumes low transmissability.",xStat-340,yButton2+5);
     }
     
-     if(mouseX >  xStat && mouseX < xStat+150 && mouseY > yButton3-25 && mouseY < yButton3-10){
-     fill(80,200);
-    rect(xStat-350,yButton3-29,320,56,7);
+     if(mouseX >  xStat && mouseX < xStat+150 && mouseY > yButton3-50 && mouseY < yButton3-30){
+    fill(80,200);
+    rect(xStat-350,yButton3-55,320,56,7);
     fill(220);
-    text("Controls the proportion of agents who come in",xStat-340,yButton3-5);
-    text("contact with an infected agent and isolate.",xStat-340,yButton3+15);
+    text("Controls the proportion of agents who come in",xStat-340,yButton3-30);
+    text("contact with an infected agent and isolate.",xStat-340,yButton3-10);
     }
+    
+    if(mouseX >  xStat && mouseX < xStat+150 && mouseY > yButton3 && mouseY < yButton3+20){
+    fill(80,200);
+    rect(xStat-350,yButton3-17,320,56,7);
+    fill(220);
+    text("Controls the proportion of agents wearing ",xStat-340,yButton3+5);
+    text("a face covering and assumes low transmissability.",xStat-340,yButton3+25);
+    }
+  
     
     if(mouseX >  xStat && mouseX < xStat+100 && mouseY > yDay-15 && mouseY < yDay){
     fill(80,200);
@@ -361,6 +378,7 @@ void statsBar() {
     text("This target line represents the theoretical",xStat-340,yCFR-72);
     text("healthcare systems maximum capacity.",xStat-340,yCFR-57);
     }
+   
     
     
     fill(255);
@@ -462,9 +480,11 @@ void statsBar() {
 
     text("INFECTIOUS IN ISOLATION", xStat, yButton1-10);
     
-    text("SOCIAL DISTANCING", xStat, yButton2-10);
+    text("SOCIAL DISTANCING", xStat, yButton2-25);
     
-    text("CONTACTS TRACED", xStat+16, yButton3-10);
+    text("CONTACTS TRACED", xStat+16, yButton3-40);
+    
+    text("FACE COVERING", xStat+18, yButton3+10);
     
     text("PREVALENCE: "+nf(percentAffected, 0, 2) + "%", xStat, ySick);
     
@@ -522,10 +542,19 @@ void statsBar() {
     fill(255); 
     noStroke();
   //  ellipse( xStat+5, yButton3-15, 4, 4);
+  
+  ///the ellipse for Contacts Traced 
     strokeWeight(1);
     noFill();
-    stroke(88, 150, 255); 
-    ellipse(xStat+6, yButton3-15, 9, 9);
+    fill(#E82A2A); 
+    ellipse(xStat+6, yButton3-44, 9, 9);
+    
+    
+    //// the ellipse for face covering
+    strokeWeight(1);
+    noFill();
+    stroke(62,214,43); 
+    ellipse(xStat+7, yButton3+5, 9,9);
     
     
     fill(88, 150, 255); 
@@ -546,130 +575,130 @@ void statsBar() {
     //float xCFR = map(percentCFR, 0, xScale, 0, 360);
 
        textAlign(CENTER);
-       textSize(16);
+       textSize(15);
        noFill();
        stroke(255);
        strokeWeight(1);
        if(s1){
          fill(180);
        }
-       rect(xStat,yButton1,65,30, 7);
+       rect(xStat,yButton1,65,15, 7);
        fill(0);
        if(!s1){
        fill(200);
        }
        
-       text("0%", xStat+34,yPercent);
+       text("0%", xStat+34,yPercent-8);
        
        noFill();
        if(s2){
          fill(180);
        }
-       rect(xStat+74,yButton1,65,30, 7);
+       rect(xStat+74,yButton1,65,15, 7);
        fill(0);
        if(!s2){
        fill(200);
        }
        
-       text("25%", xStat+109,yPercent);
+       text("25%", xStat+109,yPercent-8);
        
        noFill();
        if(s3){
          fill(180);
        }
-       rect(xStat+149,yButton1,65,30, 7);
+       rect(xStat+149,yButton1,65,15, 7);
        fill(0);
        if(!s3){
        fill(200);
        }
        
-       text("50%", xStat+184,yPercent);
+       text("50%", xStat+184,yPercent-8);
        
        noFill();
        if(s4){
          fill(180);
        }
-       rect(xStat+223,yButton1,65,30, 7);
+       rect(xStat+223,yButton1,65,15, 7);
        fill(0);
        if(!s4){
        fill(200);
        }
        
-       text("75%", xStat+259,yPercent);
+       text("75%", xStat+259,yPercent-8);
        noFill();
        
        noFill();
        if(s5){
          fill(180);
        }
-       rect(xStat+297,yButton1,65,30, 7);
+       rect(xStat+297,yButton1,65,15, 7);
        fill(0);
        if(!s5){
        fill(200);
        }
        
-       text("100%", xStat+329,yPercent);
+       text("100%", xStat+329,yPercent-8);
        noFill();
       
        if(su1){
          fill(180);
        }
-       rect(xStat,yButton2,65,30, 7);
+       rect(xStat,yButton2-20,65,15,7);
        fill(0);
        if(!su1){
        fill(200);
        }
        
-       text("0%", xStat+34,yPercent2);
+       text("0%", xStat+34,yPercent2-27);
        
        noFill();
        if(su2){
          fill(180);
        }
-       rect(xStat+74,yButton2,65,30, 7);
+       rect(xStat+74,yButton2-20,65,15, 7);
        fill(0);
        if(!su2){
        fill(200);
        }
        
-       text("25%", xStat+109,yPercent2);
+       text("25%", xStat+109,yPercent2-27);
        
        noFill();
        if(su3){
          fill(180);
        }
-       rect(xStat+149,yButton2,65,30, 7);
+       rect(xStat+149,yButton2-20,65,15, 7);
        fill(0);
        if(!su3){
        fill(200);
        }
        
-       text("50%", xStat+184,yPercent2);
+       text("50%", xStat+184,yPercent2-27);
        
        noFill();
        if(su4){
          fill(180);
        }
-       rect(xStat+223,yButton2,65,30, 7);
+       rect(xStat+223,yButton2-20,65,15, 7);
        fill(0);
        if(!su4){
        fill(200);
        }
        
-       text("75%", xStat+259,yPercent2);
+       text("75%", xStat+259,yPercent2-27);
        noFill();
        
        noFill();
        if(su5){
          fill(180);
        }
-       rect(xStat+297,yButton2,65,30, 7);
+       rect(xStat+297,yButton2-20,65,15, 7);
        fill(0);
        if(!su5){
        fill(200);
        }
        
-       text("100%", xStat+329,yPercent2);
+       text("100%", xStat+329,yPercent2-27);
        
        
        noFill();
@@ -677,62 +706,123 @@ void statsBar() {
        if(ct1){
          fill(180);
        }
-       rect(xStat,yButton3,65,30, 7);
+       rect(xStat,yButton3-30,65,15, 7);
        fill(0);
        if(!ct1){
        fill(200);
        }
        
-       text("0%", xStat+34,yPercent3);
+       text("0%", xStat+34,yPercent3-37);
        
        noFill();
        if(ct2){
          fill(180);
        }
-       rect(xStat+74,yButton3,65,30, 7);
+       rect(xStat+74,yButton3-30,65,15, 7);
        fill(0);
        if(!ct2){
        fill(200);
        }
        
-       text("25%", xStat+109,yPercent3);
+       text("25%", xStat+109,yPercent3-37);
        
        noFill();
        if(ct3){
          fill(180);
        }
-       rect(xStat+149,yButton3,65,30, 7);
+       rect(xStat+149,yButton3-30,65,15, 7);
        fill(0);
        if(!ct3){
        fill(200);
        }
        
-       text("50%", xStat+184,yPercent3);
+       text("50%", xStat+184,yPercent3-37);
        
        noFill();
        if(ct4){
          fill(180);
        }
-       rect(xStat+223,yButton3,65,30, 7);
+       rect(xStat+223,yButton3-30,65,15, 7);
        fill(0);
        if(!ct4){
        fill(200);
        }
        
-       text("75%", xStat+259,yPercent3);
+       text("75%", xStat+259,yPercent3-37);
        noFill();
        
        noFill();
        if(ct5){
          fill(180);
        }
-       rect(xStat+297,yButton3,65,30, 7);
+       rect(xStat+297,yButton3-30,65,15, 7);
        fill(0);
        if(!ct5){
        fill(200);
        }
        
-       text("100%", xStat+329,yPercent3);
+       text("100%", xStat+329,yPercent3-37);
+    noFill();
+    
+    if(a1){
+         fill(180);
+       }
+       rect(xStat,yButton3+20,65,15, 7);
+       fill(0);
+       if(!a1){
+       fill(200);
+       }
+       
+       text("0%", xStat+34,yPercent3+13);
+       
+       noFill();
+       if(a2){
+         fill(180);
+       }
+       rect(xStat+74,yButton3+20,65,15, 7);
+       fill(0);
+       if(!a2){
+       fill(200);
+       }
+       
+       text("25%", xStat+109,yPercent3+13);
+       
+       noFill();
+       if(a3){
+         fill(180);
+       }
+       rect(xStat+149,yButton3+20,65,15, 7);
+       fill(0);
+       if(!a3){
+       fill(200);
+       }
+       
+       text("50%", xStat+184,yPercent3+13);
+       
+       noFill();
+       if(a4){
+         fill(180);
+       }
+       rect(xStat+223,yButton3+20,65,15, 7);
+       fill(0);
+       if(!a4){
+       fill(200);
+       }
+       
+       text("75%", xStat+259,yPercent3+13);
+       noFill();
+       
+       noFill();
+       if(a5){
+         fill(180);
+       }
+       rect(xStat+297,yButton3+20,65,15, 7);
+       fill(0);
+       if(!a5){
+       fill(200);
+       }
+       
+       text("100%", xStat+329,yPercent3+13);
     noStroke();
 
     fill(25);
@@ -815,7 +905,7 @@ void statsBar() {
     stroke(100,10);
     noFill();
     stroke(238, 109, 3, 30);
-   line(xCord1, yInfected, xCord1, yCFR);
+  // line(xCord1, yInfected, xCord1, yCFR);
     xCord1 = xCord1 + .06;
      }
     
@@ -859,7 +949,10 @@ void statsBar() {
 
   }
    
+
   
+   
+  //  println("at the end of statsbar" + (t7-t6));
 }
 /////////////////////////////////////////////////////////////////////////// Infect
 
@@ -882,6 +975,8 @@ void infect()
       if(ct5){
         isolationProb = 1.0;
       }
+      
+      
 
      
       for (int i = 0; i < population.size(); i += 1) {
@@ -908,6 +1003,18 @@ void infect()
                 
               }
               
+              if (person2.wearingMask && !person1.wearingMask){
+                infectionProbability = .08;
+              }
+              
+               if (person2.wearingMask && person1.wearingMask){
+                infectionProbability = .02;
+              }
+              
+              if (!person2.wearingMask && person1.wearingMask){
+                infectionProbability = .04;
+              }
+              
 
                 if (prob(infectionProbability) && !person1.isolate) {
 
@@ -923,6 +1030,18 @@ void infect()
                 
                 infectionProbability = .06;
                 
+              }
+              
+              if (person2.wearingMask && !person1.wearingMask){
+                infectionProbability = .04;
+              }
+              
+               if (person2.wearingMask && person1.wearingMask){
+                infectionProbability = .02;
+              }
+              
+              if (!person2.wearingMask && person1.wearingMask){
+                infectionProbability = .08;
               }
 
                 if (prob(infectionProbability) && !person2.isolate) {
@@ -1096,6 +1215,7 @@ void mousePressed()
         }
         
         sickHistory.clear();
+        
       }
     }
 
@@ -1114,11 +1234,11 @@ void mousePressed()
     //text("INSTRUCTIONS", (width-420)/2,((height-40)/2)-05);
     if(!isSetup){
     if (mouseX > 50 && mouseX < 200 && mouseY > 50 && mouseY < 120) { 
-    link("https://hhi.harvard.edu/","_new");
+    link("https://hhi.harvard.edu/");
   }
 
   if ((mouseX > ((width-380)/2)-110 && mouseX < ((width-380)/2)+110 && mouseY > ((height-40)/2)+270 && mouseY < ((height-40)/2)+290) && about) { 
-    link("http://virs.io/survey/","_new");
+    link("http://virs.io/survey/");
   }
  }
         
@@ -1155,10 +1275,34 @@ void mousePressed()
         if(!looping){
           loop();
         } 
+        
+        s1 = true;
+        s2 = false;
+        s3 = false;
+        s4 = false;
+        s5 = false;
+
+        su1 = true;
+        su2 = false;
+        su3 = false;
+        su4 = false;
+        su5 = false;
+
+        ct1 = true;
+        ct2 = false;
+        ct3 = false;
+        ct4 = false;
+        ct5 = false;
+
+        a1 = true;
+        a2 = false;
+        a3 = false; 
+        a4 = false; 
+        a5 = false;
 
     }
 
-   if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+   if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
       s1 = true;
       s2 = false;
       s3 = false;
@@ -1166,7 +1310,7 @@ void mousePressed()
       s5 = false;
     }
     
-    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
       s1 = false;
       s2 = true;
       s3 = false;
@@ -1174,7 +1318,7 @@ void mousePressed()
       s5 = false;
     }
     
-    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
       s1 = false;
       s2 = false;
       s3 = true;
@@ -1182,7 +1326,7 @@ void mousePressed()
       s5 = false;
     }
     
-    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
       s1 = false;
       s2 = false;
       s3 = false;
@@ -1190,7 +1334,7 @@ void mousePressed()
       s5 = false;
     }
     
-    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
       s1 = false;
       s2 = false;
       s3 = false;
@@ -1199,7 +1343,7 @@ void mousePressed()
     }
 
     
-    if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+    if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
       su1 = true;
       su2 = false;
       su3 = false;
@@ -1207,7 +1351,7 @@ void mousePressed()
       su5 = false;
     }
     
-    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
       su1 = false;
       su2 = true;
       su3 = false;
@@ -1215,21 +1359,21 @@ void mousePressed()
       su5 = false;
     }
     
-    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
       su1 = false;
       su2 = false;
       su3 = true;
       su4 = false;
       su5 = false;
     }
-    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
       su1 = false;
       su2 = false;
       su3 = false;
       su4 = true;
       su5 = false;
     }
-    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
       su1 = false;
       su2 = false;
       su3 = false;
@@ -1237,7 +1381,7 @@ void mousePressed()
       su5 = true;
     }
     
-    if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton3 && mouseY <= (yButton3+35)){
+    if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton3-30 && mouseY <= (yButton3-15)){
       ct1 = true;
       ct2 = false;
       ct3 = false;
@@ -1245,7 +1389,7 @@ void mousePressed()
       ct5 = false;
     }
     
-    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton3 && mouseY <= (yButton3+35)){
+    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton3-30 && mouseY <= (yButton3-15)){
       ct1 = false;
       ct2 = true;
       ct3 = false;
@@ -1253,26 +1397,65 @@ void mousePressed()
       ct5 = false;
     }
     
-    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton3 && mouseY <= (yButton3+35)){
+    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton3-30 && mouseY <= (yButton3-15)){
       ct1 = false;
       ct2 = false;
       ct3 = true;
       ct4 = false;
       ct5 = false;
     }
-    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton3 && mouseY <= (yButton3+35)){
+    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton3-30 && mouseY <= (yButton3-15)){
       ct1 = false;
       ct2 = false;
       ct3 = false;
       ct4 = true;
       ct5 = false;
     }
-    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton3 && mouseY <= (yButton3+35)){
+    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton3-30 && mouseY <= (yButton3-15)){
       ct1 = false;
       ct2 = false;
       ct3 = false;
       ct4 = false;
       ct5 = true;
+    }
+    
+    if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton3+20 && mouseY <= (yButton3+35)){
+      a1 = true;
+      a2 = false;
+      a3 = false;
+      a4 = false;
+      a5 = false;
+    }
+    
+    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton3+20 && mouseY <= (yButton3+35)){
+      a1 = false;
+      a2 = true;
+      a3 = false;
+      a4 = false;
+      a5 = false;
+    }
+    
+    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton3+20 && mouseY <= (yButton3+35)){
+      a1 = false;
+      a2 = false;
+      a3 = true;
+      a4 = false;
+      a5 = false;
+    }
+    
+    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton3+20 && mouseY <= (yButton3+35)){
+      a1 = false;
+      a2 = false;
+      a3 = false;
+      a4 = true;
+      a5 = false;
+    }
+    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton3+20 && mouseY <= (yButton3+35)){
+      a1 = false;
+      a2 = false;
+      a3 = false;
+      a4 = false;
+      a5 = true;
     }
      
 }
@@ -1339,7 +1522,11 @@ class Agent {
   
   float travelIsolate;
   
+  float maskTransmissionRate;
+  
   boolean sickIsolate = false;
+  
+  boolean wearingMask = false;
   
   boolean socialDistance = false;
   
@@ -1465,6 +1652,7 @@ void survive()
  }
 }
 
+
 void doneIsolate(){
     isolateDone = true;
     vel = new PVector(random(-1,1), random(-1, 1));
@@ -1509,6 +1697,31 @@ void drawAgent()
       }
       else { socialDistance = false; }
     }
+    
+      if(a1){
+        maskTransmissionRate = 0.0;
+      }
+      if(a2){
+        maskTransmissionRate = 0.25;
+      }
+      if(a3){
+        maskTransmissionRate = 0.5;
+      }
+      if(a4){
+        maskTransmissionRate = 0.75;
+      }
+      if(a5){
+        maskTransmissionRate = 1;
+      }
+      if (randomNum < maskTransmissionRate){
+        wearingMask = true;     
+    }
+    else{
+      wearingMask = false;
+    }
+    
+    
+    
 
     if ( sick ) {
       fill(238, 90, 30);
@@ -1533,7 +1746,9 @@ void drawAgent()
         sickIsolate = true;
         vel = new PVector(0, 0);
       }
-    } 
+      
+     
+    }
 
     if (infected) {
       susceptible = false;
@@ -1556,6 +1771,7 @@ void drawAgent()
     
     noStroke();
     ellipse( loc.x, loc.y, rad, rad);
+   
 
    if (isolate) {
       vel = new PVector(0, 0);  
@@ -1566,9 +1782,11 @@ void drawAgent()
     noFill();
 
     if ( sick ) {
+      if(!wearingMask){
       noFill();
       stroke(238, 90, 30);
       ellipse(loc.x, loc.y, 13, 13);
+      }
     }
 
     //if (infected) {
@@ -1577,10 +1795,16 @@ void drawAgent()
     //}
     
     if (isolate) {
-      strokeWeight(2);
-      stroke(88, 150, 255,110);
-      ellipse(loc.x, loc.y, 9, 9);
+      fill(#E82A2A);
+      //stroke(#E82A2A);
+      ellipse(loc.x, loc.y, 5, 5);
     } 
+    
+      if (wearingMask){
+        strokeWeight(1);
+       stroke(62,214,43); 
+       ellipse( loc.x, loc.y, 8, 8);
+    }
   }
 
   void getInfected()
@@ -1604,7 +1828,15 @@ void drawAgent()
     isolate = true;
     traced = false;
     d = 0;
+    wearingMask= false;
   }
+  
+  void wearMask()
+  {
+    wearingMask = true; 
+
+  }
+    
 
   void getSick(int minDay, int maxDay)
   {
