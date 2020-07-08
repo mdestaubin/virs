@@ -131,7 +131,7 @@ void draw()
     fill(38,38,38);
     stroke(255);
     strokeWeight(2);
-    println(frameRate);
+   // println(frameRate);
    rect(20,20,width-420,700,6); 
     stroke(150);
     line(xStat,yAssumption+10,xStat+360,yAssumption+10);
@@ -905,7 +905,7 @@ void statsBar() {
     stroke(100,10);
     noFill();
     stroke(238, 109, 3, 30);
-  // line(xCord1, yInfected, xCord1, yCFR);
+    line(xCord1, yInfected, xCord1, yCFR);
     xCord1 = xCord1 + .06;
      }
     
