@@ -186,7 +186,7 @@ void removeAgent() {
     for (int i = sickAgents.size() - 1; i >= 0; i--) {
           Agent d = sickAgents.get(i);
          if (d.dead == true) {
-          population.remove(i); 
+          sickAgents.remove(i); 
           
      } 
     }
