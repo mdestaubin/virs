@@ -1,7 +1,8 @@
-int initialPopulationSize = 999;
+int initialPopulationSize =999;
 
 ArrayList < Agent > population;
 ArrayList < Agent > survivors;
+ArrayList <Agent> sickAgents;
 
 int dayCounter = 0;
 
@@ -16,6 +17,7 @@ PFont myFont;
 PFont altFont;
 
 PImage healthZone;
+int total;
 
 //////////////////////// infection variables
 
@@ -117,6 +119,7 @@ void setup()
     frameRate(60);
    sickHistory =     new HashMap<Integer,Float>();
     population = new ArrayList<Agent>();
+    sickAgents = new ArrayList<Agent>();
     myFont = createFont("Arial Black", 32);
     altFont = createFont("Arial", 32);
     initailizePop();
@@ -131,13 +134,20 @@ void draw()
     fill(38,38,38);
     stroke(255);
     strokeWeight(2);
-   // println(frameRate);
+    println(frameRate);
+//println(sickAgents.size());
    rect(20,20,width-420,700,6); 
     stroke(150);
     line(xStat,yAssumption+10,xStat+360,yAssumption+10);
     line(xStat,yButton1-35,xStat+360,yButton1-35);
     line(xStat,yStats+10,xStat+360,yStats+10);
     for (Agent a: population){
+      if(isSetup){
+        a.update(); 
+       }
+     }
+     
+      for (Agent a: sickAgents){
       if(isSetup){
         a.update(); 
        }
@@ -165,12 +175,20 @@ void removeAgent() {
   for (int i = population.size() - 1; i >= 0; i--) {
           Agent d = population.get(i);
         if (d.dead == true) {
-          population.remove(i);
+          population.remove(i); 
+          
           noStroke();
           fill(138, 43, 226,100);
           ellipse( d.loc.x, d.loc.y, 16, 16);
           numDead  += 1;
         
+     } 
+    }
+    for (int i = sickAgents.size() - 1; i >= 0; i--) {
+          Agent d = sickAgents.get(i);
+         if (d.dead == true) {
+          sickAgents.remove(i); 
+          
      } 
     }
    } 
@@ -186,7 +204,7 @@ void statsBar() {
     float numHealthy = 0;
     float numSick = 0;
     
-    for (Agent person: population) {
+    for (Agent person: sickAgents) {
 
         if (person.sick == true) {
 
@@ -452,7 +470,7 @@ void statsBar() {
     
     textAlign(RIGHT);
     //textSize(17);
-    text(int(popSize) +"  AGENTS", xStat+349, yAssumption);
+    text(int(total) +"  AGENTS", xStat+349, yAssumption);
     text(dayCounter+ " DAYS |"  + " CASES: " + nf(round(numSick+numHealed+numDead),3), xStat+360, yStats); 
     
     //textSize(14);
@@ -941,7 +959,7 @@ void statsBar() {
     
      over = true;
 
-   if (looping) {
+    if (looping) {
       noLoop();
     } else {
       loop();
@@ -979,16 +997,17 @@ void infect()
       
 
      
-      for (int i = 0; i < population.size(); i += 1) {
+      for (int i = 0; i < sickAgents.size(); i += 1) {
   
-          Agent person1 = population.get(i);
-        
-        for (int j = i + 1; j < population.size(); j += 1)
+          Agent person1 = sickAgents.get(i);
+         
+            if(person1.sick){
+        for (int j = 0; j < population.size(); j += 1)
 
         {
             Agent person2 = population.get(j);
+            // if (( !person2.sick && !person1.recovered)){
             
-            if ((person1.sick || person2.sick)){
             float distance = dist(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
 
             // first condition
@@ -1019,38 +1038,42 @@ void infect()
                 if (prob(infectionProbability) && !person1.isolate) {
 
                     person2.getInfected();
+                    sickAgents.add(person2);
+                    population.remove(person2);
                 }
 
 
-            } else if (distance <= spreadDistance && person2.sick && !person1.sick && !person1.recovered && !person2.sickIsolate)
+            } 
+            //else if (distance <= spreadDistance && person2.sick && !person1.sick && !person1.recovered && !person2.sickIsolate)
 
-            {
+            //{
               
-                if(person1.socialDistance){
+            //    if(person1.socialDistance){
                 
-                infectionProbability = .06;
+            //    infectionProbability = .06;
                 
-              }
+            //  }
               
-              if (person2.wearingMask && !person1.wearingMask){
-                infectionProbability = .04;
-              }
+            //  if (person2.wearingMask && !person1.wearingMask){
+            //    infectionProbability = .04;
+            //  }
               
-               if (person2.wearingMask && person1.wearingMask){
-                infectionProbability = .02;
-              }
+            //   if (person2.wearingMask && person1.wearingMask){
+            //    infectionProbability = .02;
+            //  }
               
-              if (!person2.wearingMask && person1.wearingMask){
-                infectionProbability = .08;
-              }
+            //  if (!person2.wearingMask && person1.wearingMask){
+            //    infectionProbability = .08;
+            //  }
 
-                if (prob(infectionProbability) && !person2.isolate) {
+            //    if (prob(infectionProbability) && !person2.isolate) {
 
-                    person1.getInfected();      
+            //        person1.getInfected(); 
+            //        sickAgents.add(person1);
                   
-                }
+            //    }
                 
-            }              
+            //}              
             
             infectionLine(person1,person2);
             
@@ -1073,10 +1096,11 @@ void infect()
                     person1.getTraced(); 
                 }           
              }       
-          }
+         // }
 
     }
     }
+      }
     }
     
 
@@ -1190,11 +1214,12 @@ void popFlux()
 void mousePressed()
 
 {
+  
 
     PVector L = new PVector(random(0, width - 400), random(0, height));
 
     Agent infectedPerson = new Agent(L);
-
+     total = sickAgents.size() + population.size();
     infectedPerson.getInfected();
     if(mouseX<width-400 && mouseX> width- 1095 && mouseY<height-30 && mouseY> height - 720 && !over){
     if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+90 && mouseY >= ((height-40)/2)-15 && mouseY <= ((height-40)/2)){
@@ -1203,12 +1228,14 @@ void mousePressed()
             //adjust2 = false;
             isSetup = true;
             population.clear();
-
+            sickAgents.clear();
+            
         for (int i = 0; i < initialPopulationSize; i += 1)
 
         { 
             PVector R = new PVector(random(28, width - 408), random(28, height-28));
             population.add(new Agent(R));
+            
             dayCounter = 0;
             numDead = 0;
             xCord1 = 0;
@@ -1219,12 +1246,13 @@ void mousePressed()
       }
     }
 
-    if(isSetup && population.size() < 1020){
+    if(isSetup && total < 1020){
     infectedPerson.loc.x = mouseX;
 
     infectedPerson.loc.y = mouseY;
 
-    population.add(infectedPerson);
+    //population.add(infectedPerson);
+    sickAgents.add(infectedPerson);
     }
 
     loop();
@@ -1234,11 +1262,11 @@ void mousePressed()
     //text("INSTRUCTIONS", (width-420)/2,((height-40)/2)-05);
     if(!isSetup){
     if (mouseX > 50 && mouseX < 200 && mouseY > 50 && mouseY < 120) { 
-    link("https://hhi.harvard.edu/","_new");
+    link("https://hhi.harvard.edu/");
   }
 
   if ((mouseX > ((width-380)/2)-110 && mouseX < ((width-380)/2)+110 && mouseY > ((height-40)/2)+270 && mouseY < ((height-40)/2)+290) && about) { 
-    link("http://virs.io/survey/","_new");
+    link("http://virs.io/survey/");
   }
  }
         
@@ -1259,7 +1287,8 @@ void mousePressed()
       isSetup = false;
       over = false;
       population.clear();
-      
+      sickAgents.clear();
+                  
         s1 = true;
         s2 = false;
         s3 = false;
@@ -1283,7 +1312,7 @@ void mousePressed()
         a3 = false; 
         a4 = false; 
         a5 = false;
-      
+
       for (int i = 0; i < initialPopulationSize; i += 1)
 
         { 
