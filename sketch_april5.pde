@@ -941,7 +941,11 @@ void statsBar() {
     
      over = true;
 
-  
+   if (looping) {
+      noLoop();
+    } else {
+      loop();
+    }
 
   }
    
@@ -1256,22 +1260,6 @@ void mousePressed()
       over = false;
       population.clear();
       
-      for (int i = 0; i < initialPopulationSize; i += 1)
-
-        { 
-           // PVector R = new PVector(random(27, width - 406), random(25, height-26));
-            population.add(new Agent(L));
-            dayCounter = 0;
-            numDead = 0;
-            xCord1 = 0;
-        }
-        
-        sickHistory.clear();
-        
-        if(!looping){
-          loop();
-        } 
-        
         s1 = true;
         s2 = false;
         s3 = false;
@@ -1295,6 +1283,24 @@ void mousePressed()
         a3 = false; 
         a4 = false; 
         a5 = false;
+      
+      for (int i = 0; i < initialPopulationSize; i += 1)
+
+        { 
+           // PVector R = new PVector(random(27, width - 406), random(25, height-26));
+            population.add(new Agent(L));
+            dayCounter = 0;
+            numDead = 0;
+            xCord1 = 0;
+        }
+        
+        sickHistory.clear();
+        
+        if(!looping){
+          loop();
+        } 
+        
+        
 
     }
 
