@@ -1289,29 +1289,7 @@ void mousePressed()
       population.clear();
       sickAgents.clear();
                   
-        s1 = true;
-        s2 = false;
-        s3 = false;
-        s4 = false;
-        s5 = false;
-
-        su1 = true;
-        su2 = false;
-        su3 = false;
-        su4 = false;
-        su5 = false;
-
-        ct1 = true;
-        ct2 = false;
-        ct3 = false;
-        ct4 = false;
-        ct5 = false;
-
-        a1 = true;
-        a2 = false;
-        a3 = false; 
-        a4 = false; 
-        a5 = false;
+     
 
       for (int i = 0; i < initialPopulationSize; i += 1)
 
