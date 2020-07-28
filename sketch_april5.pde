@@ -941,11 +941,7 @@ void statsBar() {
     
      over = true;
 
-    if (looping) {
-      noLoop();
-    } else {
-      loop();
-    }
+  
 
   }
    
