@@ -134,7 +134,7 @@ void draw()
     fill(38,38,38);
     stroke(255);
     strokeWeight(2);
-    println(frameRate);
+   // println(frameRate);
 //println(sickAgents.size());
    rect(20,20,width-420,700,6); 
     stroke(150);
