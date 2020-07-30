@@ -27,7 +27,8 @@ PImage healthZone;
 int InsideInfected;
 int OutsideInfected;
 
-
+int numInside;
+int numOutside;
 
 //////////////////////// infection variables
 
@@ -99,6 +100,7 @@ boolean ct3 = false;
 boolean ct4 = false;
 boolean ct5 = false;
 
+
 boolean a1 = true;
 boolean a2 = false;
 boolean a3 = false; 
@@ -134,12 +136,15 @@ boolean adjust = false;
 boolean adjust2 = false;
 boolean over = false;
 
+float insidePop;
+float insidePercent;
+
 void setup()
 
 {
     size(1120,900);
     frameRate(60);
-   sickHistory =     new HashMap<Integer,Float>();
+    sickHistory =     new HashMap<Integer,Float>();
     population = new ArrayList<Agent>();
     myFont = createFont("Arial Black", 32);
     altFont = createFont("Arial", 32);
@@ -162,12 +167,20 @@ void draw()
     line(xStat,yButton1-69,xStat+360,yButton1-69);
     line(xStat,yStats+10,xStat+360,yStats+10);
     fill(#E8EAF5);
+    
+    insidePop = 0;
    
     for (Agent a: population){
       if(isSetup){
         a.update(); 
        }
+       if(a.loc.x<365){
+        insidePop += 1;
+       }
+
      }
+     
+
     
   if (pressed){ 
     fill(#E8EAF5);
@@ -234,6 +247,9 @@ void statsBar() {
             numSick += 1;
 
         }
+        
+
+   
          if (person.infected == true) {
            // if( person.loc.x < 365){
            //  infectedInside = infectedInside +1;
@@ -272,6 +288,20 @@ void statsBar() {
     float percentCFR = (numDead / (numHealed + numDead)) * 100;
     float percentHealthy = numHealthy / popSize * 100;
     float percentAffected = numAffected / totalPop * 100;
+    
+    insidePercent = insidePop/totalPop;
+    
+    //float insidePercent = nf(insidePop, 2);
+        //float test = 100 / 500;
+        //println(insidePercent + " % inside");
+        // println(insidePop + " inside");
+    //println(insidePercent + " Per");
+      
+       
+     //println(insidePop + " Inside");
+     //println(totalPop + " All");
+     //println(insidePop/totalPop + " Per");
+     
     
     float xScale = 100;
     float xHealthy = map(percentAffected, 0, xScale, 0, 360);
@@ -1801,7 +1831,7 @@ class Agent {
   int d = frameCount;
   
   int delay = frameCount;
-  
+
 
   Agent(PVector L)
 
@@ -1853,9 +1883,8 @@ class Agent {
       }
     }
    }
-    
-    if (infected)
 
+    if (infected)
     { 
 
       t += 1;
@@ -1865,7 +1894,6 @@ class Agent {
         getSick(minDays, maxDays);
 
       }
-
   }
   
   if (traced)
@@ -1926,6 +1954,10 @@ void dead()
 }
 
 ////////////////////////////////////////////////////////////////////////// DrawAgent Function
+void inside(){
+  
+}
+
 
 void drawAgent()
   {   
@@ -1934,7 +1966,7 @@ void drawAgent()
       fill(255); 
       rad = 4;
     }
-
+    
     if(su1){
         travelIsolate = 0.0;
       }
@@ -1978,22 +2010,25 @@ void drawAgent()
         insideCapacity = 0.0;
       }
       if(ct2){
-        insideCapacity = 0.25;
+        insideCapacity = 0.125;
       }
       if(ct3){
-        insideCapacity = 0.5;
+        insideCapacity = 0.25;
       }
       if(ct4){
-        insideCapacity = 0.75;
+        insideCapacity = 0.375;
       }
       if(ct5){
-        insideCapacity = 1;
+        insideCapacity = .5;
       }
       
-      if ((randomNum < insideCapacity)){
+      println(insidePercent);
+      
+
+    if (insidePercent < insideCapacity){
         allowedInside = true;     
     }
-    else {
+    else if (insidePercent > insideCapacity){
       allowedInside = false;
     }
       
@@ -2051,7 +2086,6 @@ void drawAgent()
         vel = new PVector(0, 0);
       }
       
-     
     }
 
     if (infected) {
@@ -2150,7 +2184,6 @@ void drawAgent()
 
   void bounce()
   {
-    
    if(!allowedInside && loc.x > 360){
     if (loc.x < 365 || loc.x >= width-407) {
       vel.x *= -1;
@@ -2159,6 +2192,7 @@ void drawAgent()
       vel.y *= -1;
     }
    }
+   
    if(allowedInside){
     if (loc.x < 28 || loc.x >= width-407) {
       vel.x *= -1;
@@ -2167,6 +2201,7 @@ void drawAgent()
       vel.y *= -1;
     }
    }
+   
    if(!allowedInside && loc.x < 360){
     if (loc.x < 28 || loc.x >= width-407) {
       vel.x *= -1;
