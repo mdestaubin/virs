@@ -94,11 +94,11 @@ boolean su3 = false;
 boolean su4 = false;
 boolean su5 = false;
 
-boolean ct1 = true;
+boolean ct1 = false;
 boolean ct2 = false;
 boolean ct3 = false;
 boolean ct4 = false;
-boolean ct5 = false;
+boolean ct5 = true;
 
 
 boolean a1 = true;
@@ -1436,8 +1436,8 @@ void mousePressed()
 
         { 
           
-            //PVector R = new PVector(random(28, width - 408), random(28, height-188));
-            PVector R = new PVector(random(368, width - 408), random(28, height-188));
+            PVector R = new PVector(random(28, width - 408), random(28, height-188));
+            //PVector R = new PVector(random(368, width - 408), random(28, height-188));
             population.add(new Agent(R));
             dayCounter = 0;
             numDead = 0;
@@ -2184,8 +2184,16 @@ void drawAgent()
 
   void bounce()
   {
-   if(!allowedInside && loc.x > 360){
-    if (loc.x < 365 || loc.x >= width-407) {
+    
+   boolean buffer = false; 
+   int middle = 365;
+  
+   if(!allowedInside && vel.x > 0 && loc.x < middle+4){
+     buffer = true;
+   }
+   
+   if(!allowedInside && loc.x > middle && !buffer){
+    if (loc.x < middle+3 || loc.x >= width-407) {
       vel.x *= -1;
     }
     if (loc.y < 30 || loc.y >= height-186) {
@@ -2193,7 +2201,7 @@ void drawAgent()
     }
    }
    
-   if(allowedInside){
+   else if(allowedInside){
     if (loc.x < 28 || loc.x >= width-407) {
       vel.x *= -1;
     }
@@ -2202,7 +2210,7 @@ void drawAgent()
     }
    }
    
-   if(!allowedInside && loc.x < 360){
+   else if(!allowedInside && loc.x < middle){
     if (loc.x < 28 || loc.x >= width-407) {
       vel.x *= -1;
     }
