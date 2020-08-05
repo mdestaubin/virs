@@ -2513,7 +2513,7 @@ void drawAgent()
     else if(insidePercent > insideCapacity) {
       allowedInside = false;
     }
-   println(insidePercent);
+  // println(insidePercent);
     
     if(b1){
         vaccinationRate = 0.0;
