@@ -1,14 +1,15 @@
 //Credit:
 //Michael de St. Aubin, HHI Project Lead
 //Robert Pietrusko, GSD Professor of Landscape Architecture
-//Zeerak Ahmed, GSD Teaching Assistant
+//Zeerak Ammed, GSD Teaching Assistant
 //Nipurna Dhakal, Computer Science Intern Clark University
 
-int initialPopulationSize = 999;
+int initialPopulationSize;
+int clicks = 0;
 
 ArrayList < Agent > population;
 ArrayList < Agent > survivors;
-
+ArrayList <Agent> sickAgents;
 
 int dayCounter = 0;
 
@@ -24,11 +25,16 @@ PFont altFont;
 
 PImage healthZone;
 
+int total;
+
 int InsideInfected;
 int OutsideInfected;
+int InsideMask;
+int OutsideMask;
 
-int numInside;
-int numOutside;
+int infectedNumber;
+
+
 
 //////////////////////// infection variables
 
@@ -94,12 +100,11 @@ boolean su3 = false;
 boolean su4 = false;
 boolean su5 = false;
 
-boolean ct1 = false;
+boolean ct1 = true;
 boolean ct2 = false;
 boolean ct3 = false;
 boolean ct4 = false;
-boolean ct5 = true;
-
+boolean ct5 = false;
 
 boolean a1 = true;
 boolean a2 = false;
@@ -112,6 +117,20 @@ boolean b2 = false;
 boolean b3 = false; 
 boolean b4 = false; 
 boolean b5 = false;
+
+boolean c1 = false;
+boolean c2 = false;
+boolean c3 = false; 
+boolean c4 = false; 
+boolean c5 = true;
+
+boolean d1 = true;
+boolean d2 = false;
+boolean d3 = false; 
+//boolean d4 = false; 
+//boolean d5 = false;
+
+boolean selection = false; 
 
 int yPercent  = 245; //23+button
 int yPercent2 = 310;
@@ -131,10 +150,26 @@ boolean play = true;
 
 PImage virs;
 PImage hhi;
+PImage InOut;
+PImage Out;
+PImage tenPop;
+PImage hunPop;
+PImage thoPop;
+PImage tenthoPop;
+int threshold = 365;
+
 
 boolean adjust = false;
 boolean adjust2 = false;
+boolean adjust3 = false;
+boolean adjust4 = false;
 boolean over = false;
+boolean selectPop = false;
+
+boolean tinyPop = false;
+boolean smallPop = false;
+boolean mediumPop = false;
+boolean largePop = false;
 
 float insidePop;
 float insidePercent;
@@ -143,14 +178,22 @@ void setup()
 
 {
     size(1120,900);
-    frameRate(60);
-    sickHistory =     new HashMap<Integer,Float>();
+    //frameRate(60);
+    sickHistory = new HashMap<Integer,Float>();
+    sickAgents = new ArrayList<Agent>();
     population = new ArrayList<Agent>();
     myFont = createFont("Arial Black", 32);
     altFont = createFont("Arial", 32);
     initailizePop();
     virs = loadImage("DATA/virslogo.png");
     hhi = loadImage("DATA/hhilogo.png");
+    InOut = loadImage("DATA/scenario2.png");
+    Out = loadImage("DATA/scenario1.png");
+    tenPop = loadImage("DATA/10.png");
+    hunPop = loadImage("DATA/100.png");
+    thoPop = loadImage("DATA/1000.png");
+    tenthoPop = loadImage("DATA/10000.png");
+    
 }
 
 void draw()
@@ -168,30 +211,52 @@ void draw()
     line(xStat,yStats+10,xStat+360,yStats+10);
     fill(#E8EAF5);
     
+   // println(mouseX+","+mouseY);
+   if (tinyPop && !largePop && !smallPop && !mediumPop){
+   initialPopulationSize = 9;
+   }
+   if (smallPop && !mediumPop && !largePop && !tinyPop){
+    initialPopulationSize = 99;
+   }
+   if (mediumPop  && !largePop && !smallPop && !tinyPop){
+   initialPopulationSize = 999;
+   }
+   if (largePop && !smallPop && !mediumPop && !tinyPop){
+   initialPopulationSize = 9999;
+   }
     insidePop = 0;
-   
+ 
+  if (pressed){ 
+    fill(#E8EAF5);
+     textSize(18);
+    text("INDOOR", 200,745);
+    text("OUTDOOR", 530, 745);
+    noStroke();
+    fill(40,0,40,40);
+    rect(20,20,threshold-20,699);
+    stroke(250,180);
+    strokeWeight(5);
+    line(threshold, 22,threshold,718);
+}
+
     for (Agent a: population){
       if(isSetup){
         a.update(); 
+        if(a.loc.x<threshold){
+        insidePop += 1;
        }
-       if(a.loc.x<365){
+       }
+     } 
+     
+     for (Agent a: sickAgents){
+      if(isSetup){
+        a.update();
+        if(a.loc.x<threshold){
         insidePop += 1;
        }
 
+       }
      }
-     
-
-    
-  if (pressed){ 
-    fill(#E8EAF5);
-    textSize(18);
-    text("INDOOR", 200,745);
-    text("OUTDOOR", 530, 745);
-    stroke(150,80);
-    strokeWeight(5);
-    line( 365, 20,365,719);
-  
-}
 
 ///////////////////////////////////////////////////////////////////////////YEARLY CENSUS
 
@@ -205,7 +270,7 @@ void draw()
 
     infect();
     statsBar();
-  
+    
     //if(isSetup && frameCount % 2 == 0){
     //  saveFrame("output/#####.png");
     //}
@@ -213,17 +278,24 @@ void draw()
 }
 
 void removeAgent() {
-  for (int i = population.size() - 1; i >= 0; i--) {
-          Agent d = population.get(i);
+  for (int i = sickAgents.size() - 1; i >= 0; i--) {
+          Agent d = sickAgents.get(i);
         if (d.dead == true) {
-          population.remove(i);
+          sickAgents.remove(i);
           noStroke();
           fill(138, 43, 226,100);
-          ellipse( d.loc.x, d.loc.y, 16, 16);
+         // ellipse( d.loc.x, d.loc.y, 16, 16);
           numDead  += 1;
         
      } 
     }
+    //for (int i = sickAgents.size() - 1; i >= 0; i--) {
+    //      Agent d = sickAgents.get(i);
+    //     if (d.dead == true) {
+    //      sickAgents.remove(i); 
+          
+    // } 
+    //}
    } 
 
 ////////////////////////////////////////////////////////////////////////////// STATS BAR  
@@ -240,16 +312,13 @@ void statsBar() {
 
 //int infectedOutside = 0; 
     
-    for (Agent person: population) {
+    for (Agent person: sickAgents) {
 
         if (person.sick == true) {
 
             numSick += 1;
 
         }
-        
-
-   
          if (person.infected == true) {
            // if( person.loc.x < 365){
            //  infectedInside = infectedInside +1;
@@ -259,6 +328,7 @@ void statsBar() {
            //}
 
             numInfected += 1;
+            infectedNumber +=1;
 
         }
             
@@ -272,11 +342,8 @@ void statsBar() {
         }
 
     }
-   
-   
-  
-  
-   // infectedIn = infectedInside;  
+
+    // infectedIn = infectedInside;  
     float numAffected = numHealed + numDead + numInfected + numSick;
     
     //println("num" + numAffected);
@@ -290,18 +357,6 @@ void statsBar() {
     float percentAffected = numAffected / totalPop * 100;
     
     insidePercent = insidePop/totalPop;
-    
-    //float insidePercent = nf(insidePop, 2);
-        //float test = 100 / 500;
-        //println(insidePercent + " % inside");
-        // println(insidePop + " inside");
-    //println(insidePercent + " Per");
-      
-       
-     //println(insidePop + " Inside");
-     //println(totalPop + " All");
-     //println(insidePop/totalPop + " Per");
-     
     
     float xScale = 100;
     float xHealthy = map(percentAffected, 0, xScale, 0, 360);
@@ -353,7 +408,7 @@ void statsBar() {
     text("The reproduction number is the average number",xStat-340,yAssumption+68);
     text("of infections caused by one infectious agent.",xStat-340,yAssumption+88);
     }
-    
+    if(!pressed){
     if(mouseX >  xStat && mouseX < xStat+150 && mouseY > yButton1-25 && mouseY < yButton1-10){
     fill(80,200);
     rect(xStat-350,yButton1-29,320,56,7);
@@ -385,7 +440,33 @@ void statsBar() {
     text("Controls the proportion of agents wearing ",xStat-340,yButton3+5);
     text("a face covering and assumes low transmissability.",xStat-340,yButton3+25);
     }
-  
+    }
+    
+    if(mouseX >  741 && mouseX < 832 && mouseY >162 && mouseY < 173){
+    fill(80,200);
+    rect(xStat-350,yButton3-200,320,56,7);
+    fill(220);
+    text("Controls the vacinated agents",xStat-340,yButton3-180);
+    text("vaccinated agents have no transmissability.",xStat-340,yButton3-160);
+    }
+    if(pressed){
+      if(mouseX >  xStat && mouseX < xStat+150 && mouseY > yButton1-25 && mouseY < yButton1-10){
+    fill(80,200);
+    rect(xStat-350,yButton1-29,320,56,7);
+    fill(220);
+    text("Controls the proportion of agents wearing ",xStat-340,yButton1-5);
+    text("a face covering and assumes low transmissability.",xStat-340,yButton1+15);
+    }
+    
+    if(mouseX >  xStat && mouseX < xStat+150 && mouseY > yButton2-30 && mouseY < yButton2-25){
+    fill(80,200);
+    rect(xStat-350,yButton2-40,320,56,7);
+    fill(220);
+    text("Controls the proportion of agents who are",xStat-340,yButton2-15);
+    text("allowed indoors.",xStat-340,yButton2+5);
+    }
+    
+    }
     
     if(mouseX >  xStat && mouseX < xStat+100 && mouseY > yDay-15 && mouseY < yDay){
     fill(80,200);
@@ -476,23 +557,71 @@ void statsBar() {
      //ellipse(((width-420)/2)-20,((height-40)/2)-123,12,12);
     // ellipse(((width-420)/2)-85,((height-40)/2)-105,26,26);
      fill(255);
+     if(!selectPop && !selection){
      virs.resize(0,110);
      hhi.resize(0,60);
      image(hhi,50,50);
      image(virs,((width-380)/2)-62,((height-40)/2)-150);
+     }
      
      //text("V",(width-420)/2,((height-40)/2)-75);
      textFont(altFont);
      textSize(18);
+     if (!selection){
      if(!about){
+     if (!selectPop){
      //virs.resize(0,120);
      //image(virs,((width-420)/2)-85,((height-40)/2)-220);
-     text("START SIMULATION",(width-380)/2,((height-40)/2));
+     text("SETUP SIMULATION",(width-380)/2,((height-40)/2));    
      text("ABOUT", (width-380)/2,((height-40)/2)+35);
+      
      textAlign(RIGHT);
      //text("[BETA TESTING]",width-420,(65));
     // text("INFO ON COVID-19", (width-380)/2,((height-40)/2)+70);
      }
+     }
+     }
+     if(selectPop){
+     textFont(altFont);
+     textSize(17);
+    // text("SET AGENT POPULATION SIZE",(width-380)/2,((height-40)/2));
+     textAlign(LEFT);
+     tenPop.resize(0,340);
+     image(tenPop,32,31);
+     text("10 AGENTS",45,60);
+     hunPop.resize(0,340);
+     image(hunPop,370,31);
+     text("100 AGENTS", 385,60);
+     
+     thoPop.resize(0,340);
+     image(thoPop,32,370);
+     text("1,000 AGENTS",45,400);
+     
+     tenthoPop.resize(0,340);
+     image(tenthoPop,370,370);
+     text("10,000 AGENTS", 385 ,400);
+     noFill();
+     //rect(240,448,65,20, 5);
+     //rect(340,448,65,20, 5);
+     //rect(440,448,65,20, 5);
+     }
+     
+     if(selection){
+     textAlign(LEFT);
+     textFont(altFont);
+     textSize(17);
+     //text("SELECT THE SIMULATION YOU WOULD LIKE TO START",(width-380)/2,((height-40)/2)); 
+     Out.resize(0,332);
+     InOut.resize(0,332);
+     image(Out, 35,35);
+     image(InOut,35,375);  
+     text("ALL INTERVENTIONS", 45,60);
+     text("INDOOR VS OUTDOOR",45,400);
+     noFill();
+     rect(30,35,680,330, 5);
+     rect(30,375,680,330, 5);
+     }
+     
      if(about){
 
      textFont(altFont);
@@ -532,7 +661,7 @@ void statsBar() {
     
     textAlign(RIGHT);
     //textSize(17);
-    text(int(popSize) +"  AGENTS", xStat+349, yAssumption-12);
+    text(int(total) +"  AGENTS", xStat+349, yAssumption-12);
     text(dayCounter+ " DAYS |"  + " CASES: " + nf(round(numSick+numHealed+numDead),3), xStat+360, yStats); 
     
     //textSize(14);
@@ -559,16 +688,24 @@ void statsBar() {
     text("EXPOSED: " + int(numInfected), xStat+18, yDay);
     
     text("VACCINATION", xStat, yButton1-50);
-
-    //text("INFECTIOUS IN ISOLATION", xStat, yButton1-5);
     
-    //text("SOCIAL DISTANCING", xStat, yButton2-25);
+    if(!pressed &&  isSetup){
+    text("INFECTIOUS IN ISOLATION", xStat, yButton1-5);
     
-    //text("CONTACTS TRACED", xStat+16, yButton3-40);
+    text("SOCIAL DISTANCING", xStat, yButton2-25);
     
-    text("INDOOR CAPACITY", xStat, yButton3-40);
-    
+    text("CONTACTS TRACED", xStat+16, yButton3-40);
     text("FACE COVERING", xStat+18, yButton3+10);
+    }
+     
+    if (pressed){
+    // text("FACE COVERSING OPTIONS", xStat+70, yButton3-40);
+     text("INDOOR CAPACITY", xStat, yButton2-25);
+     text("FACE COVERING", xStat+18,  yButton1 - 5);
+    // text("FACE COVERING OUTDOOR", xStat+18, yButton3+10);
+    }
+    
+   
     
     text("PREVALENCE: "+nf(percentAffected, 0, 2) + "%", xStat, ySick);
     
@@ -630,20 +767,27 @@ void statsBar() {
   //  ellipse( xStat+5, yButton3-15, 4, 4);
   
   ///the ellipse for Contacts Traced 
-    //strokeWeight(1);
-    //noFill();
-    //fill(#E82A2A); 
-    //ellipse(xStat+6, yButton3-44, 9, 9);
+  if(!pressed){
+    strokeWeight(1);
+    noFill();
+    fill( #EA50D1); 
+    ellipse(xStat+6, yButton3-44, 9, 9);
     
-    
-    //// the ellipse for face covering
     strokeWeight(1);
     noFill();
     stroke(62,214,43); 
     ellipse(xStat+7, yButton3+5, 9,9);
     
+  }
+    //// the ellipse for face covering
+    if(pressed){
+    strokeWeight(1);
+    noFill();
+    stroke(62,214,43); 
+    ellipse(xStat+4, yButton1 - 10, 9,9);
+    }
     
-    fill(88, 150, 255); 
+    fill(#0958D3); 
     noStroke();
     ellipse( xStat+230, yDay-5, 5, 5);
     
@@ -665,134 +809,192 @@ void statsBar() {
        noFill();
        stroke(255);
        strokeWeight(1);
+       if(!pressed){
+         if(a1){
+         fill(180);
+       }
+       rect(xStat,yButton3+20,65,15, 7);
+       fill(0);
+       if(!a1){
+      fill(200);
+       }
        
-       //////////////////////////////////// infectious in isolation
-       //if(s1){
-       //  fill(180);
-       //}
-       //rect(xStat,yButton1,65,15, 7);
-       //fill(0);
-       //if(!s1){
-       //fill(200);
-       //}
+       text("0%", xStat+34,yPercent3+13);
        
-       //text("0%", xStat+34,yPercent-8);
+       noFill();
+       if(a2){
+         fill(180);
+       }
+       rect(xStat+74,yButton3+20,65,15, 7);
+       fill(0);
+       if(!a2){
+       fill(200);
+       }
        
-       //noFill();
-       //if(s2){
-       //  fill(180);
-       //}
-       //rect(xStat+74,yButton1,65,15, 7);
-       //fill(0);
-       //if(!s2){
-       //fill(200);
-       //}
+       text("25%", xStat+109,yPercent3+13);
        
-       //text("25%", xStat+109,yPercent-8);
+       noFill();
+       if(a3){
+         fill(180);
+       }
+       rect(xStat+149,yButton3+20,65,15, 7);
+       fill(0);
+       if(!a3){
+       fill(200);
+       }
        
-       //noFill();
-       //if(s3){
-       //  fill(180);
-       //}
-       //rect(xStat+149,yButton1,65,15, 7);
-       //fill(0);
-       //if(!s3){
-       //fill(200);
-       //}
+       text("50%", xStat+184,yPercent3+13);
        
-       //text("50%", xStat+184,yPercent-8);
+       noFill();
+       if(a4){
+         fill(180);
+       }
+       rect(xStat+223,yButton3+20,65,15, 7);
+       fill(0);
+       if(!a4){
+       fill(200);
+       }
        
-       //noFill();
-       //if(s4){
-       //  fill(180);
-       //}
-       //rect(xStat+223,yButton1,65,15, 7);
-       //fill(0);
-       //if(!s4){
-       //fill(200);
-       //}
+       text("75%", xStat+259,yPercent3+13);
+       noFill();
        
-       //text("75%", xStat+259,yPercent-8);
-       //noFill();
+       noFill();
+       if(a5){
+         fill(180);
+       }
+       rect(xStat+297,yButton3+20,65,15, 7);
+       fill(0);
+       if(!a5){
+       fill(200);
+       }
        
-       //noFill();
-       //if(s5){
-       //  fill(180);
-       //}
-       //rect(xStat+297,yButton1,65,15, 7);
-       //fill(0);
-       //if(!s5){
-       //fill(200);
-       //}
+       text("100%", xStat+329,yPercent3+13);
+    noFill();
+    
+       if(s1){
+         fill(180);
+       }
+       rect(xStat,yButton1,65,15, 7);
+       fill(0);
+       if(!s1){
+       fill(200);
+       }
        
-       //text("100%", xStat+329,yPercent-8);
-       //noFill();
+       text("0%", xStat+34,yPercent-8);
+       
+       noFill();
+       if(s2){
+         fill(180);
+       }
+       rect(xStat+74,yButton1,65,15, 7);
+       fill(0);
+       if(!s2){
+       fill(200);
+       }
+       
+       text("25%", xStat+109,yPercent-8);
+       
+       noFill();
+       if(s3){
+         fill(180);
+       }
+       rect(xStat+149,yButton1,65,15, 7);
+       fill(0);
+       if(!s3){
+       fill(200);
+       }
+       
+       text("50%", xStat+184,yPercent-8);
+       
+       noFill();
+       if(s4){
+         fill(180);
+       }
+       rect(xStat+223,yButton1,65,15, 7);
+       fill(0);
+       if(!s4){
+       fill(200);
+       }
+       
+       text("75%", xStat+259,yPercent-8);
+       noFill();
+       
+       noFill();
+       if(s5){
+         fill(180);
+       }
+       rect(xStat+297,yButton1,65,15, 7);
+       fill(0);
+       if(!s5){
+       fill(200);
+       }
+       
+       text("100%", xStat+329,yPercent-8);
+       noFill();
       
-      /////////////////////////////////////////////////// social distancing
-      
-      //if(su1){
-      //   fill(180);
-      // }
-      // rect(xStat,yButton2-20,65,15,7);
-      // fill(0);
-      // if(!su1){
-      // fill(200);
-      // }
+       if(su1){
+         fill(180);
+       }
+       rect(xStat,yButton2-20,65,15,7);
+       fill(0);
+       if(!su1){
+       fill(200);
+       }
        
-      // text("0%", xStat+34,yPercent2-27);
+       text("0%", xStat+34,yPercent2-27);
        
-      // noFill();
-      // if(su2){
-      //   fill(180);
-      // }
-      // rect(xStat+74,yButton2-20,65,15, 7);
-      // fill(0);
-      // if(!su2){
-      // fill(200);
-      // }
+       noFill();
+       if(su2){
+         fill(180);
+       }
+       rect(xStat+74,yButton2-20,65,15, 7);
+       fill(0);
+       if(!su2){
+       fill(200);
+       }
        
-      // text("25%", xStat+109,yPercent2-27);
+       text("25%", xStat+109,yPercent2-27);
        
-      // noFill();
-      // if(su3){
-      //   fill(180);
-      // }
-      // rect(xStat+149,yButton2-20,65,15, 7);
-      // fill(0);
-      // if(!su3){
-      // fill(200);
-      // }
+       noFill();
+       if(su3){
+         fill(180);
+       }
+       rect(xStat+149,yButton2-20,65,15, 7);
+       fill(0);
+       if(!su3){
+       fill(200);
+       }
        
-      // text("50%", xStat+184,yPercent2-27);
+       text("50%", xStat+184,yPercent2-27);
        
-      // noFill();
-      // if(su4){
-      //   fill(180);
-      // }
-      // rect(xStat+223,yButton2-20,65,15, 7);
-      // fill(0);
-      // if(!su4){
-      // fill(200);
-      // }
+       noFill();
+       if(su4){
+         fill(180);
+       }
+       rect(xStat+223,yButton2-20,65,15, 7);
+       fill(0);
+       if(!su4){
+       fill(200);
+       }
        
-      // text("75%", xStat+259,yPercent2-27);
-      // noFill();
+       text("75%", xStat+259,yPercent2-27);
+       noFill();
        
-      // noFill();
-      // if(su5){
-      //   fill(180);
-      // }
-      // rect(xStat+297,yButton2-20,65,15, 7);
-      // fill(0);
-      // if(!su5){
-      // fill(200);
-      // }
+       noFill();
+       if(su5){
+         fill(180);
+       }
+       rect(xStat+297,yButton2-20,65,15, 7);
+       fill(0);
+       if(!su5){
+       fill(200);
+       }
        
-      // text("100%", xStat+329,yPercent2-27);
+       text("100%", xStat+329,yPercent2-27);
        
        
        noFill();
-      ///////////////////////////////////////////// contacts traced
+      
        if(ct1){
          fill(180);
        }
@@ -853,67 +1055,196 @@ void statsBar() {
        
        text("100%", xStat+329,yPercent3-37);
     noFill();
-    
-    if(a1){
+       }
+       
+       if(pressed){
+         if(d2){
          fill(180);
        }
-       rect(xStat,yButton3+20,65,15, 7);
+       rect(880,208,40,10,4);
+       fill(0);
+       if(!d2){
+         rect(880,208,40,10,4);
+      fill(200);
+       }
+       textSize(10);
+       text("Indoor", 900,217);
+         textSize(15);
+       noFill();
+       //if(d2){
+       //  fill(180);
+       //}
+       //rect(xStat+180,yButton2+30,120,20, 7);
+       //fill(0);
+       //if(!d2){
+       //fill(200);
+       //}
+       
+       //text("Indoor", xStat+240,yPercent2+25);
+       
+       //noFill();
+      // if(d3){
+      //   fill(180);
+      // }
+      //// rect(xStat+149,yButton2-20,65,15, 7);
+      // fill(0);
+      // if(!d3){
+      // fill(200);
+      // }
+       
+      // //text("50%", xStat+184,yPercent2-27);
+       
+      // noFill();
+       //if(d4){
+       //  fill(180);
+       //}
+       //rect(xStat+223,yButton2-20,65,15, 7);
+       //fill(0);
+       //if(!d4){
+       //fill(200);
+       //}
+       
+       //text("75%", xStat+259,yPercent2-27);
+       //noFill();
+       
+       //noFill();
+       //if(d5){
+       //  fill(180);
+       //}
+       //rect(xStat+297,yButton2-20,65,15, 7);
+       //fill(0);
+       //if(!d5){
+       //fill(200);
+       //}
+       
+       //text("100%", xStat+329,yPercent2-27);
+      // noFill();
+       noFill();
+      if(c1){
+         fill(180);
+       }
+       rect(xStat,yButton2-20,65,15,7);
+       fill(0);
+       if(!c1){
+       fill(200);
+       }
+       
+       text("0%", xStat+34,yPercent2-27);
+       
+       noFill();
+       if(c2){
+         fill(180);
+       }
+       rect(xStat+74,yButton2-20,65,15, 7);
+       fill(0);
+       if(!c2){
+       fill(200);
+       }
+       
+       text("25%", xStat+109,yPercent2-27);
+       
+       noFill();
+       if(c3){
+         fill(180);
+       }
+       rect(xStat+149,yButton2-20,65,15, 7);
+       fill(0);
+       if(!c3){
+       fill(200);
+       }
+       
+       text("50%", xStat+184,yPercent2-27);
+       
+       noFill();
+       if(c4){
+         fill(180);
+       }
+       rect(xStat+223,yButton2-20,65,15, 7);
+       fill(0);
+       if(!c4){
+       fill(200);
+       }
+       
+       text("75%", xStat+259,yPercent2-27);
+       noFill();
+       
+       noFill();
+       if(c5){
+         fill(180);
+       }
+       rect(xStat+297,yButton2-20,65,15, 7);
+       fill(0);
+       if(!c5){
+       fill(200);
+       }
+       
+       text("100%", xStat+329,yPercent2-27);
+       
+       
+       noFill();
+       if(a1){
+         fill(180);
+       }
+       rect(xStat,yButton1,65,15, 7);
        fill(0);
        if(!a1){
        fill(200);
        }
        
-       text("0%", xStat+34,yPercent3+13);
+       text("0%", xStat+34,yPercent-8);
        
        noFill();
        if(a2){
          fill(180);
        }
-       rect(xStat+74,yButton3+20,65,15, 7);
+       rect(xStat+74,yButton1,65,15, 7);
        fill(0);
        if(!a2){
        fill(200);
        }
        
-       text("25%", xStat+109,yPercent3+13);
+       text("25%", xStat+109,yPercent-8);
        
        noFill();
        if(a3){
          fill(180);
        }
-       rect(xStat+149,yButton3+20,65,15, 7);
+       rect(xStat+149,yButton1,65,15, 7);
        fill(0);
        if(!a3){
        fill(200);
        }
        
-       text("50%", xStat+184,yPercent3+13);
+       text("50%", xStat+184,yPercent-8);
        
        noFill();
        if(a4){
          fill(180);
        }
-       rect(xStat+223,yButton3+20,65,15, 7);
+       rect(xStat+223,yButton1,65,15, 7);
        fill(0);
        if(!a4){
        fill(200);
        }
        
-       text("75%", xStat+259,yPercent3+13);
+       text("75%", xStat+259,yPercent-8);
        noFill();
        
        noFill();
        if(a5){
          fill(180);
        }
-       rect(xStat+297,yButton3+20,65,15, 7);
+       rect(xStat+297,yButton1,65,15, 7);
        fill(0);
        if(!a5){
        fill(200);
        }
        
-       text("100%", xStat+329,yPercent3+13);
+       text("100%", xStat+329,yPercent-8);
+}
     noFill();
+    
+    
     
     if(b1){
          fill(180);
@@ -927,9 +1258,25 @@ void statsBar() {
        text("0%", xStat+34,yPercent-52);
        
        noFill();
-       if(b2){
+        if(b1){
          fill(180);
        }
+       rect(xStat,yButton1-44,65,15, 7);
+       fill(0);
+       if(!b1){
+       fill(200);
+       }
+       
+       text("0%", xStat+34,yPercent-52);
+       
+       noFill();
+       if(b2){
+         fill(180);
+         fill(#93969B);
+       rect(xStat,yButton1-44,65,15, 7);
+       }
+       //fill(#93969B);
+       //rect(xStat,yButton1-44,65,15, 7)
        rect(xStat+74,yButton1-44,65,15, 7);
        fill(0);
        if(!b2){
@@ -941,6 +1288,9 @@ void statsBar() {
        noFill();
        if(b3){
          fill(180);
+         fill(#93969B);
+       rect(xStat,yButton1-44,65,15, 7);
+        rect(xStat+74,yButton1-44,65,15, 7);
        }
        rect(xStat+149,yButton1-44,65,15, 7);
        fill(0);
@@ -953,6 +1303,10 @@ void statsBar() {
        noFill();
        if(b4){
          fill(180);
+         fill(#93969B);
+       rect(xStat,yButton1-44,65,15, 7);
+        rect(xStat+74,yButton1-44,65,15, 7);
+        rect(xStat+149,yButton1-44,65,15, 7);
        }
        rect(xStat+223,yButton1-44,65,15, 7);
        fill(0);
@@ -966,6 +1320,11 @@ void statsBar() {
        noFill();
        if(b5){
          fill(180);
+         fill(#93969B);
+       rect(xStat,yButton1-44,65,15, 7);
+        rect(xStat+74,yButton1-44,65,15, 7);
+        rect(xStat+149,yButton1-44,65,15, 7);
+          rect(xStat+223,yButton1-44,65,15, 7);
        }
        rect(xStat+297,yButton1-44,65,15, 7);
        fill(0);
@@ -1042,6 +1401,16 @@ void statsBar() {
         adjust2 = true; 
     } 
     
+    if (numSick >= 800){
+      adjust3 = true;
+    }
+    
+    if( numSick >= 2000){
+      adjust4 = true;
+    }
+    
+    
+    
      
     if(adjust){
     yInfected   = (yInfected+yCFR)/2;
@@ -1052,6 +1421,16 @@ void statsBar() {
         yInfected   = (yInfected+yCFR)/2; 
         yLine = 713 - 13;
     } 
+    
+    if (adjust3){
+     yInfected   = (yInfected+yCFR)/2; 
+    yLine = 713 - 13;
+    }
+    
+    if (adjust4){
+     yInfected   = (yInfected+yCFR)/2; 
+    yLine = 713 - 13;
+    }
     
    strokeWeight(1);
 
@@ -1068,14 +1447,27 @@ void statsBar() {
     
    if ((numSick == 0 && numInfected == 0 && dayCounter > 9) || dayCounter > 99) {
      
-     fill(0,100);
-     noStroke();
-     rect(20,20,width-420,700,7); 
+     //fill(0,100);
+     //noStroke();
+     //rect(20,20,width-420,700,7); 
+     fill(38,38,38);
+    stroke(255);
+    strokeWeight(2);
+    //println(frameRate);
+     rect(20,20,width-420,700,6);  
      
      fill(250);
-     textSize(18);
-     text("SIMULATION OVER", (width-380)/2,((height-40)/2));
-     text("REFRESH BROWSER TO RETURN TO MAIN MENU", (width-380)/2,((height-40)/2)+35);
+     textSize(23);
+     text("SIMULATION OVER", (width-380)/2,105);
+     //text("SIMULATION STASTISTICS", ((width-380)/2),160);
+     //textSize(15);
+     //text("TOTAL NUMBER OF CASES:"+ nf(int(numInfected)), ((width-380)/2),200);
+     //text("TOTAL NUMBER OF DEATHS:"+ numDead, ((width-380)/2),230);
+     //text("TOTAL NUMBER OF RECOVERY:"+ nf(int(numHealed)),((width-380)/2),260);
+     //textSize(18);
+     //text("REFRESH BROWSER",((width-380)/2)+ 150,((height-40)/2)-50);
+    // text("TO RESTART SIMULATION",((width-380)/2)+ 150,((height-40)/2)-30);
+      copy(xStat-5, 395, 370, 320, 115, 150, 510, 478);
      //text("USER FEEDBACK SURVEY", (width-380)/2,((height-40)/2)+70);
     
      //fill(255,100);
@@ -1120,36 +1512,31 @@ void infect()
         isolationProb = 1.0;
       }   
      
-     
-      for (int i = 0; i < population.size(); i += 1) {
+     for (int i = 0; i < sickAgents.size(); i += 1) {
   
-          Agent person1 = population.get(i);
-        
-        for (int j = i + 1; j < population.size(); j += 1)
+          Agent person1 = sickAgents.get(i);
+          
+          if(person1.sick){
+        for (int j = 0; j < population.size(); j += 1)
 
         {
             Agent person2 = population.get(j);
             
-            if ((person1.sick || person2.sick)){
+            
             float distance = dist(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
 
-            // first condition
 
+            
+            if(smallPop || tinyPop){
+            if(pressed){
             if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.recovered  && !person1.sickIsolate)
 
             {
-              
             
-              if( person1.loc.x < 365  && person2.loc.x < 365 ){
+              if( person1.loc.x < threshold  && person2.loc.x< threshold ){
                
                 infectionProbability = 0.1;
-                
-              //if(person2.socialDistance){
-                
-              //  infectionProbability = .06;
-                
-              //}
-              
+
               if (person2.wearingMask && !person1.wearingMask){
                 infectionProbability = .08;
               }
@@ -1161,17 +1548,15 @@ void infect()
               if (!person2.wearingMask && person1.wearingMask){
                 infectionProbability = .06;
               }
-              }
+             }
               
-              
-              else if (person1.loc.x > 365  && person2.loc.x > 365 ){
+              else if (person1.loc.x > threshold  && person2.loc.x > threshold ){
                 
               //   if(person2.socialDistance){
                 
               //  infectionProbability = .06;
                 
               //}
-              
               infectionProbability = .01;
               
               if (person2.wearingMask && !person1.wearingMask){
@@ -1191,23 +1576,193 @@ void infect()
                 if (prob(infectionProbability) && !person1.isolate && !person2.infected) {
 
                     person2.getInfected();
-                    if( person2.loc.x < 365 &&  !person2.recovered){
+                    sickAgents.add(person2);
+                    population.remove(person2);
+                    
+                    if( person2.loc.x < threshold &&  !person2.recovered){
                     InsideInfected +=1;
+                     if (person2.wearingMask){
+                      InsideMask +=1;
+                      }
            }
-                 if( person2.loc.x > 365 && !person2.recovered){
-                 OutsideInfected = OutsideInfected +1; 
+                 if( person2.loc.x > threshold && !person2.recovered){
+                 OutsideInfected = OutsideInfected +1;
+                  if (person1.wearingMask){
+                      OutsideMask +=1;
+                      }
                }
+                 
                 }
 
             }
-            else if (distance <= spreadDistance && person2.sick && !person1.sick && !person1.recovered && !person2.sickIsolate)
+          
+            }
+            
+            if(!pressed){
+            if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.recovered  && !person1.sickIsolate)
+
             {
-              if( person1.loc.x < 365  && person2.loc.x< 365 ){
-                 
               
-              infectionProbability = 0.1;
+              if(person2.socialDistance){
+                
+                infectionProbability = .06;
+                
+              }
+              
+              if (person2.wearingMask && !person1.wearingMask){
+                infectionProbability = .08;
+              }
+              
+               if (person2.wearingMask && person1.wearingMask){
+                infectionProbability = .02;
+              }
+              
+              if (!person2.wearingMask && person1.wearingMask){
+                infectionProbability = .04;
+              }
+              
+
+                if (prob(infectionProbability) && !person1.isolate) {
+
+                    person2.getInfected();
+                    sickAgents.add(person2);
+                    population.remove(person2);
+                }
+
+
+            } 
                  
-              // if(person1.socialDistance){
+            }
+            }
+            if (mediumPop){
+              infectionProbability = 0.08;
+            if(pressed){
+            if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.recovered  && !person1.sickIsolate)
+
+            {
+              
+            
+              if( person1.loc.x < threshold  && person2.loc.x< threshold ){
+               
+                infectionProbability = 0.09;
+                
+              //if(person2.socialDistance){
+                
+              //  infectionProbability = .06;
+                
+              //}
+              
+              if (person2.wearingMask && !person1.wearingMask){
+                infectionProbability = .08;
+              }
+              
+               if (person2.wearingMask && person1.wearingMask){
+                infectionProbability = .03;
+              }
+              
+              if (!person2.wearingMask && person1.wearingMask){
+                infectionProbability = .05;
+              }
+              }
+              
+              
+              else if (person1.loc.x > threshold  && person2.loc.x > threshold ){
+                
+              //   if(person2.socialDistance){
+                
+              //  infectionProbability = .06;
+                
+              //}
+              infectionProbability = .009;
+              
+              if (person2.wearingMask && !person1.wearingMask){
+                infectionProbability = .007;
+              }
+              
+               if (person2.wearingMask && person1.wearingMask){
+                infectionProbability = .003;
+              }
+              
+              if (!person2.wearingMask && person1.wearingMask){
+                infectionProbability = .005;
+              }
+              }
+              
+              
+                if (prob(infectionProbability) && !person1.isolate && !person2.infected) {
+
+                    person2.getInfected();
+                    sickAgents.add(person2);
+                    population.remove(person2);
+                    
+                    if( person2.loc.x < threshold &&  !person2.recovered){
+                    InsideInfected +=1;
+                     if (person2.wearingMask){
+                      InsideMask +=1;
+                      }
+           }
+                 if( person2.loc.x > threshold && !person2.recovered){
+                 OutsideInfected = OutsideInfected +1;
+                  if (person1.wearingMask){
+                      OutsideMask +=1;
+                      }
+               }
+                 
+                }
+
+            }
+          
+            }
+            
+            if(!pressed){
+            if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.recovered  && !person1.sickIsolate)
+
+            {
+              
+              if(person2.socialDistance){
+                
+                infectionProbability = .05;
+                
+              }
+              
+              if (person2.wearingMask && !person1.wearingMask){
+                infectionProbability = .07;
+              }
+              
+               if (person2.wearingMask && person1.wearingMask){
+                infectionProbability = .01;
+              }
+              
+              if (!person2.wearingMask && person1.wearingMask){
+                infectionProbability = .03;
+              }
+              
+
+                if (prob(infectionProbability) && !person1.isolate) {
+
+                    person2.getInfected();
+                    sickAgents.add(person2);
+                    population.remove(person2);
+                }
+
+
+            } 
+                 
+            }
+            }
+            if(largePop){
+              infectionProbability = 0.07;
+            if(pressed){
+            if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.recovered  && !person1.sickIsolate)
+
+            {
+              
+            
+              if( person1.loc.x < threshold  && person2.loc.x< threshold ){
+               
+                infectionProbability = 0.08;
+                
+              //if(person2.socialDistance){
                 
               //  infectionProbability = .06;
                 
@@ -1218,25 +1773,26 @@ void infect()
               }
               
                if (person2.wearingMask && person1.wearingMask){
-                infectionProbability = .04;
+                infectionProbability = .02;
               }
               
               if (!person2.wearingMask && person1.wearingMask){
-                infectionProbability = .08;
+                infectionProbability = .04;
               }
               }
               
-             else if (person1.loc.x > 365  && person2.loc.x > 365 ){
-              //if(person1.socialDistance){
+              
+              else if (person1.loc.x > threshold  && person2.loc.x > threshold ){
+                
+              //   if(person2.socialDistance){
                 
               //  infectionProbability = .06;
                 
               //}
-              
-              infectionProbability = 0.01;
+              infectionProbability = .009;
               
               if (person2.wearingMask && !person1.wearingMask){
-                infectionProbability = .004;
+                infectionProbability = .006;
               }
               
                if (person2.wearingMask && person1.wearingMask){
@@ -1244,26 +1800,72 @@ void infect()
               }
               
               if (!person2.wearingMask && person1.wearingMask){
-                infectionProbability = .008;
+                infectionProbability = .004;
+              }
               }
               
-            
-             }
+              
+                if (prob(infectionProbability) && !person1.isolate && !person2.infected) {
 
-                if (prob(infectionProbability) && !person2.isolate && !person1.infected) {
-
-                    person1.getInfected(); 
+                    person2.getInfected();
+                    sickAgents.add(person2);
+                    population.remove(person2);
                     
-                      if( person1.loc.x < 365 && !person1.recovered){
-                      InsideInfected +=1;
+                    if( person2.loc.x < threshold &&  !person2.recovered){
+                    InsideInfected +=1;
+                     if (person2.wearingMask){
+                      InsideMask +=1;
+                      }
            }
-             if( person1.loc.x > 365 && !person1.recovered){
-             OutsideInfected = OutsideInfected +1; 
-           }
-                  
+                 if( person2.loc.x > threshold && !person2.recovered){
+                 OutsideInfected = OutsideInfected +1;
+                  if (person1.wearingMask){
+                      OutsideMask +=1;
+                      }
+               }
+                 
                 }
-                                
-            }              
+
+            }
+          
+            }
+            
+            if(!pressed){
+            if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.recovered  && !person1.sickIsolate)
+
+            {
+              
+              if(person2.socialDistance){
+                
+                infectionProbability = .04;
+                
+              }
+              
+              if (person2.wearingMask && !person1.wearingMask){
+                infectionProbability = .06;
+              }
+              
+               if (person2.wearingMask && person1.wearingMask){
+                infectionProbability = .00;
+              }
+              
+              if (!person2.wearingMask && person1.wearingMask){
+                infectionProbability = .02;
+              }
+              
+
+                if (prob(infectionProbability) && !person1.isolate) {
+
+                    person2.getInfected();
+                    sickAgents.add(person2);
+                    population.remove(person2);
+                }
+
+
+            } 
+                 
+            }
+            }
             
             infectionLine(person1,person2);
             
@@ -1273,7 +1875,7 @@ void infect()
 
                 if (prob(isolationProb)) {
 
-                    //person2.getTraced(); 
+                    person2.getTraced(); 
                 }
 
 
@@ -1283,25 +1885,28 @@ void infect()
                 
                 if (prob(isolationProb)) {
 
-                    //person1.getTraced(); 
+                    person1.getTraced(); 
                 }           
              }       
           }
+        
         
     }
   
  
     }
-    
     float allTransmission = InsideInfected+OutsideInfected;
     //println(allTransmission);
     if(pressed){
     textFont(altFont);
     textSize(18);
+    fill(255);
     text(" Transmissions: " + InsideInfected, 201, 775);
     text(" Transmissions: " + OutsideInfected, 528, 775);
     text(" % of Transmissions: " + nf((InsideInfected / (allTransmission))*100,0,2) + "%", 201, 800);  
     text(" % of Transmissions: " + nf((OutsideInfected / (allTransmission))*100,0,2) + "%", 528, 800);
+    text("Transmission with Face Covering:" +InsideMask, 200, 825);
+    text(" Transmission with Face Covering:" +OutsideMask, 530,825);
     }
     }
     
@@ -1335,7 +1940,7 @@ void initailizePop() {
 
     {
 
-        PVector L = new PVector(random(25, width - 407), random(27, height-186));        
+        PVector L = new PVector(random(25, width - 407), random(27, height-26));        
 
         population.add(new Agent(L));
 
@@ -1353,7 +1958,7 @@ void infectionLine(Agent person1, Agent person2) {
 
         strokeWeight(3);
         
-        if((person1.vel.x == 0 || person2.vel.x == 0)){
+        if((person1.vel.x == 0 || person2.vel.x == 0 || person1.recovered || person2.recovered)){
         noStroke();//?
      }
         line(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
@@ -1420,24 +2025,111 @@ void mousePressed()
     PVector L = new PVector(random(0, width - 400), random(0, height));
     //text( "INSIDE", 250, 20);
     Agent infectedPerson = new Agent(L);
-
+    total = sickAgents.size() + population.size();
     infectedPerson.getInfected();
-    if(mouseX<width-400 && mouseX> width- 1095 && mouseY<height-30 && mouseY> height - 720 && !over){
-    if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+90 && mouseY >= ((height-40)/2)-15 && mouseY <= ((height-40)/2)){
+    
+   if(!selection && !isSetup && !selectPop ){
+   if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+90 && mouseY >= (((height-40)/2)-15) && mouseY <= ((height-40)/2)){
+    selectPop = true; 
+    }
+    }
+    if(selectPop){
+    if(mouseX >= 40 && mouseX <= 350 && mouseY >= 40 && mouseY <= 360){
+     tinyPop = true;
+     smallPop = false;
+     mediumPop = false;
+     largePop = false;
+   //  selectPop = false;
+   // selection = true;
+    }
+    if(mouseX >= 360 && mouseX <= 680 && mouseY >= 40 && mouseY <= 360){
+     smallPop = true;
+     mediumPop = false;
+      largePop = false;
+      tinyPop = false;
+    // selectPop = false;
+      //selection = true;
+    }
+    //if(mouseX <= ((width-400)/2)-90 && mouseX >= ((width-400)/2)+90 && mouseY <= (((height-40)/2)-15) && mouseY <= ((height-40)/2)){
+    if(mouseX >= 40 && mouseX <= 350 && mouseY >= 390 && mouseY <= 680){
+    mediumPop = true;
+    tinyPop = false;
+    largePop = false;
+    smallPop = false;
+    //selectPop = false;
+    //selection = true;
+    }
+    if(mouseX >= 360 && mouseX <= 680 && mouseY >= 390 && mouseY <= 680){
+    largePop = true;
+    smallPop = false;
+    tinyPop = false;
+    mediumPop = false;
+   // selectPop = false;
+    //selection = true;
+    }
+    if(selectPop && clicks >= 1){
+      selectPop = false;
+      selection = true;
+    }
+     //}
+    }
+    
+  //text( "INSIDE", 250, 20);
+ if(mouseX<width-400 &&  mouseY<height-30 && !over){ 
+   
+  if(selection == true && isSetup == false){
+ if(mouseX >= 35 && mouseX <= 700 && mouseY >= 390 && mouseY <= 700){
      
-    if(!isSetup){
+       if(!isSetup && clicks >= 2){
             //adjust = false;
             //adjust2 = false;
-            isSetup = true;
+            selection = false;
+             isSetup = true;
             population.clear();
             pressed = true;
+            threshold = 365;
+            c5 = true;
+            c1 = false;
         
         for (int i = 0; i < initialPopulationSize; i += 1)
 
         { 
-          
+          //if(!pressed){
             PVector R = new PVector(random(28, width - 408), random(28, height-188));
-            //PVector R = new PVector(random(368, width - 408), random(28, height-188));
+            population.add(new Agent(R));
+          //}
+          //else if(pressed){
+           // PVector R = new PVector(random(368, width - 408), random(28, height-188));
+           // population.add(new Agent(R));
+          //}
+            //population.add(new Agent(R));
+            dayCounter = 0;
+            numDead = 0;
+            xCord1 = 0;
+            InsideMask = 0;
+            OutsideMask = 0;
+        }
+        sickHistory.clear();
+       }
+      }
+   }
+   
+   if(selection){
+   if(mouseX >= 35 && mouseX <= 700 && mouseY >= 35 && mouseY <= 380){
+   if(!isSetup && clicks >= 2){
+            //adjust = false;
+            //adjust2 = false;
+             isSetup = true;
+            population.clear();
+            pressed = false;
+            threshold = 365;
+            c5 = true;
+            c1 = false;
+
+        for (int i = 0; i < initialPopulationSize; i += 1)
+
+        { 
+            PVector R = new PVector(random(28, width - 408), random(28, height-188));
             population.add(new Agent(R));
             dayCounter = 0;
             numDead = 0;
@@ -1447,20 +2139,17 @@ void mousePressed()
         sickHistory.clear();
         
       }
-    }
-      
-    if(isSetup && population.size() < 1020){
+   }
+    } 
+
+    if(isSetup && total< (initialPopulationSize + 20) && (mouseX > threshold + 8 || mouseX < threshold - 8)){
     infectedPerson.loc.x = mouseX;
-
     infectedPerson.loc.y = mouseY;
-
-    population.add(infectedPerson);
+    sickAgents.add(infectedPerson);
     }
 
     loop();
-    }
-    //text( "INSIDE", 250, 20);
- 
+}
 
     //text("INSTRUCTIONS", (width-420)/2,((height-40)/2)-05);
     if(!isSetup){
@@ -1472,10 +2161,18 @@ void mousePressed()
     link("http://virs.io/survey/");
   }
  }
-        
+    //   if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+90 && mouseY >= ((height-40)/2)-15 && mouseY <= ((height-40)/2)){
+    //   if(!selection){
+    //selection = true;
+    //   }
+    // } 
     if(mouseX >= ((width-420)/2)-30 && mouseX <= ((width-420)/2)+30 && mouseY >= ((height-40)/2)+20 && mouseY <= ((height-40)/2)+35){
+      if(!selection){
+        if(!selectPop){
       if(!about){
        about = true; 
+      }
+      }
       }
     }
     
@@ -1489,7 +2186,13 @@ void mousePressed()
       
       isSetup = false;
       over = false;
+     selectPop = false;
+     largePop = false;
+     smallPop = false;
+     mediumPop = false;
+      
       population.clear();
+      sickAgents.clear();
       
       for (int i = 0; i < initialPopulationSize; i += 1)
 
@@ -1505,120 +2208,94 @@ void mousePressed()
         pressed = false;
        InsideInfected = 0 ;
       OutsideInfected  = 0;
+      InsideMask = 0;
+      OutsideMask = 0;
         if(!looping){
           loop();
         } 
         
-        s1 = true;
-        s2 = false;
-        s3 = false;
-        s4 = false;
-        s5 = false;
-
-        su1 = true;
-        su2 = false;
-        su3 = false;
-        su4 = false;
-        su5 = false;
-
-        ct1 = true;
-        ct2 = false;
-        ct3 = false;
-        ct4 = false;
-        ct5 = false;
-
-        a1 = true;
-        a2 = false;
-        a3 = false; 
-        a4 = false; 
-        a5 = false;
-        
-        b1 = true;
-        b2 = false;
-        b3 = false; 
-        b4 = false; 
-        b5 = false;
 
     }
+    
+if(!pressed){
+   if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
+      s1 = true;
+      s2 = false;
+      s3 = false;
+      s4 = false;
+      s5 = false;
+    }
+    
+    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
+      s1 = false;
+      s2 = true;
+      s3 = false;
+      s4 = false;
+      s5 = false;
+    }
+    
+    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
+      s1 = false;
+      s2 = false;
+      s3 = true;
+      s4 = false;
+      s5 = false;
+    }
+    
+    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
+      s1 = false;
+      s2 = false;
+      s3 = false;
+      s4 = true;
+      s5 = false;
+    }
+    
+    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
+      s1 = false;
+      s2 = false;
+      s3 = false;
+      s4 = false;
+      s5 = true;
+    }
 
-   //if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
-   //   s1 = true;
-   //   s2 = false;
-   //   s3 = false;
-   //   s4 = false;
-   //   s5 = false;
-   // }
     
-   // if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
-   //   s1 = false;
-   //   s2 = true;
-   //   s3 = false;
-   //   s4 = false;
-   //   s5 = false;
-   // }
+    if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+      su1 = true;
+      su2 = false;
+      su3 = false;
+      su4 = false;
+      su5 = false;
+    }
     
-   // if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
-   //   s1 = false;
-   //   s2 = false;
-   //   s3 = true;
-   //   s4 = false;
-   //   s5 = false;
-   // }
+    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+      su1 = false;
+      su2 = true;
+      su3 = false;
+      su4 = false;
+      su5 = false;
+    }
     
-   // if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
-   //   s1 = false;
-   //   s2 = false;
-   //   s3 = false;
-   //   s4 = true;
-   //   s5 = false;
-   // }
-    
-   // if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
-   //   s1 = false;
-   //   s2 = false;
-   //   s3 = false;
-   //   s4 = false;
-   //   s5 = true;
-   // }
-
-    
-   // if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
-   //   su1 = true;
-   //   su2 = false;
-   //   su3 = false;
-   //   su4 = false;
-   //   su5 = false;
-   // }
-    
-   // if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
-   //   su1 = false;
-   //   su2 = true;
-   //   su3 = false;
-   //   su4 = false;
-   //   su5 = false;
-   // }
-    
-   // if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
-   //   su1 = false;
-   //   su2 = false;
-   //   su3 = true;
-   //   su4 = false;
-   //   su5 = false;
-   // }
-   // if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
-   //   su1 = false;
-   //   su2 = false;
-   //   su3 = false;
-   //   su4 = true;
-   //   su5 = false;
-   // }
-   // if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
-   //   su1 = false;
-   //   su2 = false;
-   //   su3 = false;
-   //   su4 = false;
-   //   su5 = true;
-   // }
+    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+      su1 = false;
+      su2 = false;
+      su3 = true;
+      su4 = false;
+      su5 = false;
+    }
+    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+      su1 = false;
+      su2 = false;
+      su3 = false;
+      su4 = true;
+      su5 = false;
+    }
+    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+      su1 = false;
+      su2 = false;
+      su3 = false;
+      su4 = false;
+      su5 = true;
+    }
     
     if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton3-30 && mouseY <= (yButton3-15)){
       ct1 = true;
@@ -1657,8 +2334,7 @@ void mousePressed()
       ct4 = false;
       ct5 = true;
     }
-    
-    if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton3+20 && mouseY <= (yButton3+35)){
+     if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton3+20 && mouseY <= (yButton3+35)){
       a1 = true;
       a2 = false;
       a3 = false;
@@ -1696,13 +2372,138 @@ void mousePressed()
       a4 = false;
       a5 = true;
     }
+}
+
+if(pressed){
+  if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
+      a1 = true;
+      a2 = false;
+      a3 = false;
+      a4 = false;
+      a5 = false;
+    }
+    
+    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
+      a1 = false;
+      a2 = true;
+      a3 = false;
+      a4 = false;
+      a5 = false;
+    }
+    
+    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
+      a1 = false;
+      a2 = false;
+      a3 = true;
+      a4 = false;
+      a5 = false;
+    }
+    
+    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
+      a1 = false;
+      a2 = false;
+      a3 = false;
+      a4 = true;
+      a5 = false;
+    }
+    
+    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton1 && mouseY <= (yButton1+15)){
+      a1 = false;
+      a2 = false;
+      a3 = false;
+      a4 = false;
+      a5 = true;
+    }
+
+  if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+      c1 = true;
+      c2 = false;
+      c3 = false;
+      c4 = false;
+      c5 = false;
+    }
+    
+    if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+      c1 = false;
+      c2 = true;
+      c3 = false;
+      c4 = false;
+      c5 = false;
+    }
+    
+    if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+      c1 = false;
+      c2 = false;
+      c3 = true;
+      c4 = false;
+      c5 = false;
+    }
+    if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+      c1 = false;
+      c2 = false;
+      c3 = false;
+      c4 = true;
+      c5 = false;
+    }
+    if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+      c1 = false;
+      c2 = false;
+      c3 = false;
+      c4 = false;
+      c5 = true;
+    }
+    
+    
+    if(mouseX >= 880 && mouseX <= 921 && mouseY >= 211 && mouseY <= (228)){
+      if(d2){
+      d2 = false;
+      }
+      else if(!d2){
+      d2 = true;
+      }
+    }
+    
+    if(mouseX >= 924 && mouseX <= 1037 && mouseY >=320&& mouseY <= 340){
+      d1 = false;
+      d2 = true;
+     // d3 = false;
+     // d4 = false;
+     // d5 = false;
+    }
+    
+    //if(mouseX >= xStat+149 && mouseX <= (xStat+214) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+    //  d1 = false;
+    //  d2 = false;
+    //  d3 = true;
+    //  //d4 = false;
+    //  //d5 = false;
+    //}
+    //if(mouseX >= xStat+223 && mouseX <= (xStat+288) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+    //  d1 = false;
+    //  d2 = false;
+    //  d3 = false;
+    ////  d4 = true;
+    // // d5 = false;
+    //}
+    //if(mouseX >= xStat+297 && mouseX <= (xStat+362) && mouseY >= yButton2-15 && mouseY <= (yButton2-4)){
+    //  d1 = false;
+    //  d2 = false;
+    //  d3 = false;
+    ////  d4 = false;
+    // // d5 = true;
+    //}
+    
+}
+    
     
      if(mouseX >= xStat && mouseX <= (xStat+65) && mouseY >= yButton1-43 && mouseY <= (yButton1-28)){
-      s1 = true;
-      s2 = false;
-      s3 = false;
-      s4 = false;
-      s5 = false;
+        if (!b2 && !b3 && !b4 && !b5){
+      b1 = true;
+      b2 = false;
+      b3 = false;
+      b4 = false;
+      b5 = false;
+        }
     }
     
     if(mouseX >= xStat+74 && mouseX <= (xStat+139) && mouseY >= yButton1-43 && mouseY <= (yButton1-28)){
@@ -1743,8 +2544,14 @@ void mousePressed()
       b5 = true;
     }
      
+
 }
 
+void mouseClicked(){
+ 
+  clicks = clicks+1;
+  println(clicks);
+}
 ////////////////////////////////////////////////////////////////////////////////// Reset
 
 void keyPressed()
@@ -1766,6 +2573,16 @@ void keyPressed()
      
     
 }
+
+  void mouseDragged() 
+{
+
+  if((mouseX < threshold + 10 && mouseX > threshold - 10) && (mouseX < 695 && mouseX > 40)){
+   threshold = mouseX; 
+  }
+
+}
+
 
 class Agent {
 
@@ -1808,9 +2625,13 @@ class Agent {
   float vaccinationRate;
   
   float travelIsolate;
-  
   float maskTransmissionRate;
+  float maskTransmissionRateOutside;
+  float maskTransmissionRateInside;
+  
   float insideCapacity;
+  
+  boolean notAllowed = false; 
   
   boolean sickIsolate = false;
   
@@ -1831,7 +2652,7 @@ class Agent {
   int d = frameCount;
   
   int delay = frameCount;
-
+  
 
   Agent(PVector L)
 
@@ -1874,7 +2695,7 @@ class Agent {
       days -=1;
 
       if (days == 0){ 
-        if(randomNum > deathRate){
+        if(random(0,1) > deathRate){
          survive();
       }
       else {
@@ -1883,17 +2704,19 @@ class Agent {
       }
     }
    }
-
+    
     if (infected)
+
     { 
 
       t += 1;
 
       if (t >= random(240,360)) {    
-
+     
         getSick(minDays, maxDays);
 
       }
+
   }
   
   if (traced)
@@ -1954,10 +2777,6 @@ void dead()
 }
 
 ////////////////////////////////////////////////////////////////////////// DrawAgent Function
-void inside(){
-  
-}
-
 
 void drawAgent()
   {   
@@ -1966,7 +2785,7 @@ void drawAgent()
       fill(255); 
       rad = 4;
     }
-    
+
     if(su1){
         travelIsolate = 0.0;
       }
@@ -1990,7 +2809,83 @@ void drawAgent()
       else { socialDistance = false; }
     }
     
+    if (pressed){
+      if(d2){
       if(a1){
+        maskTransmissionRateOutside = 0.0;
+      }
+      if(a2){
+        maskTransmissionRateOutside = 0.25;
+      }
+      if(a3){
+        maskTransmissionRateOutside = 0.5;
+      }
+      if(a4){
+        maskTransmissionRateOutside = 0.75;
+      }
+      if(a5){
+        maskTransmissionRateOutside = 1;
+      }
+      if (randomNum < maskTransmissionRateOutside && loc.x<threshold){
+        wearingMask = true;     
+    }
+    else{
+      wearingMask = false;
+    }
+      }
+      
+      if(!d2){
+         if(a1){
+        maskTransmissionRateOutside = 0.0;
+      }
+      if(a2){
+        maskTransmissionRateOutside = 0.25;
+      }
+      if(a3){
+        maskTransmissionRateOutside = 0.5;
+      }
+      if(a4){
+        maskTransmissionRateOutside = 0.75;
+      }
+      if(a5){
+        maskTransmissionRateOutside = 1;
+      }
+      if (randomNum < maskTransmissionRateOutside){
+        wearingMask = true;     
+    }
+    else{
+      wearingMask = false;
+    }
+        
+      }
+    
+    //if(d1){
+    //    maskTransmissionRateInside = 0.0;
+    //  }
+    //  if(d2){
+    //    maskTransmissionRateInside = 0.25;
+    //  }
+    //  if(d3){
+    //    maskTransmissionRateInside = 0.5;
+    //  }
+    //  if(d4){
+    //    maskTransmissionRateInside = 0.75;
+    //  }
+    //  if(d5){
+    //    maskTransmissionRateInside = 1;
+    //  }
+    //  if (randomNum < maskTransmissionRateInside && loc.x<365){
+    //    wearingMask = true;     
+    //}
+    //else{
+    //  wearingMask = false;
+    //}
+    
+    
+    }
+    
+    if(!pressed){
+    if(a1){
         maskTransmissionRate = 0.0;
       }
       if(a2){
@@ -2005,41 +2900,38 @@ void drawAgent()
       if(a5){
         maskTransmissionRate = 1;
       }
-      
-       if(ct1){
-        insideCapacity = 0.0;
-      }
-      if(ct2){
-        insideCapacity = 0.125;
-      }
-      if(ct3){
-        insideCapacity = 0.25;
-      }
-      if(ct4){
-        insideCapacity = 0.375;
-      }
-      if(ct5){
-        insideCapacity = .5;
-      }
-      
-      println(insidePercent);
-      
-
-    if (insidePercent < insideCapacity){
-        allowedInside = true;     
-    }
-    else if (insidePercent > insideCapacity){
-      allowedInside = false;
-    }
-      
-      
-      if ((randomNum < maskTransmissionRate)&& loc.x < 365){
-     // if ((randomNum < maskTransmissionRate)){
+      if (randomNum < maskTransmissionRate){
         wearingMask = true;     
     }
     else{
       wearingMask = false;
     }
+    }
+     
+     if(c1){
+        insideCapacity = 0.0;
+      }
+      if(c2){
+        insideCapacity = 0.125;
+      }
+      if(c3){
+        insideCapacity = 0.25;
+      }
+      if(c4){
+        insideCapacity = 0.375;
+      }
+      if(c5){
+        insideCapacity = .5;
+      }
+      
+      if ((insidePercent < insideCapacity)){
+        allowedInside = true;     
+    }
+ 
+    else if(insidePercent > insideCapacity) {
+      allowedInside = false;
+    }
+   //println(insidePercent);
     
     if(b1){
         vaccinationRate = 0.0;
@@ -2056,7 +2948,7 @@ void drawAgent()
       if(b5){
         vaccinationRate = 1;
       }
-      if (randomNum < vaccinationRate){
+      if (randomNum < vaccinationRate &&     !infected && !sick){
          recovered = true;     
     }
     
@@ -2086,6 +2978,7 @@ void drawAgent()
         vel = new PVector(0, 0);
       }
       
+     
     }
 
     if (infected) {
@@ -2096,7 +2989,7 @@ void drawAgent()
 
     if (recovered) {
       susceptible = false;
-      fill(88, 150, 255); 
+      fill(#0958D3); 
       rad = 5;
     }
     
@@ -2108,8 +3001,19 @@ void drawAgent()
     }
     
     noStroke();
+    if(smallPop){
+    ellipse( loc.x, loc.y, rad+10, rad+10);
+    }
+    if(tinyPop){
+    ellipse( loc.x, loc.y, rad+28, rad+28);
+    }
+    if(mediumPop){
     ellipse( loc.x, loc.y, rad, rad);
-   
+    }
+   if(largePop){
+    ellipse( loc.x, loc.y, rad-2, rad-2);
+    }
+
 
    if (isolate) {
       vel = new PVector(0, 0);  
@@ -2120,10 +3024,27 @@ void drawAgent()
     noFill();
 
     if ( sick ) {
-      if(!wearingMask){
+      if(!wearingMask && !recovered){
+        if(tinyPop){
       noFill();
       stroke(238, 90, 30);
+      ellipse(loc.x, loc.y, 70, 70);
+        }
+        if(smallPop){
+      noFill();
+      stroke(238, 90, 30);
+      ellipse(loc.x, loc.y, 25, 25);
+        }
+        if (mediumPop){
+         noFill();
+      stroke(238, 90, 30);
       ellipse(loc.x, loc.y, 13, 13);
+        }
+        if (largePop){
+         noFill();
+      stroke(238, 90, 30);
+      ellipse(loc.x, loc.y, 10, 10);
+        }
       }
     }
 
@@ -2133,7 +3054,7 @@ void drawAgent()
     //}
     
     if (isolate) {
-      fill(#E82A2A);
+      fill(#F233D3);
       //stroke(#E82A2A);
       ellipse(loc.x, loc.y, 5, 5);
     } 
@@ -2172,6 +3093,7 @@ void drawAgent()
   void wearMask()
   {
     wearingMask = true; 
+
   }
     
 
@@ -2181,19 +3103,22 @@ void drawAgent()
     infected = false;
     days = (int)random(minDay, maxDay);
   }
+  
+
 
   void bounce()
   {
-    
+   
+   
    boolean buffer = false; 
-   int middle = 365;
+   
   
-   if(!allowedInside && vel.x > 0 && loc.x < middle+4){
+   if(!allowedInside && vel.x > 0 && loc.x < threshold+4){
      buffer = true;
    }
    
-   if(!allowedInside && loc.x > middle && !buffer){
-    if (loc.x < middle+3 || loc.x >= width-407) {
+   if(!allowedInside && loc.x > threshold && !buffer){
+    if (loc.x < threshold+3 || loc.x >= width-407) {
       vel.x *= -1;
     }
     if (loc.y < 30 || loc.y >= height-186) {
@@ -2210,7 +3135,7 @@ void drawAgent()
     }
    }
    
-   else if(!allowedInside && loc.x < middle){
+   else if(!allowedInside && loc.x < threshold){
     if (loc.x < 28 || loc.x >= width-407) {
       vel.x *= -1;
     }
@@ -2220,4 +3145,5 @@ void drawAgent()
    }
   }
 
-}// End of Class
+}
+// End of Class
