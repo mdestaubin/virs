@@ -332,7 +332,7 @@ void removeAgent() {
 
 void statsBar() {
 
-    float popSize = population.size();   
+    float popSize = population.size() + sickAgents.size();   
     float totalPop= popSize + numDead;
     float numInfected = 0;
     float numHealed = 0;
