@@ -5,7 +5,7 @@
 //Nipurna Dhakal, Computer Science Intern Clark University
 
 int initialPopulationSize;
-
+int clicks = 0;
 
 ArrayList < Agent > population;
 ArrayList < Agent > survivors;
@@ -13,7 +13,7 @@ ArrayList <Agent> sickAgents;
 
 int dayCounter = 0;
 
-int framesPerDay = 60;
+int framesPerDay = 0;
 
 int currentPopulationSize = 0;
 
@@ -42,9 +42,9 @@ int minDays = 3;
 
 int maxDays = 7;
 
-int spreadDistance = 5;
+int spreadDistance = 0;
 
-int contactDistance = 15;
+int contactDistance = 13;
 
 float infectionProbability = .1;
 
@@ -130,7 +130,9 @@ boolean d3 = false;
 //boolean d4 = false; 
 //boolean d5 = false;
 
-boolean selection = false; 
+boolean selection = false;
+//boolean startScreen = true; 
+
 
 int yPercent  = 245; //23+button
 int yPercent2 = 310;
@@ -152,14 +154,23 @@ PImage virs;
 PImage hhi;
 PImage InOut;
 PImage Out;
+PImage tenPop;
+PImage hunPop;
+PImage thoPop;
+PImage tenthoPop;
+int threshold = 365;
+
 
 boolean adjust = false;
 boolean adjust2 = false;
 boolean adjust3 = false;
 boolean adjust4 = false;
+boolean adjust5 = false; 
+boolean adjust6 = false; 
 boolean over = false;
 boolean selectPop = false;
 
+boolean tinyPop = false;
 boolean smallPop = false;
 boolean mediumPop = false;
 boolean largePop = false;
@@ -172,16 +183,21 @@ void setup()
 {
     size(1120,900);
     //frameRate(60);
-   sickHistory =     new HashMap<Integer,Float>();
-   sickAgents = new ArrayList<Agent>();
+    sickHistory = new HashMap<Integer,Float>();
+    sickAgents = new ArrayList<Agent>();
     population = new ArrayList<Agent>();
     myFont = createFont("Arial Black", 32);
     altFont = createFont("Arial", 32);
-    initailizePop();
+    //initailizePop();
     virs = loadImage("DATA/virslogo.png");
     hhi = loadImage("DATA/hhilogo.png");
-    InOut = loadImage("DATA/In|Out.png");
-    Out = loadImage("DATA/Outdoor.png");
+    InOut = loadImage("DATA/scenario2.png");
+    Out = loadImage("DATA/scenario1.png");
+    tenPop = loadImage("DATA/10.png");
+    hunPop = loadImage("DATA/100.png");
+    thoPop = loadImage("DATA/1000.png");
+    tenthoPop = loadImage("DATA/10000.png");
+    
 }
 
 void draw()
@@ -198,50 +214,82 @@ void draw()
     line(xStat,yButton1-69,xStat+360,yButton1-69);
     line(xStat,yStats+10,xStat+360,yStats+10);
     fill(#E8EAF5);
+    
    // println(mouseX+","+mouseY);
-   if (smallPop && !mediumPop && !largePop){
-    initialPopulationSize = 999;
+   if (tinyPop && !largePop && !smallPop && !mediumPop){
+   initialPopulationSize = 9;
    }
-   if (mediumPop  && !largePop && !smallPop){
-   initialPopulationSize = 3000;
+   if (smallPop && !mediumPop && !largePop && !tinyPop){
+    initialPopulationSize = 99;
    }
-   if (largePop && !smallPop && !mediumPop){
-   initialPopulationSize = 5000;
+   if (mediumPop  && !largePop && !smallPop && !tinyPop){
+   initialPopulationSize = 999;
+   }
+   if (largePop && !smallPop && !mediumPop && !tinyPop){
+   initialPopulationSize = 9999;
    }
     insidePop = 0;
+ 
+  if (pressed){ 
+    //fill(#E8EAF5);
+    // textSize(18);
+    //text("INDOOR", 200,745);
+    //text("OUTDOOR", 530, 745);
+    noStroke();
+    fill(40,0,40,40);
+    rect(20,20,threshold-20,699);
+    stroke(250,180);
+    strokeWeight(5);
+    line(threshold, 22,threshold,718);
+}
+
     for (Agent a: population){
       if(isSetup){
         a.update(); 
-        if(a.loc.x<365){
+        if(a.loc.x<threshold){
         insidePop += 1;
        }
-
        }
      } 
      
      for (Agent a: sickAgents){
       if(isSetup){
         a.update();
-        if(a.loc.x<365){
+        if(a.loc.x<threshold){
         insidePop += 1;
        }
 
        }
      }
-    
-  if (pressed){ 
+
+     //fill(38,38,38);
+     //noStroke();
+     //rect(720,20,width-720,740);
+     //rect(0,0,740,20);
+     //rect(0,0,20,740);
+     //rect(0,720,740,40);
+     //noFill();
+     //stroke(255);
+     //strokeWeight(2);
+     //rect(20,20,width-420,700,6); 
+
+    if(pressed){
     fill(#E8EAF5);
-     textSize(18);
+    textSize(18);
     text("INDOOR", 200,745);
-    text("OUTDOOR", 530, 745);
-    stroke(150,80);
-    strokeWeight(5);
-    line( 365, 20, 365,719);
-  
-}
+    text("OUTDOOR", 530, 745); 
+    }
 
-///////////////////////////////////////////////////////////////////////////YEARLY CENSUS
 
+///////////////////////////////////////////////////////////////////////////YEARLY CENSUS 
+    if(tinyPop){
+     framesPerDay = 666; 
+    }
+     else if (!tinyPop){
+      framesPerDay = 60;  
+     }
+     
+    
     if (frameCount % framesPerDay == 0)
     {
         currentPopulationSize = population.size();
@@ -252,7 +300,7 @@ void draw()
 
     infect();
     statsBar();
-  
+    
     //if(isSetup && frameCount % 2 == 0){
     //  saveFrame("output/#####.png");
     //}
@@ -324,22 +372,19 @@ void statsBar() {
         }
 
     }
-   
-   
-  
-  
-   // infectedIn = infectedInside;  
+
+    // infectedIn = infectedInside;  
     float numAffected = numHealed + numDead + numInfected + numSick;
     
     //println("num" + numAffected);
     
-    float percentSick = numSick / totalPop * 100;
-    float percentInfected = numInfected / totalPop * 100;
-    float percentHealed = numHealed / totalPop * 100;
-    float percentDead = numDead / totalPop * 100;
+    float percentSick = (numSick / totalPop )* 100;
+    float percentInfected = (numInfected / totalPop) * 100;
+    float percentHealed = (numHealed / totalPop) * 100;
+    float percentDead = (numDead / totalPop) * 100;
     float percentCFR = (numDead / (numHealed + numDead)) * 100;
-    float percentHealthy = numHealthy / popSize * 100;
-    float percentAffected = numAffected / totalPop * 100;
+    float percentHealthy = (numHealthy / popSize) * 100;
+    float percentAffected = (numAffected / totalPop) * 100;
     
     insidePercent = insidePop/totalPop;
     
@@ -542,20 +587,24 @@ void statsBar() {
      //ellipse(((width-420)/2)-20,((height-40)/2)-123,12,12);
     // ellipse(((width-420)/2)-85,((height-40)/2)-105,26,26);
      fill(255);
+     if(!selectPop && !selection){
      virs.resize(0,110);
      hhi.resize(0,60);
      image(hhi,50,50);
      image(virs,((width-380)/2)-62,((height-40)/2)-150);
+     }
      
      //text("V",(width-420)/2,((height-40)/2)-75);
      textFont(altFont);
      textSize(18);
+     
      if (!selection){
      if(!about){
      if (!selectPop){
+
      //virs.resize(0,120);
      //image(virs,((width-420)/2)-85,((height-40)/2)-220);
-     text("SELECT SIMULATION",(width-380)/2,((height-40)/2));    
+     text("SETUP SIMULATION",(width-380)/2,((height-40)/2));    
      text("ABOUT", (width-380)/2,((height-40)/2)+35);
       
      textAlign(RIGHT);
@@ -564,29 +613,48 @@ void statsBar() {
      }
      }
      }
-     if(selectPop){
+     
+     
+     if(selectPop ){
+       
      textFont(altFont);
      textSize(17);
-     text("SELECT THE SIZE OF THE POPULATION" ,(width-380)/2,((height-40)/2));
-     text("999", ((width-380)/2)-100,(((height-40)/2)+35));
-     text("3000", ((width-380)/2),(((height-40)/2)+35));
-     text("5000", ((width-380)/2)+100,(((height-40)/2)+35));
+    // text("SET AGENT POPULATION SIZE",(width-380)/2,((height-40)/2));
+     textAlign(LEFT);
+     tenPop.resize(0,340);
+     image(tenPop,32,31);
+     text("10 AGENTS",45,60);
+     hunPop.resize(0,340);
+     image(hunPop,370,31);
+     text("100 AGENTS", 385,60);
+     
+     thoPop.resize(0,340);
+     image(thoPop,32,370);
+     text("1,000 AGENTS",45,400);
+     
+     tenthoPop.resize(0,340);
+     image(tenthoPop,370,370);
+     text("10,000 AGENTS", 385 ,400);
      noFill();
-     rect(240,448,65,20, 5);
-     rect(340,448,65,20, 5);
-     rect(440,448,65,20, 5);
+     //rect(240,448,65,20, 5);
+     //rect(340,448,65,20, 5);
+     //rect(440,448,65,20, 5);
      }
      
-     if(selection){
+     if(selection){    
+     textAlign(LEFT);
      textFont(altFont);
      textSize(17);
-     text("SELECT THE SIMULATION YOU WOULD LIKE TO START",(width-380)/2,((height-40)/2)); 
-     text( "Indoor|Outdoor",((width-380)/2)-100,(((height-40)/2)+35));
-     InOut.resize(0,110);
-     image(InOut, ((width-380)/2)-155,(((height-40)/2)+50));
-     text("Outdoor", ((width-380)/2)+50,(((height-40)/2)+35));
-     Out.resize(0,110);
-     image(Out, ((width-380)/2)-5,(((height-40)/2)+50));
+     //text("SELECT THE SIMULATION YOU WOULD LIKE TO START",(width-380)/2,((height-40)/2)); 
+     Out.resize(0,332);
+     InOut.resize(0,332);
+     image(Out, 35,35);
+     image(InOut,35,375);  
+     text("ALL INTERVENTIONS", 45,60);
+     text("INDOOR VS OUTDOOR",45,400);
+     noFill();
+     rect(30,35,680,330, 5);
+     rect(30,375,680,330, 5);
      }
      
      if(about){
@@ -655,7 +723,8 @@ void statsBar() {
     text("EXPOSED: " + int(numInfected), xStat+18, yDay);
     
     text("VACCINATION", xStat, yButton1-50);
-    if(!pressed){
+    
+    if(!pressed ){
     text("INFECTIOUS IN ISOLATION", xStat, yButton1-5);
     
     text("SOCIAL DISTANCING", xStat, yButton2-25);
@@ -745,8 +814,6 @@ void statsBar() {
     ellipse(xStat+7, yButton3+5, 9,9);
     
   }
-    
-    
     //// the ellipse for face covering
     if(pressed){
     strokeWeight(1);
@@ -1026,17 +1093,17 @@ void statsBar() {
        }
        
        if(pressed){
-         if(d2){
+           if(d2){
          fill(180);
        }
-       rect(880,208,40,10,4);
+      rect(880,203,80,15,4);
        fill(0);
        if(!d2){
-         rect(880,208,40,10,4);
+         rect(880,203,80,15,4);
       fill(200);
        }
-       textSize(10);
-       text("Indoor", 900,217);
+       textSize(14);
+       text("Indoor Only", 919,217);
          textSize(15);
        noFill();
        //if(d2){
@@ -1239,7 +1306,7 @@ void statsBar() {
        
        noFill();
        if(b2){
-         fill(180);
+         fill(180,180,0);
          fill(#93969B);
        rect(xStat,yButton1-44,65,15, 7);
        }
@@ -1369,15 +1436,21 @@ void statsBar() {
         adjust2 = true; 
     } 
     
-    if (numSick >= 800){
+    if (numSick >= 600){
       adjust3 = true;
     }
     
-    if( numSick >= 2000){
+      if( numSick >= 900){
       adjust4 = true;
     }
     
+    if(numSick >= 2000){
+      adjust5 = true;
+    }
     
+    if(numSick >3500){
+      adjust6 = true;
+    }
     
      
     if(adjust){
@@ -1395,10 +1468,21 @@ void statsBar() {
     yLine = 713 - 13;
     }
     
-    if (adjust4){
+     if (adjust4){
      yInfected   = (yInfected+yCFR)/2; 
     yLine = 713 - 13;
     }
+    
+     if (adjust5){
+     yInfected   = (yInfected+yCFR)/2; 
+    yLine = 713 - 13;
+    }
+    
+     if (adjust6){
+     yInfected   = (yInfected+yCFR)/2; 
+    yLine = 713 - 13;
+    }
+    
     
    strokeWeight(1);
 
@@ -1415,22 +1499,27 @@ void statsBar() {
     
    if ((numSick == 0 && numInfected == 0 && dayCounter > 9) || dayCounter > 99) {
      
-     fill(0,100);
-     noStroke();
-     rect(20,20,width-420,700,7); 
+     //fill(0,100);
+     //noStroke();
+     //rect(20,20,width-420,700,7); 
+     fill(38,38,38);
+    stroke(255);
+    strokeWeight(2);
+    //println(frameRate);
+     rect(20,20,width-420,700,6);  
      
      fill(250);
-     textSize(18);
-     text("SIMULATION OVER", (width-380)/2,((height-40)/2)-80);
-     text("SIMULATION STASTISTICS", ((width-380)/2) - 150,((height-40)/2)-50);
-     textSize(15);
-     text("TOTAL NUMBER OF CASES:"+ nf(int(numInfected)), ((width-380)/2) - 160,((height-40)/2)-15);
-     text("TOTAL NUMBER OF DEATHS:"+ numDead, ((width-380)/2) - 158,((height-40)/2)+5);
-     text("TOTAL NUMBER OF RECOVERY:"+ nf(int(numHealed)),((width-380)/2) - 1550,((height-40)/2)+25);
-     textSize(18);
-     text("REFRESH BROWSER",((width-380)/2)+ 150,((height-40)/2)-50);
-     text("TO RESTART SIMULATION",((width-380)/2)+ 150,((height-40)/2)-30);
-     
+     textSize(23);
+     text("SIMULATION OVER", (width-380)/2,105);
+     //text("SIMULATION STASTISTICS", ((width-380)/2),160);
+     //textSize(15);
+     //text("TOTAL NUMBER OF CASES:"+ nf(int(numInfected)), ((width-380)/2),200);
+     //text("TOTAL NUMBER OF DEATHS:"+ numDead, ((width-380)/2),230);
+     //text("TOTAL NUMBER OF RECOVERY:"+ nf(int(numHealed)),((width-380)/2),260);
+     //textSize(18);
+     //text("REFRESH BROWSER",((width-380)/2)+ 150,((height-40)/2)-50);
+    // text("TO RESTART SIMULATION",((width-380)/2)+ 150,((height-40)/2)-30);
+      copy(xStat-5, 395, 370, 320, 115, 150, 510, 478);
      //text("USER FEEDBACK SURVEY", (width-380)/2,((height-40)/2)+70);
     
      //fill(255,100);
@@ -1458,6 +1547,18 @@ void statsBar() {
 void infect()
 
 {
+  if(smallPop){
+    spreadDistance = 28;
+    }
+    if(tinyPop){
+    spreadDistance = 70;
+    }
+    if(mediumPop){
+    spreadDistance = 5;
+    }
+   if(largePop){
+    spreadDistance = 2;
+    }
   
   if(ct1){
         isolationProb = 0.0;
@@ -1488,23 +1589,18 @@ void infect()
             
             float distance = dist(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
 
-            if(smallPop){
+
+            
+            if(smallPop || tinyPop){
             if(pressed){
             if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.recovered  && !person1.sickIsolate)
 
             {
-              
             
-              if( person1.loc.x < 365  && person2.loc.x< 365 ){
+              if( person1.loc.x < threshold  && person2.loc.x< threshold ){
                
                 infectionProbability = 0.1;
-                
-              //if(person2.socialDistance){
-                
-              //  infectionProbability = .06;
-                
-              //}
-              
+
               if (person2.wearingMask && !person1.wearingMask){
                 infectionProbability = .08;
               }
@@ -1516,10 +1612,9 @@ void infect()
               if (!person2.wearingMask && person1.wearingMask){
                 infectionProbability = .06;
               }
-              }
+             }
               
-              
-              else if (person1.loc.x > 365  && person2.loc.x > 365 ){
+              else if (person1.loc.x > threshold  && person2.loc.x > threshold ){
                 
               //   if(person2.socialDistance){
                 
@@ -1548,13 +1643,13 @@ void infect()
                     sickAgents.add(person2);
                     population.remove(person2);
                     
-                    if( person2.loc.x < 365 &&  !person2.recovered){
+                    if( person2.loc.x < threshold &&  !person2.recovered){
                     InsideInfected +=1;
                      if (person2.wearingMask){
                       InsideMask +=1;
                       }
            }
-                 if( person2.loc.x > 365 && !person2.recovered){
+                 if( person2.loc.x > threshold && !person2.recovered){
                  OutsideInfected = OutsideInfected +1;
                   if (person1.wearingMask){
                       OutsideMask +=1;
@@ -1611,7 +1706,7 @@ void infect()
             {
               
             
-              if( person1.loc.x < 365  && person2.loc.x< 365 ){
+              if( person1.loc.x < threshold  && person2.loc.x< threshold ){
                
                 infectionProbability = 0.09;
                 
@@ -1635,7 +1730,7 @@ void infect()
               }
               
               
-              else if (person1.loc.x > 365  && person2.loc.x > 365 ){
+              else if (person1.loc.x > threshold  && person2.loc.x > threshold ){
                 
               //   if(person2.socialDistance){
                 
@@ -1664,13 +1759,13 @@ void infect()
                     sickAgents.add(person2);
                     population.remove(person2);
                     
-                    if( person2.loc.x < 365 &&  !person2.recovered){
+                    if( person2.loc.x < threshold &&  !person2.recovered){
                     InsideInfected +=1;
                      if (person2.wearingMask){
                       InsideMask +=1;
                       }
            }
-                 if( person2.loc.x > 365 && !person2.recovered){
+                 if( person2.loc.x > threshold && !person2.recovered){
                  OutsideInfected = OutsideInfected +1;
                   if (person1.wearingMask){
                       OutsideMask +=1;
@@ -1720,45 +1815,22 @@ void infect()
             }
             }
             if(largePop){
-              infectionProbability = 0.07;
+              infectionProbability = 0.001;
             if(pressed){
             if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.recovered  && !person1.sickIsolate)
 
             {
               
             
-              if( person1.loc.x < 365  && person2.loc.x< 365 ){
+              if( person1.loc.x < threshold  && person2.loc.x< threshold ){
                
-                infectionProbability = 0.08;
+                infectionProbability = 0.008;
                 
               //if(person2.socialDistance){
                 
               //  infectionProbability = .06;
                 
               //}
-              
-              if (person2.wearingMask && !person1.wearingMask){
-                infectionProbability = .06;
-              }
-              
-               if (person2.wearingMask && person1.wearingMask){
-                infectionProbability = .02;
-              }
-              
-              if (!person2.wearingMask && person1.wearingMask){
-                infectionProbability = .04;
-              }
-              }
-              
-              
-              else if (person1.loc.x > 365  && person2.loc.x > 365 ){
-                
-              //   if(person2.socialDistance){
-                
-              //  infectionProbability = .06;
-                
-              //}
-              infectionProbability = .009;
               
               if (person2.wearingMask && !person1.wearingMask){
                 infectionProbability = .006;
@@ -1774,19 +1846,42 @@ void infect()
               }
               
               
+              else if (person1.loc.x > threshold  && person2.loc.x > threshold ){
+                
+              //   if(person2.socialDistance){
+                
+              //  infectionProbability = .06;
+                
+              //}
+              infectionProbability = .0009;
+              
+              if (person2.wearingMask && !person1.wearingMask){
+                infectionProbability = .0006;
+              }
+              
+               if (person2.wearingMask && person1.wearingMask){
+                infectionProbability = .0002;
+              }
+              
+              if (!person2.wearingMask && person1.wearingMask){
+                infectionProbability = .0004;
+              }
+              }
+              
+              
                 if (prob(infectionProbability) && !person1.isolate && !person2.infected) {
 
                     person2.getInfected();
                     sickAgents.add(person2);
                     population.remove(person2);
                     
-                    if( person2.loc.x < 365 &&  !person2.recovered){
+                    if( person2.loc.x < threshold &&  !person2.recovered){
                     InsideInfected +=1;
                      if (person2.wearingMask){
                       InsideMask +=1;
                       }
            }
-                 if( person2.loc.x > 365 && !person2.recovered){
+                 if( person2.loc.x > threshold && !person2.recovered){
                  OutsideInfected = OutsideInfected +1;
                   if (person1.wearingMask){
                       OutsideMask +=1;
@@ -1806,20 +1901,20 @@ void infect()
               
               if(person2.socialDistance){
                 
-                infectionProbability = .04;
+                infectionProbability = .0005;
                 
               }
               
               if (person2.wearingMask && !person1.wearingMask){
-                infectionProbability = .06;
+                infectionProbability = .006;
               }
               
                if (person2.wearingMask && person1.wearingMask){
-                infectionProbability = .00;
+                infectionProbability = .004;
               }
               
               if (!person2.wearingMask && person1.wearingMask){
-                infectionProbability = .02;
+                infectionProbability = .002;
               }
               
 
@@ -1835,8 +1930,10 @@ void infect()
                  
             }
             }
-            
-            infectionLine(person1,person2);
+            if(largePop || mediumPop){
+            infectionLine(person1,person2);              
+            }
+            //infectionLine(person1,person2);
             
             if (distance <= contactDistance && person1.sick && !person2.sick && !person2.recovered )
 
@@ -1869,12 +1966,13 @@ void infect()
     if(pressed){
     textFont(altFont);
     textSize(18);
+    fill(255);
     text(" Transmissions: " + InsideInfected, 201, 775);
     text(" Transmissions: " + OutsideInfected, 528, 775);
     text(" % of Transmissions: " + nf((InsideInfected / (allTransmission))*100,0,2) + "%", 201, 800);  
     text(" % of Transmissions: " + nf((OutsideInfected / (allTransmission))*100,0,2) + "%", 528, 800);
-    text("Transmission with Face Covering:" +InsideMask, 200, 825);
-    text(" Transmission with Face Covering:" +OutsideMask, 530,825);
+    text("Transmission with Face Covering: " +InsideMask, 200, 825);
+    text(" Transmission with Face Covering: " +OutsideMask, 530,825);
     }
     }
     
@@ -1922,8 +2020,12 @@ void infectionLine(Agent person1, Agent person2) {
 
       if (spreadDist < 20){
 
-        stroke(255,70);
-
+        if (largePop){
+         stroke(255,10);
+        }
+        if (mediumPop){
+        stroke(255,50);
+        }
         strokeWeight(3);
         
         if((person1.vel.x == 0 || person2.vel.x == 0 || person1.recovered || person2.recovered)){
@@ -1990,54 +2092,75 @@ void mousePressed()
 
 {
 
+
     PVector L = new PVector(random(0, width - 400), random(0, height));
     //text( "INSIDE", 250, 20);
     Agent infectedPerson = new Agent(L);
     total = sickAgents.size() + population.size();
     infectedPerson.getInfected();
     
-    if(!selection && !isSetup && !selectPop ){
+   if(!selection && !isSetup && !selectPop ){
    if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+90 && mouseY >= (((height-40)/2)-15) && mouseY <= ((height-40)/2)){
     selectPop = true; 
     }
     }
+    
     if(selectPop){
-    if(mouseX >= 257 && mouseX <= 283 &&mouseY >= 455&& mouseY <= 465){
+    if(mouseX >= 40 && mouseX <= 350 && mouseY >= 40 && mouseY <= 360){
+     tinyPop = true;
+     smallPop = false;
+     mediumPop = false;
+     largePop = false;
+   //  selectPop = false;
+   // selection = true;
+    }
+    if(mouseX >= 360 && mouseX <= 680 && mouseY >= 40 && mouseY <= 360){
      smallPop = true;
      mediumPop = false;
       largePop = false;
-     selectPop = false;
-     selection = true;
+      tinyPop = false;
+    // selectPop = false;
+      //selection = true;
     }
-    if(mouseX >= 354 && mouseX <= 389 &&mouseY >= 455&& mouseY <= 465){
+    //if(mouseX <= ((width-400)/2)-90 && mouseX >= ((width-400)/2)+90 && mouseY <= (((height-40)/2)-15) && mouseY <= ((height-40)/2)){
+    if(mouseX >= 40 && mouseX <= 350 && mouseY >= 390 && mouseY <= 680){
     mediumPop = true;
+    tinyPop = false;
     largePop = false;
     smallPop = false;
-    selectPop = false;
-     selection = true;
+    //selectPop = false;
+    //selection = true;
     }
-    if(mouseX >= 451 && mouseX <= 487 &&mouseY >= 455&& mouseY <= 465){
+    if(mouseX >= 360 && mouseX <= 680 && mouseY >= 390 && mouseY <= 680){
     largePop = true;
-     smallPop = false;
-     mediumPop = false;
-    selectPop = false;
-    selection = true;
+    smallPop = false;
+    tinyPop = false;
+    mediumPop = false;
+   // selectPop = false;
+    //selection = true;
     }
+    if(selectPop && clicks >= 1){
+      selectPop = false;
+      selection = true;
     }
-    //text( "INSIDE", 250, 20);
+    //}
+    }
+    
+  //text( "INSIDE", 250, 20);
  if(mouseX<width-400 &&  mouseY<height-30 && !over){ 
    
   if(selection == true && isSetup == false){
- if(mouseX >= ((width-400)/2)-150  && mouseX <= ((width-380)/2)-50 &&mouseY >= ((height-40)/2)+50 && mouseY <= ((height-40)/2)+160){
+ if(mouseX >= 35 && mouseX <= 700 && mouseY >= 390 && mouseY <= 700){
      
-       if(!isSetup){
+       if(!isSetup && clicks >= 2){
             //adjust = false;
             //adjust2 = false;
             selection = false;
-            isSetup = true;
+             isSetup = true;
             population.clear();
-            sickAgents.clear();
             pressed = true;
+            threshold = 365;
+            
         
         for (int i = 0; i < initialPopulationSize; i += 1)
 
@@ -2057,23 +2180,20 @@ void mousePressed()
             InsideMask = 0;
             OutsideMask = 0;
         }
-        
         sickHistory.clear();
        }
       }
    }
    
    if(selection){
-   if(mouseX >= ((width-400)/2)+10 && mouseX <= ((width-400)/2)+110 &&mouseY >= ((height-40)/2)+50 && mouseY <= ((height-40)/2)+160){
-   if(!isSetup){
+   if(mouseX >= 35 && mouseX <= 700 && mouseY >= 35 && mouseY <= 380){
+   if(!isSetup && clicks >= 2){
             //adjust = false;
             //adjust2 = false;
-            isSetup = true;
+             isSetup = true;
             population.clear();
-            sickAgents.clear();
-            
-            selection = false;
             pressed = false;
+           
 
         for (int i = 0; i < initialPopulationSize; i += 1)
 
@@ -2090,17 +2210,21 @@ void mousePressed()
       }
    }
     } 
-  
-    
-      
-    if(isSetup && total< (initialPopulationSize +20)){
+    if (pressed){
+    if(isSetup && total< (initialPopulationSize + 20) && (mouseX > threshold + 8 || mouseX < threshold - 8)){
     infectedPerson.loc.x = mouseX;
-
     infectedPerson.loc.y = mouseY;
-
     sickAgents.add(infectedPerson);
     }
-
+    }
+    
+    else if(!pressed){
+    if(isSetup && total< (initialPopulationSize + 20)){
+    infectedPerson.loc.x = mouseX;
+    infectedPerson.loc.y = mouseY;
+    sickAgents.add(infectedPerson);
+    }
+    }
     loop();
 }
 
@@ -2143,6 +2267,9 @@ void mousePressed()
      largePop = false;
      smallPop = false;
      mediumPop = false;
+     pressed = false; 
+     selection = false;
+     clicks = -1;
       
       population.clear();
       sickAgents.clear();
@@ -2499,6 +2626,12 @@ if(pressed){
      
 
 }
+
+void mouseClicked(){
+ 
+  clicks = clicks+1;
+  println(clicks);
+}
 ////////////////////////////////////////////////////////////////////////////////// Reset
 
 void keyPressed()
@@ -2519,6 +2652,15 @@ void keyPressed()
    }
      
     
+}
+
+  void mouseDragged() 
+{
+  if(pressed){
+  if((mouseX < threshold + 10 && mouseX > threshold - 10) && (mouseX < 695 && mouseX > 40)){
+   threshold = mouseX; 
+  }
+  }
 }
 
 
@@ -2557,6 +2699,8 @@ class Agent {
   float t = frameCount;
   
   float randomNum = random(0, 1);
+  float randomNum1 = random(0,1);
+  float randomNum2 = random(0,1);
 
   float sickIsolateRate;
   
@@ -2598,7 +2742,15 @@ class Agent {
 
     loc = L;
 
-    vel = new PVector(random(-1,1), random(-1, 1));
+    if(tinyPop || smallPop){
+
+      vel = new PVector(random(-2,2), random(-2, 2));
+    }
+
+    else if (!tinyPop || !smallPop){
+     vel = new PVector(random(-1,1), random(-1, 1)); 
+    }
+
 
     noVel = new PVector(0, 0);
     
@@ -2725,13 +2877,13 @@ void drawAgent()
     }
 
     if(su1){
-        travelIsolate = 0.0;
+        travelIsolate = .0;
       }
       if(su2){
-        travelIsolate = 0.25;
+        travelIsolate = .25;
       }
       if(su3){
-        travelIsolate = 0.50;
+        travelIsolate = .50;
       }
       if(su4){
         travelIsolate = .75;
@@ -2740,12 +2892,12 @@ void drawAgent()
         travelIsolate = 1.0;
       }
       
-      if (susceptible || infected || sick || recovered){
+     // if (susceptible || infected || sick || recovered){
         if (randomNum < travelIsolate){
          socialDistance = true;
       }
       else { socialDistance = false; }
-    }
+    //}
     
     if (pressed){
       if(d2){
@@ -2764,7 +2916,7 @@ void drawAgent()
       if(a5){
         maskTransmissionRateOutside = 1;
       }
-      if (randomNum < maskTransmissionRateOutside && loc.x<365){
+      if (randomNum1 < maskTransmissionRateOutside && loc.x<threshold){
         wearingMask = true;     
     }
     else{
@@ -2788,7 +2940,7 @@ void drawAgent()
       if(a5){
         maskTransmissionRateOutside = 1;
       }
-      if (randomNum < maskTransmissionRateOutside){
+      if (randomNum1 < maskTransmissionRateOutside){
         wearingMask = true;     
     }
     else{
@@ -2838,7 +2990,7 @@ void drawAgent()
       if(a5){
         maskTransmissionRate = 1;
       }
-      if (randomNum < maskTransmissionRate){
+      if (randomNum1 < maskTransmissionRate){
         wearingMask = true;     
     }
     else{
@@ -2850,13 +3002,13 @@ void drawAgent()
         insideCapacity = 0.0;
       }
       if(c2){
-        insideCapacity = 0.25;
+        insideCapacity = 0.125;
       }
       if(c3){
-        insideCapacity = 0.5;
+        insideCapacity = 0.25;
       }
       if(c4){
-        insideCapacity = 0.75;
+        insideCapacity = 0.375;
       }
       if(c5){
         insideCapacity = 1;
@@ -2886,7 +3038,7 @@ void drawAgent()
       if(b5){
         vaccinationRate = 1;
       }
-      if (randomNum < vaccinationRate &&     !infected && !sick){
+      if (randomNum2 < vaccinationRate &&     !infected && !sick){
          recovered = true;     
     }
     
@@ -2895,7 +3047,13 @@ void drawAgent()
     if ( sick ) {
       fill(238, 90, 30);
       susceptible = false;
-      rad = 5;
+       if(largePop){
+      rad = 8 ;
+      }
+      else if(!largePop){
+      rad = 5 ;
+      }
+   
       if(s1){
         sickIsolateRate = 0.0;
       }
@@ -2911,7 +3069,7 @@ void drawAgent()
       if(s5){
         sickIsolateRate = 1;
       }
-      if (randomNum < sickIsolateRate){
+      if (random(0,1) < sickIsolateRate){
         sickIsolate = true;
         vel = new PVector(0, 0);
       }
@@ -2922,7 +3080,13 @@ void drawAgent()
     if (infected) {
       susceptible = false;
       fill(255, 255, 0); 
-      rad = 5 ;
+    
+      if(largePop){
+      rad = 8 ;
+      }
+      else if(!largePop){
+      rad = 5 ;        
+      }
     } 
 
     if (recovered) {
@@ -2940,10 +3104,13 @@ void drawAgent()
     
     noStroke();
     if(smallPop){
-    ellipse( loc.x, loc.y, rad, rad);
+    ellipse( loc.x, loc.y, rad+10, rad+10);
+    }
+    if(tinyPop){
+    ellipse( loc.x, loc.y, rad+28, rad+28);
     }
     if(mediumPop){
-    ellipse( loc.x, loc.y, rad-2, rad-2);
+    ellipse( loc.x, loc.y, rad, rad);
     }
    if(largePop){
     ellipse( loc.x, loc.y, rad-2, rad-2);
@@ -2960,15 +3127,25 @@ void drawAgent()
 
     if ( sick ) {
       if(!wearingMask && !recovered){
+        if(tinyPop){
+      noFill();
+      stroke(238, 90, 30);
+      ellipse(loc.x, loc.y, 70, 70);
+        }
         if(smallPop){
       noFill();
       stroke(238, 90, 30);
-      ellipse(loc.x, loc.y, 13, 13);
+      ellipse(loc.x, loc.y, 32, 32);
         }
-        if (mediumPop || largePop){
+        if (mediumPop){
          noFill();
       stroke(238, 90, 30);
-      ellipse(loc.x, loc.y, 10, 10);
+      ellipse(loc.x, loc.y, 13, 13);
+        }
+        if (largePop){
+         noFill();
+      stroke(238, 90, 30);
+      ellipse(loc.x, loc.y, 12, 12);
         }
       }
     }
@@ -2987,7 +3164,18 @@ void drawAgent()
       if (wearingMask){
         strokeWeight(1);
        stroke(62,214,43); 
-       ellipse( loc.x, loc.y, 8, 8);
+       if(largePop){
+       ellipse( loc.x, loc.y, 5, 5);
+       }
+        if(mediumPop){
+       ellipse( loc.x, loc.y, 8, 8);       
+       }
+        if(smallPop){
+       ellipse( loc.x, loc.y, 19, 19);
+       }
+        if(tinyPop){
+       ellipse( loc.x, loc.y, 40, 40);
+       }
     }
   }
 
@@ -3033,28 +3221,57 @@ void drawAgent()
 
   void bounce()
   {
-  //    if (loc.x<365 && !allowedInside){
-  //notAllowed = true; 
-  //}
-    if(!pressed){
+   
+     if(!pressed){
+       if(largePop || mediumPop || smallPop){
     if (loc.x < 28 || loc.x >= width-407) {
       vel.x *= -1;
     }
     if (loc.y < 30 || loc.y >= height-186) {
       vel.y *= -1;
     }
+    if (smallPop && sick){
+      if (loc.x < 38 || loc.x >= width-417) {
+      vel.x *= -1;
     }
+    if (loc.y < 38 || loc.y >= height-194) {
+      vel.y *= -1;
+    } 
+    }
+       }
+       
+       if(tinyPop){
+         if(!sick){
+        if (loc.x < 40 || loc.x >= width-420) {
+      vel.x *= -1;
+    }
+    if (loc.y < 50 || loc.y >= height-206) {
+      vel.y *= -1;
+    }
+       }
+       if(sick){
+        if (loc.x < 55 || loc.x >= width-435) {
+      vel.x *= -1;
+    }
+    if (loc.y < 60 || loc.y >= height-216) {
+      vel.y *= -1;
+    }
+       }
+       
+    }
+    
+     }
+    
     else if(pressed){
-      
- boolean buffer = false; 
-   int middle = 365;
+   boolean buffer = false; 
+   
   
-   if(!allowedInside && vel.x > 0 && loc.x < middle+4){
+   if(!allowedInside && vel.x > 0 && loc.x < threshold+4){
      buffer = true;
    }
    
-   if(!allowedInside && loc.x > middle && !buffer){
-    if (loc.x < middle+3 || loc.x >= width-407) {
+   if(!allowedInside && loc.x > threshold && !buffer){
+    if (loc.x < threshold+3 || loc.x >= width-407) {
       vel.x *= -1;
     }
     if (loc.y < 30 || loc.y >= height-186) {
@@ -3071,7 +3288,7 @@ void drawAgent()
     }
    }
    
-   else if(!allowedInside && loc.x < middle){
+   else if(!allowedInside && loc.x < threshold){
     if (loc.x < 28 || loc.x >= width-407) {
       vel.x *= -1;
     }
@@ -3079,15 +3296,6 @@ void drawAgent()
       vel.y *= -1;
     }
    }
-   //if( notAllowed){
-   //  if (loc.x < 28 || loc.x >= width-407) {
-   //   vel.x *= -1;
-   // }
-   // if (loc.y < 30 || loc.y >= height-186) {
-   //   vel.y *= -1;
-   // }
-   //}
-   
   }
   }
 }
