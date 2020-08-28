@@ -76,6 +76,8 @@ int yDead = 380;
 
 boolean isSetup = false;
 
+boolean home = true;
+
 boolean pressed = false;
 
 int numDead = 0;
@@ -2091,36 +2093,36 @@ void popFlux()
 void mousePressed()
 
 {
-
-
     PVector L = new PVector(random(0, width - 400), random(0, height));
     //text( "INSIDE", 250, 20);
     Agent infectedPerson = new Agent(L);
     total = sickAgents.size() + population.size();
     infectedPerson.getInfected();
     
-   if(!selection && !isSetup && !selectPop ){
-   if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+90 && mouseY >= (((height-40)/2)-15) && mouseY <= ((height-40)/2)){
-    selectPop = true; 
+   if(!selection && !isSetup && !selectPop && home ){
+    if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+90 && mouseY >= (((height-40)/2)-15) && mouseY <= ((height-40)/2)){
+     selectPop = true; 
+     home = false;
+     clicks = 0;
     }
-    }
+   }
     
-    if(selectPop){
+    if(selectPop && !home && clicks > 0){
     if(mouseX >= 40 && mouseX <= 350 && mouseY >= 40 && mouseY <= 360){
      tinyPop = true;
      smallPop = false;
      mediumPop = false;
      largePop = false;
-   //  selectPop = false;
-   // selection = true;
+     //selectPop = false;
+     //selection = true;
     }
     if(mouseX >= 360 && mouseX <= 680 && mouseY >= 40 && mouseY <= 360){
      smallPop = true;
      mediumPop = false;
       largePop = false;
       tinyPop = false;
-    // selectPop = false;
-      //selection = true;
+     //selectPop = false;
+     //selection = true;
     }
     //if(mouseX <= ((width-400)/2)-90 && mouseX >= ((width-400)/2)+90 && mouseY <= (((height-40)/2)-15) && mouseY <= ((height-40)/2)){
     if(mouseX >= 40 && mouseX <= 350 && mouseY >= 390 && mouseY <= 680){
@@ -2136,23 +2138,25 @@ void mousePressed()
     smallPop = false;
     tinyPop = false;
     mediumPop = false;
-   // selectPop = false;
+    //selectPop = false;
     //selection = true;
     }
     if(selectPop && clicks >= 1){
       selectPop = false;
       selection = true;
+      clicks = 0;
     }
     //}
+
     }
     
   //text( "INSIDE", 250, 20);
  if(mouseX<width-400 &&  mouseY<height-30 && !over){ 
    
-  if(selection == true && isSetup == false){
+  if(selection && !isSetup && !home && !selectPop){
  if(mouseX >= 35 && mouseX <= 700 && mouseY >= 390 && mouseY <= 700){
      
-       if(!isSetup && clicks >= 2){
+       if(!isSetup && clicks >= 1){
             //adjust = false;
             //adjust2 = false;
             selection = false;
@@ -2185,9 +2189,9 @@ void mousePressed()
       }
    }
    
-   if(selection){
+   if(selection && !isSetup && !home && !selectPop){
    if(mouseX >= 35 && mouseX <= 700 && mouseY >= 35 && mouseY <= 380){
-   if(!isSetup && clicks >= 2){
+   if(!isSetup && clicks >= 1){
             //adjust = false;
             //adjust2 = false;
              isSetup = true;
@@ -2269,6 +2273,7 @@ void mousePressed()
      mediumPop = false;
      pressed = false; 
      selection = false;
+     home = true;
      clicks = -1;
       
       population.clear();
@@ -2630,7 +2635,7 @@ if(pressed){
 void mouseClicked(){
  
   clicks = clicks+1;
- // println(clicks);
+  println(clicks);
 }
 ////////////////////////////////////////////////////////////////////////////////// Reset
 
