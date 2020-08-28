@@ -2635,7 +2635,7 @@ if(pressed){
 void mouseClicked(){
  
   clicks = clicks+1;
-  println(clicks);
+  //println(clicks);
 }
 ////////////////////////////////////////////////////////////////////////////////// Reset
 
