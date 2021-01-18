@@ -8,7 +8,8 @@ ViRS is a spatially abstract COVID-19 transmission study model.It intends to exp
 of impact non-pharmaceutical public health interventions have on containing and stopping a COVID-19 
 outbreak within a population of agents.
 
-##Prerequisities 
+
+## Prerequisities 
 Running Virs is pretty simple, you just have to download two things 
 * The processing software called Processing 
 * Download the file sketch_main.pde
@@ -27,17 +28,17 @@ Step by step process of downloading Processing
 If you have any issues with our simulator please report to : http://virs.io/survey/
 
 
-##License
+## License
 Virs.io is licensed by Harvard Humanatarian Initiative. 
 For a list of copyright holders, please refer to AUTHOR Michael de St. Aubin.
 
-##Citation
+## Citation
 Michael de St. Aubin, HHI Project Lead
 Robert Pietrusko, GSD Professor of Landscape Architecture
 Zeerak Ammed, GSD Teaching Assistant
 Nipurna Dhakal, Computer Science Intern Clark University
 
-#Contact
+# Contact
 Contact the project lead Michael de St. Aubin: mdestaubin@hsph.harvard.edu
 
 
