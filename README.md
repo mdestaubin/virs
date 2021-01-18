@@ -33,10 +33,10 @@ Virs.io is licensed by Harvard Humanatarian Initiative.
 For a list of copyright holders, please refer to AUTHOR Michael de St. Aubin.
 
 ## Citation
-Michael de St. Aubin, HHI Project Lead
-Robert Pietrusko, GSD Professor of Landscape Architecture
-Zeerak Ammed, GSD Teaching Assistant
-Nipurna Dhakal, Computer Science Intern Clark University
+* Michael de St. Aubin, HHI Project Lead
+* Robert Pietrusko, GSD Professor of Landscape Architecture
+* Zeerak Ammed, GSD Teaching Assistant
+* Nipurna Dhakal, Computer Science Intern Clark University
 
 # Contact
 Contact the project lead Michael de St. Aubin: mdestaubin@hsph.harvard.edu
