@@ -4,11 +4,19 @@
 //Zeerak Ammed, GSD Teaching Assistant
 //Nipurna Dhakal, Computer Science Intern Clark University
 
+
+
+//creating a valiable the initilizes the population of the agents
 int initialPopulationSize;
 int clicks = 0;
 
+
+
+// Arraylist that stores all the agents in the simulator who are not sick of dead 
 ArrayList < Agent > population;
+// Arraylist that stores all the agents in the simulator have recovered from the virus 
 ArrayList < Agent > survivors;
+// Arraylist that stores all the agents in the simulator who are sick with the virs 
 ArrayList <Agent> sickAgents;
 
 int dayCounter = 0;
@@ -87,51 +95,72 @@ int numDead = 0;
 //int infectedOutside; 
 
 //FloatList sickHistory;
+
+
+// a
 HashMap<Integer,Float> sickHistory;
 float xCord1;
 
+
+
+//Boolean variables for different interventions 
+
+//Boolean variables for infectious in Isolation
 boolean s1 = true;
 boolean s2 = false;
 boolean s3 = false;
 boolean s4 = false;
 boolean s5 = false;
 
+
+//Boolean variables for Social distancing
 boolean su1 = true;
 boolean su2 = false;
 boolean su3 = false;
 boolean su4 = false;
 boolean su5 = false;
 
+
+//boolan variable for contacts traced 
 boolean ct1 = true;
 boolean ct2 = false;
 boolean ct3 = false;
 boolean ct4 = false;
 boolean ct5 = false;
 
+
+//Boolean variables for face covering 
 boolean a1 = true;
 boolean a2 = false;
 boolean a3 = false; 
 boolean a4 = false; 
 boolean a5 = false;
 
+
+//Boolean variables for vaccination
 boolean b1 = true;
 boolean b2 = false;
 boolean b3 = false; 
 boolean b4 = false; 
 boolean b5 = false;
 
+//Boolean variables for indoor capacity 
 boolean c1 = false;
 boolean c2 = false;
 boolean c3 = false; 
 boolean c4 = false; 
 boolean c5 = true;
 
+
+//Boolean variables for indoor facecovering 
 boolean d1 = true;
 boolean d2 = false;
 boolean d3 = false; 
 //boolean d4 = false; 
 //boolean d5 = false;
 
+
+// boolean variable for selecting indoor/outdoor simulator or all intervention simulator
 boolean selection = false;
 //boolean startScreen = true; 
 
@@ -180,6 +209,10 @@ boolean largePop = false;
 float insidePop;
 float insidePercent;
 
+
+
+
+// the method where the screen is setup 
 void setup()
 
 {
@@ -202,6 +235,10 @@ void setup()
     
 }
 
+
+
+
+// 
 void draw()
 
 {
@@ -218,20 +255,27 @@ void draw()
     fill(#E8EAF5);
     
    // println(mouseX+","+mouseY);
+   
+  //if the user selects tiny pop the population is 9
    if (tinyPop && !largePop && !smallPop && !mediumPop){
    initialPopulationSize = 9;
    }
+   //if the user selects smallpop the population is 99
    if (smallPop && !mediumPop && !largePop && !tinyPop){
     initialPopulationSize = 99;
    }
+   //if the user selects mediumpop the population is 999
    if (mediumPop  && !largePop && !smallPop && !tinyPop){
    initialPopulationSize = 999;
    }
+   // if the user selects large pop the population is 9999
    if (largePop && !smallPop && !mediumPop && !tinyPop){
    initialPopulationSize = 9999;
    }
     insidePop = 0;
  
+ 
+ // in out simulation is selected 
   if (pressed){ 
     //fill(#E8EAF5);
     // textSize(18);
@@ -285,7 +329,7 @@ void draw()
 
 ///////////////////////////////////////////////////////////////////////////YEARLY CENSUS 
     if(tinyPop){
-     framesPerDay = 666; 
+     framesPerDay = 600; 
     }
      else if (!tinyPop){
       framesPerDay = 60;  
@@ -309,6 +353,8 @@ void draw()
     
 }
 
+
+//  
 void removeAgent() {
   for (int i = sickAgents.size() - 1; i >= 0; i--) {
           Agent d = sickAgents.get(i);
@@ -332,6 +378,8 @@ void removeAgent() {
 
 ////////////////////////////////////////////////////////////////////////////// STATS BAR  
 
+
+// this menthod is for the statistics bar at the right side of the screen 
 void statsBar() {
 
     float popSize = population.size() + sickAgents.size();   
@@ -343,7 +391,7 @@ void statsBar() {
 //    int infectedInside = 0;
 
 //int infectedOutside = 0; 
-    
+   
     for (Agent person: sickAgents) {
 
         if (person.sick == true) {
@@ -409,6 +457,7 @@ void statsBar() {
     noStroke(); 
     textAlign(LEFT);
     
+    //defination of incubaltion
     if(mouseX > xStat && mouseX < xStat+125 && mouseY > yAssumption+35-20 && mouseY < yAssumption+35){
     fill(80,200);
     rect(xStat-350,yAssumption+19,320,56,7);
@@ -417,6 +466,7 @@ void statsBar() {
     text("exposure to infection and becoming infected.",xStat-340,yAssumption+63);
     }
     
+    // 
     if(mouseX > xStat + 200 && mouseX < xStat+360 && mouseY > yAssumption+35-20 && mouseY < yAssumption+35){
     fill(80,200);
     rect(xStat-350,yAssumption+19,320,56,7);
@@ -589,11 +639,18 @@ void statsBar() {
      //ellipse(((width-420)/2)-20,((height-40)/2)-123,12,12);
     // ellipse(((width-420)/2)-85,((height-40)/2)-105,26,26);
      fill(255);
-     if(!selectPop && !selection){
+     if(!selectPop && !selection && !about){
      virs.resize(0,110);
      hhi.resize(0,60);
      image(hhi,50,50);
      image(virs,((width-380)/2)-62,((height-40)/2)-150);
+     }
+     
+     if(about){
+     virs.resize(0,110);
+     hhi.resize(0,60);
+     image(hhi,50,50);
+     image(virs,((width-380)/2)-62,((height-40)/2)-200);
      }
      
      //text("V",(width-420)/2,((height-40)/2)-75);
@@ -663,28 +720,28 @@ void statsBar() {
 
      textFont(altFont);
      textSize(14);
-     text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore", (width-380)/2,((height-40)/2));
-     text("and visualize how disease dynamics and social behaviors interact over space and time.",(width-380)/2,((height-40)/2)+20);
-     text("Originating as an individual thesis project at the Harvard Graduate School of Design,", (width-380)/2,((height-40)/2)+40);
-     text("ViRS is now a collaborative, cross-disciplinary research effort at the Harvard Humanitarian Initiative.", (width-380)/2,((height-40)/2)+60);
+     text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore", (width-380)/2,((height-40)/2)-40);
+     text("and visualize how disease dynamics and social behaviors interact over space and time.",(width-380)/2,((height-40)/2)-20);
+     text("Originating as an individual thesis project at the Harvard Graduate School of Design,", (width-380)/2,((height-40)/2));
+     text("ViRS is now a collaborative, cross-disciplinary research effort at the Harvard Humanitarian Initiative.", (width-380)/2,((height-40)/2)+20);
      
-     text("This particular product from ViRS is a spatially abstract COVID-19 transmission study model.", (width-380)/2,((height-40)/2)+100);
-     text("It intends to explore the potential level of impact non-pharmaceutical public health interventions", (width-380)/2,((height-40)/2)+120);
-     text("have on containing and stopping a COVID-19 outbreak within a population of agents.", (width-380)/2,((height-40)/2)+140);
+     text("This particular product from ViRS is a spatially abstract COVID-19 transmission study model.", (width-380)/2,((height-40)/2)+60);
+     text("It intends to explore the potential level of impact non-pharmaceutical public health interventions", (width-380)/2,((height-40)/2)+80);
+     text("have on containing and stopping a COVID-19 outbreak within a population of agents.", (width-380)/2,((height-40)/2)+100);
      
-     text("This is not a prediction model. Its primary purpose is to act as an educational tool that", (width-380)/2,((height-40)/2)+180);
-     text("gives the user the ability to control certain parameters and explore their effects on the outbreak.", (width-380)/2,((height-40)/2)+200);
-     text("This model is in beta in its early stages and will be regularly updated with improvements.", (width-380)/2,((height-40)/2)+220);
+     text("This is not a prediction model. Its primary purpose is to act as an educational tool that", (width-380)/2,((height-40)/2)+140);
+     text("gives the user the ability to control certain parameters and explore their effects on the outbreak.", (width-380)/2,((height-40)/2)+160);
+     text("This model is in beta in its early stages and will be regularly updated with improvements.", (width-380)/2,((height-40)/2)+180);
      
-     text("We'd love to hear your thoughts, please take our...", (width-380)/2,((height-40)/2)+260);
+     text("We'd love to hear your thoughts, please take our...", (width-380)/2,((height-40)/2)+220);
     
      textSize(18);
-     text("USER FEEDBACK SURVEY", (width-380)/2,((height-40)/2)+290);
-     text("BACK", (width-380)/2,((height-40)/2)+335);
+     text("USER FEEDBACK SURVEY", (width-380)/2,((height-40)/2)+250);
+     text("BACK", (width-380)/2,((height-40)/2)+280);
      
       fill(255,50);
       noStroke();
-      rect(((width-420)/2)-104,((height-40)/2)+270,248,27,7);
+      rect(((width-420)/2)-104,((height-40)/2)+230,248,27,7);
      }
      fill(255);
      dayCounter = 0;
@@ -1546,14 +1603,15 @@ void statsBar() {
 
 /////////////////////////////////////////////////////////////////////////// Infect
 
+/// this is the method where the agents get infected 
 void infect()
 
 {
   if(smallPop){
-    spreadDistance = 28;
+    spreadDistance = 25;
     }
     if(tinyPop){
-    spreadDistance = 70;
+    spreadDistance = 60;
     }
     if(mediumPop){
     spreadDistance = 5;
@@ -1668,23 +1726,25 @@ void infect()
             if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.recovered  && !person1.sickIsolate)
 
             {
+              if (smallPop){
+              infectionProbability = 0.03;
               
               if(person2.socialDistance){
                 
-                infectionProbability = .06;
+                infectionProbability = .01;
                 
               }
               
               if (person2.wearingMask && !person1.wearingMask){
-                infectionProbability = .08;
-              }
-              
-               if (person2.wearingMask && person1.wearingMask){
                 infectionProbability = .02;
               }
               
+               if (person2.wearingMask && person1.wearingMask){
+                infectionProbability = .001;
+              }
+              
               if (!person2.wearingMask && person1.wearingMask){
-                infectionProbability = .04;
+                infectionProbability = .01;
               }
               
 
@@ -1694,9 +1754,39 @@ void infect()
                     sickAgents.add(person2);
                     population.remove(person2);
                 }
+              }
+              if (tinyPop){
+              infectionProbability = 0.02;
+              
+              if(person2.socialDistance){
+                
+                infectionProbability = .009;
+                
+              }
+              
+              if (person2.wearingMask && !person1.wearingMask){
+                infectionProbability = .02;
+              }
+              
+               if (person2.wearingMask && person1.wearingMask){
+                infectionProbability = .001;
+              }
+              
+              if (!person2.wearingMask && person1.wearingMask){
+                infectionProbability = .009;
+              }
+              
+
+                if (prob(infectionProbability) && !person1.isolate) {
+
+                    person2.getInfected();
+                    sickAgents.add(person2);
+                    population.remove(person2);
+                }
+              }
 
 
-            } 
+           } 
                  
             }
             }
@@ -2141,7 +2231,7 @@ void mousePressed()
     //selectPop = false;
     //selection = true;
     }
-    if(selectPop && clicks >= 1){
+    if(selectPop && clicks >= 1 && mouseX >= 40 && mouseX <= 680 && mouseY >= 40 && mouseY <= 680 ){
       selectPop = false;
       selection = true;
       clicks = 0;
@@ -2238,7 +2328,7 @@ void mousePressed()
     link("https://hhi.harvard.edu/");
   }
 
-  if ((mouseX > ((width-380)/2)-110 && mouseX < ((width-380)/2)+110 && mouseY > ((height-40)/2)+270 && mouseY < ((height-40)/2)+290) && about) { 
+  if ((mouseX > ((width-380)/2)-110 && mouseX < ((width-380)/2)+110 && mouseY > ((height-40)/2)+230 && mouseY < ((height-40)/2)+250) && about) { 
     link("http://virs.io/survey/");
   }
  }
@@ -2257,7 +2347,7 @@ void mousePressed()
       }
     }
     
-    if(mouseX >= ((width-420)/2)-30 && mouseX <= ((width-420)/2)+30 && mouseY >= ((height-40)/2)+325 && mouseY <= ((height-40)/2)+335){
+    if(mouseX >= ((width-420)/2)-30 && mouseX <= ((width-420)/2)+30 && mouseY >= ((height-40)/2)+270 && mouseY <= ((height-40)/2)+290){
       if(about){
        about = false; 
     }
@@ -2275,7 +2365,45 @@ void mousePressed()
      selection = false;
      home = true;
      clicks = -1;
-      
+     s1 = true;
+     s2 = false;
+     s3 = false;
+     s4 = false;
+     s5 = false;
+
+     su1 = true;
+     su2 = false;
+     su3 = false;
+     su4 = false;
+     su5 = false;
+
+     ct1 = true;
+     ct2 = false;
+     ct3 = false;
+     ct4 = false;
+     ct5 = false;
+   
+      a1 = true;
+      a2 = false;
+       a3 = false; 
+      a4 = false; 
+      a5 = false;
+
+      b1 = true;
+      b2 = false;
+      b3 = false; 
+      b4 = false; 
+      b5 = false;
+
+      c1 = false;
+      c2 = false;
+      c3 = false; 
+      c4 = false; 
+      c5 = true;
+
+      d1 = true;
+      d2 = false;
+      d3 = false; 
       population.clear();
       sickAgents.clear();
       
@@ -2668,7 +2796,7 @@ void keyPressed()
   }
 }
 
-
+// this class is used to define an Agent 
 class Agent {
 
   PVector loc;
@@ -3270,7 +3398,7 @@ void drawAgent()
     else if(pressed){
    boolean buffer = false; 
    
-  
+  if (  largePop || mediumPop){
    if(!allowedInside && vel.x > 0 && loc.x < threshold+4){
      buffer = true;
    }
@@ -3302,6 +3430,137 @@ void drawAgent()
     }
    }
   }
+  if ( tinyPop ){
+    
+   if(!allowedInside && vel.x > 0 && loc.x < threshold+4){
+     buffer = true;
+   }
+   
+   if(!sick){
+   if(!allowedInside && loc.x > threshold && !buffer){
+ 
+    if (loc.x < threshold+3 || loc.x >= width-420) {
+      vel.x *= -1;
+    }
+    if (loc.y < 50 || loc.y >= height-206) {
+      vel.y *= -1;
+    }
+   }
+   
+   else if(allowedInside){
+    if (loc.x < 40 || loc.x >= width-420) {
+      vel.x *= -1;
+    }
+    if (loc.y < 50 || loc.y >= height-206) {
+      vel.y *= -1;
+    }
+   }
+   
+   else if(!allowedInside && loc.x < threshold){
+    if (loc.x < 40 || loc.x >= width-420) {
+      vel.x *= -1;
+    }
+    if (loc.y < 50 || loc.y >= height-206) {
+      vel.y *= -1;
+    }
+   }
+  }
+  
+  if(sick){
+   if(!allowedInside && loc.x > threshold && !buffer){
+ 
+    if (loc.x < threshold+3 || loc.x >= width-435) {
+      vel.x *= -1;
+    }
+    if (loc.y < 60 || loc.y >= height-216) {
+      vel.y *= -1;
+    }
+   }
+   
+   else if(allowedInside){
+    if (loc.x < 50 || loc.x >= width-435) {
+      vel.x *= -1;
+    }
+    if (loc.y < 60 || loc.y >= height-216) {
+      vel.y *= -1;
+    }
+   }
+   
+   else if(!allowedInside && loc.x < threshold){
+    if (loc.x < 50 || loc.x >= width-435) {
+      vel.x *= -1;
+    }
+    if (loc.y < 60 || loc.y >= height-216) {
+      vel.y *= -1;
+    }
+   }
+  }
+  
+  
+  }
+  if (  smallPop){
+   if(!allowedInside && vel.x > 0 && loc.x < threshold+4){
+     buffer = true;
+   }
+   if(!sick){
+   if(!allowedInside && loc.x > threshold && !buffer){
+    if (loc.x < threshold+3 || loc.x >= width-407) {
+      vel.x *= -1;
+    }
+    if (loc.y < 30 || loc.y >= height-186) {
+      vel.y *= -1;
+    }
+   }
+   
+   else if(allowedInside){
+    if (loc.x < 28 || loc.x >= width-407) {
+      vel.x *= -1;
+    }
+    if (loc.y < 30 || loc.y >= height-186) {
+      vel.y *= -1;
+    }
+   }
+   
+   else if(!allowedInside && loc.x < threshold){
+    if (loc.x < 28 || loc.x >= width-407) {
+      vel.x *= -1;
+    }
+    if (loc.y < 30 || loc.y >= height-186) {
+      vel.y *= -1;
+    }
+   }
+  }
+  if(sick){
+   if(!allowedInside && loc.x > threshold && !buffer){
+    if (loc.x < threshold+3 || loc.x >= width-417) {
+      vel.x *= -1;
+    }
+    if (loc.y < 38 || loc.y >= height-194) {
+      vel.y *= -1;
+    }
+   }
+   
+   else if(allowedInside){
+    if (loc.x < 34 || loc.x >= width-417) {
+      vel.x *= -1;
+    }
+    if (loc.y < 38 || loc.y >= height-194) {
+      vel.y *= -1;
+    }
+   }
+   
+   else if(!allowedInside && loc.x < threshold){
+    if (loc.x < 34 || loc.x >= width-417) {
+      vel.x *= -1;
+    }
+    if (loc.y < 38 || loc.y >= height-194) {
+      vel.y *= -1;
+    }
+   }
+  }
+  
+  }
+    }
   }
 }
 // End of Class
