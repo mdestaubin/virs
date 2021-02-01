@@ -38,7 +38,7 @@ For a list of copyright holders, please refer to AUTHOR Michael de St. Aubin.
 * Zeerak Ammed, GSD Teaching Assistant
 * Nipurna Dhakal, Computer Science Intern Clark University
 
-# Contact
+## Contact
 Contact the project lead Michael de St. Aubin: mdestaubin@hsph.harvard.edu
 
 
