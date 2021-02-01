@@ -1,4 +1,4 @@
-# VIRS
+# ViRS
 ## Describtion 
 The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore
 and visualize how disease dynamics and social behaviors interact over space and time. Originating 
