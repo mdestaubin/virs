@@ -1,17 +1,17 @@
 # VIRS
 ## Describtion 
 The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore
-and visualize how disease dynamics and social behaviors interact over space and time.Originating 
-as an individual thesis project at the Harvard Graduate School of Design,ViRS is now a collaborative,
+and visualize how disease dynamics and social behaviors interact over space and time. Originating 
+as a thesis project at the Harvard Graduate School of Design in 2018, ViRS is now a collaborative,
 cross-disciplinary research effort at the Harvard Humanitarian Initiative.This particular product from
-ViRS is a spatially abstract COVID-19 transmission study model.It intends to explore the potential level
-of impact non-pharmaceutical public health interventions have on containing and stopping a COVID-19 
+ViRS is a spatially abstract COVID-19 transmission study model. It aims to explore the potential level
+of impact public health interventions and social behaviors have on containing and stopping a COVID-19 
 outbreak within a population of agents.
 
 
 ## Prerequisities 
-Running Virs is pretty simple, you just have to download two things 
-* The processing software called Processing 
+Running Virs is pretty simple, you'll need to download two things 
+* The visual programming software Processing 
 * Download the file sketch_main.pde
 
 ## Installation 
@@ -25,7 +25,7 @@ Step by step process of downloading Processing
 * Within a few minutes processing should open. 
 
 ## Contribution 
-If you have any issues with our simulator please report to : http://virs.io/survey/
+If you have any issues with our simulator please report to: http://virs.io/survey/
 
 
 ## License
