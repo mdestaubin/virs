@@ -1,0 +1,241 @@
+﻿Virs
+Introduction:
+The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore and visualize how disease dynamics and social behaviors interact over space and time.Originating as an individual thesis project at the Harvard Graduate School of Design,ViRS is now a collaborative, cross-disciplinary research effort at the Harvard Humanitarian Initiative. This particular product from ViRS is a spatially abstract COVID-19 transmission study model. It intends to explore the potential level of impact non-pharmaceutical public health interventions have on containing and stopping a COVID-19 outbreak within a population of agents.
+Some important variables and data structures to to take into account: 
+InitialPopulation:  int variable with the number of agents in the beginning of the simulation 
+Populaulation: Arraylist that stores all the agents in the simulator who are not sick or dead 
+
+
+Survivors: Arraylist that stores all the agents in the simulator have recovered from the virus 
+
+
+SickAgents: Arraylist that stores all the agents in the simulator who are sick with the virs
+ 
+sickHistory: Hashmap that stores the number of sick agents, an int index and the agent as a float value. 
+
+
+tinyPop, largePop, smallPop, mediumPop: 4 boolean values which determine what the user has selected to be the initial population of the simulation.( example if smallPop is set as true the population will be 99, where as large is 999). 
+
+
+Pressed: Pressed is a boolean variable which turns true if the user selected indoor vs outdoor simulation. 
+
+
+SelectPop: boolean variable that trunks true after the user presses setup simulation button.
+
+
+
+
+The API of the code 
+
+
+Method Setup
+  
+
+Description: 
+This method is used to set up the simulation screen and consists of what the screen size we have in our simulator. 
+
+
+What the method does: 
+It initializes the data structures we have created, the font of the letters used and loads in the pictures used in our simulator. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Method Draw 
+  
+
+Description:
+This method draws up the layout of the simulator. It consists of different lines that have been used to separate different components in the stats bar. Here we have also declared the size of the simulation space( space where the agents interact). 
+
+
+What the method does:
+This is  the method where we determine how many agents to draw initially, using the four boolean variables that we had initialized earlier. So, id tinyPop is true and the rest of them are false( which will always happen as only one can be set as true) the variable initialPopulation will be set as 9 and so on. 
+As we have two different scenarios in our simulator right now, there are two different setups for our screen. You can see that there are conditions where a setup is made if the boolean variable pressed is true. Those setups are made for the indoor vs outdoor simulator scenario. We have also used two other variables which record the number of indoor agents. So if the agents lie below the selected threshold of the screen( threshold point is set to be the middle point of the simulation screen) it is considered indoors. 
+We have also adjusted the variable framesperday which is lower if the population is set to tiny with the concept that 100 agents won't be in the same room for a long time.
+This method also calls two methods Infect and statsBar which have been described below. 
+
+
+Further methods called: 
+This method further calls two other methods 
+*  infect();
+* statsBar();
+
+
+
+
+Function RemoveAgents
+  
+
+Description: 
+This method relates to removing the agents who have died in the simulation
+
+
+What the method does:
+This method calculates the agents who have died from the sirus and increments the death counter. We check by creating a if statement which checks if the agents in the arraylist sickHistory are dead or not. If they are dead the agent is removed from the arraylist and is also removed from the simulation by using noStroke().
+
+
+
+
+
+
+
+
+
+
+Function statsBar
+  
+
+Description: 
+This Method is for the statistics bar at the right side of the screen of the simulation.
+
+
+What the method does:
+The method starts with initializing different variables that count the number of infected, healed, healthy and sickagents at that particular instance. 
+There is a for loop that goes through the arraylist of sick agents and checks the status of the agent and increments the particular variable. For example if the agent is recovered it increments the numHealed counter. 
+
+
+  
+
+We have also introduced some important variables that are calculating some of the important statistics of the simulation. Some of them calculate what percent of the population got sick from the virus, what percent got healed, what percent died etc. 
+
+
+  
+
+We have also implemented a feature where if you hover over a heading of the particular stats bar there appears a text explaining what the intervention/ feature mean.   
+  
+
+Here we have also included the setup of the population selection screen 
+
+
+
+
+In this class we also have the code that creates the epidemic curve. The epidemic curve is created by using a stroke line with total active cases at the particular time, we get this data from the hashmap that we had created that records the active number of cases at that time   
+
+
+For interventions we have created different boolean variables that tell what if the user has selected an intervention. If the boolean variable of the particular intervention is selected the boolean variable turns true and the region intervention percent turns gray. 
+  
+
+In this picture you can see that the infectious in isolation is set to 50% and social distancing is set to 25%. 
+  
+
+
+Function Infect
+  
+
+Description: 
+This is the method where we determine the probability of the infection using the variable infectionProbability with taking in respect the different intervention factors and their distance.  
+
+
+What the method does:
+Initially we have created a spread distance for different population types. LargePop has the lowest spread distance as the agents are represented by a smaller dot than that of the lower pop sizes making the spread radius to be smaller. Where the agents in smallPop cover a larger area and need to infect an agent that is as large as them. 
+We go through a nested loop where we take two agents at a time one from the population arraylist where it only has agents that have not been infected, and the other from the sickagent arraylist where there are agents who are sick and infectious. 
+If the two agents taken are in close proximity if goes to the process of determining the infection probability. 
+While determining if the agent gets infected or not, we take in fact many factors such as if the agent is wearing a face covering, if the agent's social distancing, if the agent is vaccinated etc. The agents who don't have any precaus measures implemented have a higher chance of infection probability. 
+The infection probability is also higher if the agents are indoors in the indoor vs outdoor simulation scenario. 
+
+
+Further Function called: 
+prob(): 
+infectionLine(); 
+
+
+
+
+Function Prob 
+  
+
+Description: 
+The function prob that takes in the infection probability and decides if the agent is getting infected or not. 
+If the agent gets infected we add that agent to the sickAgent arraylist and remove the agent from the population arraylist. 
+
+
+Parameters: 
+Probrate which is the infectionProbability from the method infect()
+
+
+
+
+
+
+
+
+Method MousePressed
+  
+
+Description: 
+This method records all the mouse clicks made in the simulation screen.
+
+
+What the method does:
+All of our simulation screens and interventions are triggered by boolean variables. For example if you press a certain percent of  intervention the boolean variable set in that location turns true and the appropriate action happens. 
+The code to deploy new infected agents is also present in this method. If you do a mouse click inside the simulation space, an infected agent gets deployed, the agent is added to the 
+Sick agent arraylist. 
+
+
+Class Agent
+  
+
+Description: 
+In this class we describe the agents in our simulator.
+ 
+What is in this class:
+Here we have decided the velocity of the agent, the location, how the agent should look in different conditions and decide if the agent is dead, sick, infected or recovered 
+Here we also assign the changes in the appearance of the agents. For example if the agent is supposed to be wearing a face covering there appears a green ring in the outer circle. 
+If the boolean variable of a certain intervention is turned True, for example the boolean variable with 50% agents wearing face covering is turned True, this class makes 50% of the agents in the simulation wear a face covering ie it will have a green ring around it. 
+
+
+
+
+
+
+
+
+
+
+
+
+About The Vaccination Simulation 
+We have set up a covid -19 simulation that shows the effectiveness of different vaccines used for Covid-19 prevention in the present world. We have two different population sizes the user can choose from. They both are triggered from two different boolean variables set for population count detection. After the population selection screen user sees the vaccination selection screen, has to select between 4 different vaccine scenarios. 
+The simulator starts similarly to the other scenario, but there is a new intervention in the starts bar, which is triggered by four boolean variables(c1,c2,c3,c4). C1(0.00%), which is preset is initially set as true, makes no agents vaccinate. If any of the other boolean variables are turned true, the agents in the simulation start getting vaccinated. Each day 0.03% of the population is vaccinated if C2 is turned true. Since each day is considered 60 frames, the second dose of the vaccination happens after 60 times the vaccination duration of the vaccine. For example, for Moderna, the second vaccination is done 28 days after the first, which means it takes 60x28 frames for the agent to get the second vaccination after it takes the first. 
+
+
+Since we also have johnson and johnson simulation, which only has single-dose vaccination. So agents get fully vaccinated in the first vaccination process they go through. 
+
+
+//johnson and johnson efficacy 
+https://www.jnj.com/johnson-johnson-announces-single-shot-janssen-covid-19-vaccine-candidate-met-primary-endpoints-in-interim-analysis-of-its-phase-3-ensemble-trial
+
+
+//moderna efficacy 
+https://www.nejm.org/doi/full/10.1056/NEJMc2036242
+
+
+//pfizer efficacy
+https://www.the-scientist.com/news-opinion/pfizers-covid-19-vaccine-reduces-viral-load-study--68439
+
+
+// astrazeneca efficacy 
+https://www.abc.net.au/news/2021-01-25/pfizer-vaccine-approved-australia-but-is-it-the-one-you-will-get/13088856
+
+
+
+
+
+
+
+
+Contributors: 
+Michael de St. Aubin, HHI Project Lead
+Robert Pietrusko, GSD Professor of Landscape Architecture
+Zeerak Ammed, GSD Teaching Assistant
+Nipurna Dhakal, Computer Science Intern Clark University
